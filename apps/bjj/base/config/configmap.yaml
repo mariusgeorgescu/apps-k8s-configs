@@ -1,13 +1,13 @@
 # ConfigMap cu variabile de configurare pentru bjj (consumat de Deployments).
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: bjj-config
-  namespace: bjj
-data:
-  KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run"
-  LOOKUP_PATH: "/data/chainsync.sqlite"
-  BATCH_SIZE: "100000000"
-  FETCH_BATCH_SIZE: "10000000"
-  PORT: "8082"
-  GHCRTS: "-N -M768m -A64m"
+apiVersion: v1 # Versiunea API pentru resurse de bază
+kind: ConfigMap # Tipul resursei este ConfigMap
+metadata: # Metadate despre ConfigMap
+  name: bjj-config # Numele ConfigMap-ului
+  namespace: bjj # Namespace-ul în care se creează
+data: # Chei/valori expuse ca variabile de mediu sau fișiere
+  KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run" # Endpoint Kupo
+  LOOKUP_PATH: "/data/chainsync.sqlite" # Calea DB-ului local pentru lookup
+  BATCH_SIZE: "100000000" # Dimensiune batch pentru procesare
+  FETCH_BATCH_SIZE: "10000000" # Dimensiune batch pentru fetch
+  PORT: "8082" # Portul HTTP expus de server
+  GHCRTS: "-N -M768m -A64m" # RTS flags pentru runtime Haskell

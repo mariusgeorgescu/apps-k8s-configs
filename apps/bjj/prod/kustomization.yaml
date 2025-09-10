@@ -1,12 +1,12 @@
 # Overlay-ul prod: referă baza și fixează imaginile containerelor.
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: bjj
-resources:
-- ../../base
-images:
-- name: mariusgeorgescu/bjjserver
-  newTag: chainsync
-- name: mariusgeorgescu/chainsync
-  newTag: chainsync
+apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
+kind: Kustomization # Declară acest fișier ca o Kustomization
+namespace: bjj # Namespace implicit pentru resurse namespaced
+resources: # Manifeste incluse din baza aplicației
+- ../../base # Include toate resursele din base
+images: # Re-scrieri pentru imaginile containerelor
+- name: mariusgeorgescu/bjjserver # Numele imaginii principale
+  newTag: chainsync # Tag-ul folosit în producție
+- name: mariusgeorgescu/chainsync # Imaginea chain-sync
+  newTag: chainsync # Tag-ul folosit în producție
 

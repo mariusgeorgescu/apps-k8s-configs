@@ -1,30 +1,30 @@
 # Deployment pentru jobul chainsync (gestionează populația DB /data/chainsync.sqlite).
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: chainsync
-  namespace: bjj
-spec:
-  replicas: 1
-  selector:
+apiVersion: apps/v1 # Versiunea API pentru Deployment
+kind: Deployment # Tipul resursei este Deployment
+metadata: # Metadate Kubernetes
+  name: chainsync # Numele Deployment-ului
+  namespace: bjj # Namespace-ul în care se creează
+spec: # Specificația Deployment-ului
+  replicas: 1 # O singură replică pentru jobul chainsync
+  selector: # Selectează pods-urile gestionate
     matchLabels:
-      app: chainsync
-  template:
-    metadata:
+      app: chainsync # Etichetă folosită și în template
+  template: # Template-ul de Pod pentru replici
+    metadata: # Metadate ale Pod-ului
       labels:
-        app: chainsync
-    spec:
-      containers:
-      - name: chainsync
-        image: mariusgeorgescu/chainsync:chainsync
-        imagePullPolicy: IfNotPresent
-        envFrom:
+        app: chainsync # Etichetă pentru selectare
+    spec: # Specificația Pod-ului
+      containers: # Lista containerelor din Pod
+      - name: chainsync # Numele containerului
+        image: mariusgeorgescu/chainsync:chainsync # Imaginea containerului
+        imagePullPolicy: IfNotPresent # Politica de pull
+        envFrom: # Variabile de mediu din ConfigMap
         - configMapRef:
-            name: bjj-config
-        volumeMounts:
-        - name: lookup-db
-          mountPath: /data
-      volumes:
-      - name: lookup-db
+            name: bjj-config # ConfigMap referit
+        volumeMounts: # Montări de volume în container
+        - name: lookup-db # Numele volumului
+          mountPath: /data # Calea în container unde e montat PVC-ul
+      volumes: # Volume disponibile în Pod
+      - name: lookup-db # Numele volumului
         persistentVolumeClaim:
-          claimName: lookup-pvc
+          claimName: lookup-pvc # Referința către PVC

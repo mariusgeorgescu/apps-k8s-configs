@@ -1,65 +1,64 @@
 # Deployment pentru aplicația bjj-server (3 replici, probe HTTP, resurse setate).
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: bjj-server
-  namespace: bjj
-spec:
-  replicas: 3
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
-  selector:
+apiVersion: apps/v1 # Versiunea API pentru Deployment
+kind: Deployment # Tipul resursei este Deployment
+metadata: # Metadate Kubernetes
+  name: bjj-server # Numele Deployment-ului
+  namespace: bjj # Namespace-ul în care se creează
+spec: # Specificația Deployment-ului
+  replicas: 3 # Numărul de replici ale aplicației
+  strategy: # Strategia de update al pods-urilor
+    type: RollingUpdate # Update gradual fără downtime
+    rollingUpdate: # Parametri ai rolling update-ului
+      maxUnavailable: 0 # Nicio replică indisponibilă în timpul update-ului
+      maxSurge: 1 # Cel mult o replică în plus față de numărul dorit
+  selector: # Selectează pods-urile gestionate de acest Deployment
     matchLabels:
-      app: bjj-server
-  template:
-    metadata:
+      app: bjj-server # Trebuie să corespundă cu labels din template
+  template: # Template-ul de Pod pentru replici
+    metadata: # Metadate ale Pod-ului
       labels:
-        app: bjj-server
-    spec:
-
-      containers:
-      - name: server
-        image: mariusgeorgescu/bjjserver:chainsync
-        imagePullPolicy: IfNotPresent
-        envFrom:
+        app: bjj-server # Etichetă pentru selectare și servicii
+    spec: # Specificația Pod-ului
+      containers: # Lista containerelor din Pod
+      - name: server # Numele containerului
+        image: mariusgeorgescu/bjjserver:chainsync # Imaginea containerului
+        imagePullPolicy: IfNotPresent # Politica de pull a imaginii
+        envFrom: # Surse de variabile de mediu
         - configMapRef:
-            name: bjj-config
-        ports:
-        - name: http
-          containerPort: 8082
-        resources:
+            name: bjj-config # ConfigMap referit pentru variabile
+        ports: # Porturi expuse de container
+        - name: http # Numele portului
+          containerPort: 8082 # Portul pe care ascultă aplicația
+        resources: # Resursele cerute/limitate de container
           requests:
-            cpu: "200m"
-            memory: "256Mi"
+            cpu: "200m" # CPU minim rezervat
+            memory: "256Mi" # Memorie minim rezervată
           limits:
-            cpu: "1"
-            memory: "1Gi"
-        readinessProbe:
+            cpu: "1" # CPU maxim permis
+            memory: "1Gi" # Memorie maxim permisă
+        readinessProbe: # Probă pentru disponibilitate
           httpGet:
-            path: /swagger-ui
-            port: 8082
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          timeoutSeconds: 2
-          failureThreshold: 3
-        livenessProbe:
+            path: /swagger-ui # Endpoint de health
+            port: 8082 # Portul probei
+            scheme: HTTP # Protocolul probei
+          initialDelaySeconds: 5 # Întârzierea inițială
+          periodSeconds: 10 # Frecvența
+          timeoutSeconds: 2 # Timeout pe probă
+          failureThreshold: 3 # Număr de eșecuri permise
+        livenessProbe: # Probă pentru viață (restart on failure)
           httpGet:
-            path: /swagger-ui
-            port: 8082
-            scheme: HTTP
-          initialDelaySeconds: 10
-          periodSeconds: 20
-          timeoutSeconds: 2
-          failureThreshold: 3
-        volumeMounts:
-        - name: lookup-db
-          mountPath: /data
-          readOnly: false
-      volumes:
-      - name: lookup-db
+            path: /swagger-ui # Endpoint pentru liveness
+            port: 8082 # Portul probei
+            scheme: HTTP # Protocolul probei
+          initialDelaySeconds: 10 # Întârzierea inițială
+          periodSeconds: 20 # Frecvența
+          timeoutSeconds: 2 # Timeout
+          failureThreshold: 3 # Număr de eșecuri permise
+        volumeMounts: # Montări de volume în container
+        - name: lookup-db # Numele volumului definit mai jos
+          mountPath: /data # Calea de montare în container
+          readOnly: false # Montare R/W
+      volumes: # Volume disponibile în Pod
+      - name: lookup-db # Numele volumului
         persistentVolumeClaim:
-          claimName: lookup-pvc
+          claimName: lookup-pvc # Referința către PVC

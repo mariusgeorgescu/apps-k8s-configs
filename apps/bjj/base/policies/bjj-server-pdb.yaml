@@ -1,13 +1,12 @@
 # PodDisruptionBudget pentru a menține disponibilitatea minimă a pods-urilor
 # bjj-server în timpul operațiilor de mentenanță/eviction.
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: bjj-server-pdb
-  namespace: bjj
-terms: []
-spec:
-  minAvailable: 1
-  selector:
+apiVersion: policy/v1 # Versiunea API pentru PDB
+kind: PodDisruptionBudget # Tipul resursei este PDB
+metadata: # Metadate Kubernetes
+  name: bjj-server-pdb # Numele PDB-ului
+  namespace: bjj # Namespace-ul resursei
+spec: # Specificația PDB-ului
+  minAvailable: 1 # Numărul minim de pods care trebuie să rămână disponibile
+  selector: # Selectează pods-urile țintă pe baza etichetelor
     matchLabels:
-      app: bjj-server
+      app: bjj-server # Trebuie să corespundă cu labels din Deployment

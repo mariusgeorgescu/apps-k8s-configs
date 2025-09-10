@@ -1,31 +1,31 @@
 # Gateway (Gateway API) pentru aplicația bjj. Folosește GatewayClass-ul Traefik
 # și gestionează listener-ele HTTP/HTTPS pentru hostul aplicației.
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: main-gateway
-  namespace: bjj
-spec:
-  gatewayClassName: traefik
-  listeners:
-  - name: http
-    hostname: bjjbackend.cardano.vip
-    port: 80
-    protocol: HTTP
-    allowedRoutes:
+apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru Gateway API
+kind: Gateway # Resursă de tip Gateway
+metadata: # Metadate Kubernetes
+  name: main-gateway # Numele Gateway-ului
+  namespace: bjj # Namespace-ul în care este creat Gateway-ul
+spec: # Specificația Gateway-ului
+  gatewayClassName: traefik # Folosește GatewayClass-ul definit de controller-ul Traefik
+  listeners: # Lista listener-elor expuse de Gateway
+  - name: http # Numele listener-ului HTTP
+    hostname: bjjbackend.cardano.vip # Domeniul asociat listener-ului
+    port: 80 # Portul pentru HTTP
+    protocol: HTTP # Protocolul folosit de listener
+    allowedRoutes: # Politica pentru rutele permise
       namespaces:
-        from: All
-  - name: https
-    hostname: bjjbackend.cardano.vip
-    port: 443
-    protocol: HTTPS
-    tls:
-      mode: Terminate
-      certificateRefs:
-      - kind: Secret
-        name: bjjbackend-tls
-    allowedRoutes:
+        from: All # Permite rute din orice namespace (cu ReferenceGrant dacă e necesar)
+  - name: https # Numele listener-ului HTTPS
+    hostname: bjjbackend.cardano.vip # Domeniul asociat listener-ului
+    port: 443 # Portul pentru HTTPS
+    protocol: HTTPS # Protocolul folosit de listener
+    tls: # Configurația TLS pentru HTTPS
+      mode: Terminate # Termination TLS la nivel de Gateway
+      certificateRefs: # Secretul TLS care conține certificatul
+      - kind: Secret # Tipul referinței (Secret)
+        name: bjjbackend-tls # Numele Secretului TLS
+    allowedRoutes: # Politica pentru rutele permise
       namespaces:
-        from: All
+        from: All # Permite rute din orice namespace
 
 

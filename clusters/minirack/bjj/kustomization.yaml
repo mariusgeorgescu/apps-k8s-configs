@@ -1,18 +1,18 @@
 # Flux Kustomization pentru bjj: aplică overlay-ul prod al aplicației.
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: bjj
-  namespace: flux-system
-spec:
-  interval: 10m0s
-  path: ./apps/bjj/prod
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: true
-  timeout: 5m0s
-  dependsOn:
-  - name: infrastructure
+apiVersion: kustomize.toolkit.fluxcd.io/v1 # Versiunea API a FluxCD Kustomization
+kind: Kustomization # Resursă Flux care aplică un Kustomize path
+metadata: # Metadate Kubernetes
+  name: bjj # Numele resursei Kustomization
+  namespace: flux-system # Namespace-ul controllerului Flux
+spec: # Specificația Kustomization-ului
+  interval: 10m0s # Frecvența reconcilierii
+  path: ./apps/bjj/prod # Calea către overlay-ul aplicației
+  prune: true # Șterge resursele care nu mai sunt în sursă
+  sourceRef: # Repository-ul Git sursă
+    kind: GitRepository # Tipul sursei
+    name: flux-system # Numele sursei (definit de bootstrap)
+  wait: true # Așteaptă ca aplicațiile să fie ready
+  timeout: 5m0s # Timeout pentru operații
+  dependsOn: # Ordine: rulează după infrastructură
+  - name: infrastructure # Dependență pe Kustomization-ul de infrastructură
 
