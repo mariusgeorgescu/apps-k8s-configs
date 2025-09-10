@@ -24,5 +24,6 @@ spec:
   timeout: 10m0s
   values:
     installCRDs: true
+    fullnameOverride: cert-manager
 
 
