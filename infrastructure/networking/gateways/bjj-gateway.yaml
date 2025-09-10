@@ -1,0 +1,28 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: bjj-gateway
+  namespace: bjj
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    hostname: bjjbackend.cardano.vip
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: Same
+  - name: https
+    hostname: bjjbackend.cardano.vip
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: bjjbackend-tls
+    allowedRoutes:
+      namespaces:
+        from: Same
+

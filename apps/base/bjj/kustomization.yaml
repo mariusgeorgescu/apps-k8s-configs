@@ -5,6 +5,5 @@ resources:
 - namespace.yaml
 - chain-sync.yaml
 - server.yaml
-- certificate.yaml
 - gateway.yaml
 
