@@ -1,3 +1,4 @@
+# Deployment pentru aplicația bjj-server (3 replici, probe HTTP, resurse setate).
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,14 +19,7 @@ spec:
       labels:
         app: bjj-server
     spec:
-      initContainers:
-      - name: wait-for-db
-        image: alpine:3.20
-        command: ["sh","-c","i=0; while [ $i -lt 60 ]; do [ -f /data/chainsync.sqlite ] && exit 0; echo waiting for db; i=$((i+1)); sleep 5; done; echo db not found; exit 1"]
-        volumeMounts:
-        - name: lookup-db
-          mountPath: /data
-          readOnly: true
+
       containers:
       - name: server
         image: mariusgeorgescu/bjjserver:chainsync

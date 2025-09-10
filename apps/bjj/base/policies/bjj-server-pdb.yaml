@@ -1,3 +1,5 @@
+# PodDisruptionBudget pentru a menține disponibilitatea minimă a pods-urilor
+# bjj-server în timpul operațiilor de mentenanță/eviction.
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:

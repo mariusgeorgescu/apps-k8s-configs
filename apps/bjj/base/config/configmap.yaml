@@ -1,3 +1,4 @@
+# ConfigMap cu variabile de configurare pentru bjj (consumat de Deployments).
 apiVersion: v1
 kind: ConfigMap
 metadata:

@@ -1,3 +1,4 @@
+# HTTPRoute: rutează traficul către Service-ul bjj-server.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -16,6 +17,7 @@ spec:
         scheme: https
         statusCode: 301
 ---
+# HTTPRoute pentru traficul HTTPS către bjj-server.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
