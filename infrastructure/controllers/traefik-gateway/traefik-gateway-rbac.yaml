@@ -20,7 +20,7 @@ roleRef:
   name: traefik-gateway
 subjects:
 - kind: ServiceAccount
-  name: traefik
+  name: traefik-traefik-gateway
   namespace: traefik
 
 
