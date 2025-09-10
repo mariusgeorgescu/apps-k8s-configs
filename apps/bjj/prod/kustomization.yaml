@@ -6,7 +6,7 @@ resources: # Manifeste incluse din baza aplicației
 - ../../base # Include toate resursele din base
 images: # Re-scrieri pentru imaginile containerelor
 - name: mariusgeorgescu/bjjserver # Numele imaginii principale
-  newTag: chainsync # Tag-ul folosit în producție
+  newTag: 988d3e55 # Tag-ul folosit în producție
 - name: mariusgeorgescu/chainsync # Imaginea chain-sync
   newTag: chainsync # Tag-ul folosit în producție
 
