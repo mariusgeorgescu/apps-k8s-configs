@@ -15,3 +15,5 @@ spec:
   timeout: 5m0s
   dependsOn:
   - name: infrastructure
+  - name: cert-manager
+  - name: cert-manager-configs
