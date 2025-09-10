@@ -1,0 +1,4 @@
+creation_rules:
+- path_regex: infrastructure/configs/cert-manager/secret-.*\.yaml
+  encrypted_regex: '^(data|stringData)$'
+  age: age1sj3u38zpu830hvsm5zv7mp38ukxext2l3gwlvwgjsluwr0xkdu8qayn4jy
