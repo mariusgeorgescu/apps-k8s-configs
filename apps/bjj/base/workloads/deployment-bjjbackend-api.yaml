@@ -2,7 +2,7 @@
 apiVersion: apps/v1 # Versiunea API pentru Deployment
 kind: Deployment # Tipul resursei este Deployment
 metadata: # Metadate Kubernetes
-  name: bjj-server # Numele Deployment-ului
+  name: deployment-bjjbackend-api # Numele Deployment-ului
   namespace: bjj # Namespace-ul în care se creează
 spec: # Specificația Deployment-ului
   replicas: 3 # Numărul de replici ale aplicației
@@ -13,19 +13,19 @@ spec: # Specificația Deployment-ului
       maxSurge: 1 # Cel mult o replică în plus față de numărul dorit
   selector: # Selectează pods-urile gestionate de acest Deployment
     matchLabels:
-      app: bjj-server # Trebuie să corespundă cu labels din template
+      app: bjjbackend-api-pod-label # Trebuie să corespundă cu labels din template
   template: # Template-ul de Pod pentru replici
     metadata: # Metadate ale Pod-ului
       labels:
-        app: bjj-server # Etichetă pentru selectare și servicii
+        app: bjjbackend-api-pod-label # Etichetă pentru selectare și servicii
     spec: # Specificația Pod-ului
       containers: # Lista containerelor din Pod
-      - name: server # Numele containerului
+      - name: container-bjjbackend-api # Numele containerului
         image: mariusgeorgescu/bjjserver:chainsync # Imaginea containerului
         imagePullPolicy: IfNotPresent # Politica de pull a imaginii
         envFrom: # Surse de variabile de mediu
         - configMapRef:
-            name: bjj-config # ConfigMap referit pentru variabile
+            name: configmap-bjjbackend # ConfigMap referit pentru variabile
         ports: # Porturi expuse de container
         - name: http # Numele portului
           containerPort: 8082 # Portul pe care ascultă aplicația
@@ -61,4 +61,4 @@ spec: # Specificația Deployment-ului
       volumes: # Volume disponibile în Pod
       - name: lookup-db # Numele volumului
         persistentVolumeClaim:
-          claimName: lookup-pvc # Referința către PVC
+          claimName: pvc-bjjbackend-lookup # Referința către PVC

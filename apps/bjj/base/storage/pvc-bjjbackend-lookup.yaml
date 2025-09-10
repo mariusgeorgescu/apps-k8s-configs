@@ -2,7 +2,7 @@
 apiVersion: v1 # Versiunea API pentru resurse de bază
 kind: PersistentVolumeClaim # Tipul resursei este PVC
 metadata: # Metadate Kubernetes
-  name: lookup-pvc # Numele PVC-ului
+  name: pvc-bjjbackend-lookup # Numele PVC-ului
   namespace: bjj # Namespace-ul în care se creează
 spec: # Specificația PVC-ului
   accessModes: # Modul de acces pentru volum

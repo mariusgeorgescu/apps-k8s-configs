@@ -2,11 +2,11 @@
 apiVersion: v1 # Versiunea API pentru resurse de bază
 kind: Service # Tipul resursei este Service
 metadata: # Metadate Kubernetes
-  name: bjj-server # Numele Service-ului
+  name: service-bjjbackend-api # Numele Service-ului
   namespace: bjj # Namespace-ul în care se creează
 spec: # Specificația Service-ului
   selector: # Etichete pentru a selecta Pods-urile țintă
-    app: bjj-server # Trebuie să corespundă cu labels din Deployment
+    app: bjjbackend-api-pod-label # Trebuie să corespundă cu labels din Deployment
   ports: # Porturile expuse de Service
   - name: http # Numele portului (util pentru referințe)
     port: 8082 # Portul pe care Service-ul ascultă în cluster

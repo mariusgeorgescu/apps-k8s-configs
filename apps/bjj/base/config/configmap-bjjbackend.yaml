@@ -2,7 +2,7 @@
 apiVersion: v1 # Versiunea API pentru resurse de bază
 kind: ConfigMap # Tipul resursei este ConfigMap
 metadata: # Metadate despre ConfigMap
-  name: bjj-config # Numele ConfigMap-ului
+  name: configmap-bjjbackend # Numele ConfigMap-ului
   namespace: bjj # Namespace-ul în care se creează
 data: # Chei/valori expuse ca variabile de mediu sau fișiere
   KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run" # Endpoint Kupo

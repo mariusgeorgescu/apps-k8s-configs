@@ -3,7 +3,7 @@
 apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru Gateway API
 kind: Gateway # Resursă de tip Gateway
 metadata: # Metadate Kubernetes
-  name: main-gateway # Numele Gateway-ului
+  name: gateway-bjjbackend-api # Numele Gateway-ului
   namespace: bjj # Namespace-ul în care este creat Gateway-ul
 spec: # Specificația Gateway-ului
   gatewayClassName: traefik # Folosește GatewayClass-ul definit de controller-ul Traefik
@@ -23,9 +23,7 @@ spec: # Specificația Gateway-ului
       mode: Terminate # Termination TLS la nivel de Gateway
       certificateRefs: # Secretul TLS care conține certificatul
       - kind: Secret # Tipul referinței (Secret)
-        name: bjjbackend-tls # Numele Secretului TLS
+        name: secret-bjjbackend-cardano-vip-tls # Numele Secretului TLS
     allowedRoutes: # Politica pentru rutele permise
       namespaces:
         from: All # Permite rute din orice namespace
-
-

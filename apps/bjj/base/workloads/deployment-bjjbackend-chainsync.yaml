@@ -2,29 +2,29 @@
 apiVersion: apps/v1 # Versiunea API pentru Deployment
 kind: Deployment # Tipul resursei este Deployment
 metadata: # Metadate Kubernetes
-  name: chainsync # Numele Deployment-ului
+  name: deployment-bjjbackend-chainsync # Numele Deployment-ului
   namespace: bjj # Namespace-ul în care se creează
 spec: # Specificația Deployment-ului
   replicas: 1 # O singură replică pentru jobul chainsync
   selector: # Selectează pods-urile gestionate
     matchLabels:
-      app: chainsync # Etichetă folosită și în template
+      app: bjjbackend-chainsync-pod-label # Etichetă folosită și în template
   template: # Template-ul de Pod pentru replici
     metadata: # Metadate ale Pod-ului
       labels:
-        app: chainsync # Etichetă pentru selectare
+        app: bjjbackend-chainsync-pod-label # Etichetă pentru selectare
     spec: # Specificația Pod-ului
       containers: # Lista containerelor din Pod
-      - name: chainsync # Numele containerului
+      - name: container-bjjbackend-chainsync # Numele containerului
         image: mariusgeorgescu/chainsync:chainsync # Imaginea containerului
         imagePullPolicy: IfNotPresent # Politica de pull
         envFrom: # Variabile de mediu din ConfigMap
         - configMapRef:
-            name: bjj-config # ConfigMap referit
+            name: configmap-bjjbackend # ConfigMap referit
         volumeMounts: # Montări de volume în container
         - name: lookup-db # Numele volumului
           mountPath: /data # Calea în container unde e montat PVC-ul
       volumes: # Volume disponibile în Pod
       - name: lookup-db # Numele volumului
         persistentVolumeClaim:
-          claimName: lookup-pvc # Referința către PVC
+          claimName: pvc-bjjbackend-lookup # Referința către PVC
