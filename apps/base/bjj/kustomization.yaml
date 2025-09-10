@@ -4,7 +4,6 @@ namespace: bjj
 commonLabels:
   app.kubernetes.io/part-of: bjj
 resources:
-- namespace.yaml
 - config/configmap.yaml
 - storage/lookup-pvc.yaml
 - services/server-svc.yaml
