@@ -3,5 +3,3 @@ kind: Kustomization
 resources:
 - controllers/traefik-gateway
 - configs/cert-manager
-- networking
-
