@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kube-system
+resources:
+- serviceaccount-coredns.yaml
+- clusterrole-coredns.yaml
+- clusterrolebinding-coredns.yaml
+- configmap-coredns.yaml
+- deployment-coredns.yaml
