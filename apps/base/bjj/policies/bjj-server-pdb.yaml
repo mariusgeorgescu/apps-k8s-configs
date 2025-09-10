@@ -3,6 +3,7 @@ kind: PodDisruptionBudget
 metadata:
   name: bjj-server-pdb
   namespace: bjj
+terms: []
 spec:
   minAvailable: 1
   selector:

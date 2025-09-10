@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
 - clusterissuer-godaddy-staging.yaml
 - clusterissuer-godaddy-prod.yaml
-- certificates/bjjbackend-cardano-vip.yaml
+
 

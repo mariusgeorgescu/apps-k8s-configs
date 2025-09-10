@@ -3,6 +3,5 @@ kind: Kustomization
 resources:
 - controllers/traefik-gateway
 - configs/cert-manager
-- namespaces/bjj.yaml
 - networking
 
