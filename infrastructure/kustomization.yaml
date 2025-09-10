@@ -4,4 +4,12 @@ resources:
 - controllers/traefik-gateway
 - controllers/coredns
 - controllers/local-path
+patches:
+- target:
+    kind: StorageClass
+    name: local-path
+  patch: |-
+    - op: replace
+      path: /metadata/annotations/storageclass.kubernetes.io~1is-default-class
+      value: "true"
 
