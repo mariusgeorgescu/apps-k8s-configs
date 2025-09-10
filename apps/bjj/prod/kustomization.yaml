@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
 kind: Kustomization # Declară acest fișier ca o Kustomization
 namespace: bjj # Namespace implicit pentru resurse namespaced
 resources: # Manifeste incluse din baza aplicației
-- ../../base # Include toate resursele din base
+- ../base # Include toate resursele din base
 images: # Re-scrieri pentru imaginile containerelor
 - name: mariusgeorgescu/bjjserver # Numele imaginii principale
   newTag: 988d3e55 # Tag-ul folosit în producție
