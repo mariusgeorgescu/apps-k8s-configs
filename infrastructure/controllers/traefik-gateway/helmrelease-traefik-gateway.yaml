@@ -16,6 +16,7 @@ spec:
   install:
     createNamespace: true
   targetNamespace: traefik
+  timeout: 10m0s
   values:
     deployment:
       enabled: true

@@ -3,8 +3,6 @@ kind: Kustomization
 resources:
 - gatewayclass-traefik.yaml
 - traefik-gateway-rbac.yaml
-- helmrepository-gateway-api.yaml
-- helmrelease-gateway-api-crds.yaml
 - helmrepository-traefik.yaml
 - helmrelease-traefik-gateway.yaml
 
