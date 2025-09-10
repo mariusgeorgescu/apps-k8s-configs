@@ -1,10 +1,10 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: rancher-charts
+  name: local-path-charts
   namespace: flux-system
 spec:
   interval: 10m0s
-  url: https://charts.rancher.io
+  url: https://rancher.github.io/local-path-provisioner/
 
 

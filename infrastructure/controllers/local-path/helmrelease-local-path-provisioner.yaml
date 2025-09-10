@@ -11,7 +11,7 @@ spec:
       version: "^0.0.30"
       sourceRef:
         kind: HelmRepository
-        name: rancher-charts
+        name: local-path-charts
         namespace: flux-system
   install:
     createNamespace: true
