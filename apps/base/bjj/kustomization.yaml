@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: bjj
 resources:
 - namespace.yaml
+- gateway.yaml
 - chain-sync.yaml
 - server.yaml
-- gateway.yaml
 

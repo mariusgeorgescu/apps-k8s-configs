@@ -5,7 +5,7 @@ metadata:
   namespace: bjj
 spec:
   parentRefs:
-  - name: bjj-gateway
+  - name: main-gateway
     sectionName: http
   hostnames:
   - bjjbackend.cardano.vip
@@ -23,7 +23,7 @@ metadata:
   namespace: bjj
 spec:
   parentRefs:
-  - name: bjj-gateway
+  - name: main-gateway
     sectionName: https
   hostnames:
   - bjjbackend.cardano.vip
