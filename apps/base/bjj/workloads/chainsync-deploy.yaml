@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chainsync
+  namespace: bjj
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chainsync
+  template:
+    metadata:
+      labels:
+        app: chainsync
+    spec:
+      containers:
+      - name: chainsync
+        image: mariusgeorgescu/chainsync:chainsync
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: bjj-config
+        volumeMounts:
+        - name: lookup-db
+          mountPath: /data
+      volumes:
+      - name: lookup-db
+        persistentVolumeClaim:
+          claimName: lookup-pvc

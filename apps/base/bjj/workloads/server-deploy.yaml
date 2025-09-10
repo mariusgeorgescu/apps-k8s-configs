@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bjj-server
+  namespace: bjj
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: bjj-server
+  template:
+    metadata:
+      labels:
+        app: bjj-server
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: alpine:3.20
+        command: ["sh","-c","i=0; while [ $i -lt 60 ]; do [ -f /data/chainsync.sqlite ] && exit 0; echo waiting for db; i=$((i+1)); sleep 5; done; echo db not found; exit 1"]
+        volumeMounts:
+        - name: lookup-db
+          mountPath: /data
+          readOnly: true
+      containers:
+      - name: server
+        image: mariusgeorgescu/bjjserver:chainsync
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: bjj-config
+        ports:
+        - name: http
+          containerPort: 8082
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+        readinessProbe:
+          httpGet:
+            path: /swagger-ui
+            port: 8082
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 2
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /swagger-ui
+            port: 8082
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          timeoutSeconds: 2
+          failureThreshold: 3
+        volumeMounts:
+        - name: lookup-db
+          mountPath: /data
+          readOnly: false
+      volumes:
+      - name: lookup-db
+        persistentVolumeClaim:
+          claimName: lookup-pvc

@@ -1,9 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: bjj
+commonLabels:
+  app.kubernetes.io/part-of: bjj
 resources:
 - namespace.yaml
-- gateway.yaml
-- chain-sync.yaml
-- server.yaml
+- config/configmap.yaml
+- storage/lookup-pvc.yaml
+- services/server-svc.yaml
+- policies/bjj-server-pdb.yaml
+- workloads/chainsync-deploy.yaml
+- workloads/server-deploy.yaml
+- routes/bjj-httproutes.yaml
 

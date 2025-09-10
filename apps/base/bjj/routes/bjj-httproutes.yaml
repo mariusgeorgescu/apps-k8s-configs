@@ -35,4 +35,3 @@ spec:
     backendRefs:
     - name: bjj-server
       port: 8082
-

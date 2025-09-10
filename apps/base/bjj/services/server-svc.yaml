@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bjj-server
+  namespace: bjj
+spec:
+  selector:
+    app: bjj-server
+  ports:
+  - name: http
+    port: 8082
+    targetPort: 8082

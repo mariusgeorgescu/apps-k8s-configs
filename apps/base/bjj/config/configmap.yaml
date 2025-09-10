@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bjj-config
+  namespace: bjj
+data:
+  KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run"
+  LOOKUP_PATH: "/data/chainsync.sqlite"
+  BATCH_SIZE: "100000000"
+  FETCH_BATCH_SIZE: "10000000"
+  PORT: "8082"
+  GHCRTS: "-N -M768m -A64m"
