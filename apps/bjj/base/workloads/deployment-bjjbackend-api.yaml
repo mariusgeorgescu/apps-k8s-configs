@@ -5,7 +5,7 @@ metadata: # Metadate Kubernetes
   name: deployment-bjjbackend-api # Numele Deployment-ului
   namespace: bjj # Namespace-ul în care se creează
 spec: # Specificația Deployment-ului
-  replicas: 3 # Numărul de replici ale aplicației
+  replicas: 2 # Numărul de replici ale aplicației
   strategy: # Strategia de update al pods-urilor
     type: RollingUpdate # Update gradual fără downtime
     rollingUpdate: # Parametri ai rolling update-ului
@@ -43,7 +43,7 @@ spec: # Specificația Deployment-ului
             path: /swagger-ui # Endpoint de health
             port: 8082 # Portul probei
             scheme: HTTP # Protocolul probei
-          initialDelaySeconds: 60 # Întârzierea inițială
+          initialDelaySeconds: 10 # Întârzierea inițială
           periodSeconds: 10 # Frecvența
           timeoutSeconds: 2 # Timeout pe probă
           failureThreshold: 3 # Număr de eșecuri permise
@@ -52,7 +52,7 @@ spec: # Specificația Deployment-ului
             path: /swagger-ui # Endpoint pentru liveness
             port: 8082 # Portul probei
             scheme: HTTP # Protocolul probei
-          initialDelaySeconds: 60 # Întârzierea inițială
+          initialDelaySeconds: 10 # Întârzierea inițială
           periodSeconds: 20 # Frecvența
           timeoutSeconds: 2 # Timeout
           failureThreshold: 3 # Număr de eșecuri permise
