@@ -4,3 +4,11 @@ resources:
 - infrastructure.yaml
 - cert-manager.yaml
 - cert-manager-configs.yaml
+patches:
+- target:
+    kind: Kustomization
+    name: infrastructure
+  patch: |-
+    - op: replace
+      path: /spec/path
+      value: ./infrastructure/controllers

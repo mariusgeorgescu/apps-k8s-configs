@@ -5,6 +5,7 @@ resources:
 - controllers/coredns
 - controllers/local-path
 - controllers/cert-manager-godaddy-webhook
+- controllers/metallb
 patches:
 - target:
     kind: StorageClass

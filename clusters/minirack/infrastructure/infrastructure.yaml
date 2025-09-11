@@ -6,12 +6,14 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./infrastructure
+  path: ./infrastructure/controllers
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
   wait: true
   timeout: 5m0s
+  # ensure controllers (Traefik, MetalLB, etc.) are deployed
+  # no dependsOn needed; keep simple
 
 
