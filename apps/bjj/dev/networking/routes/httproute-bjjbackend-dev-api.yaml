@@ -7,7 +7,7 @@ metadata: # Metadate Kubernetes
 spec: # Specificația rutei  
   parentRefs: # Gateway/Listener părinte
   - name: dev-gateway-bjjbackend-dev-api # Gateway-ul dev cu prefix
-    sectionName: https # Listener-ul HTTPS pe portul 443
+    sectionName: http # Listener-ul HTTP pe portul 80 (temporar până se rezolvă certificatul)
   hostnames: # Domeniile pentru care se aplică ruta
   - dev.bjjbackend.cardano.vip # Domeniul dev al aplicației
   rules: # Reguli de rutare
