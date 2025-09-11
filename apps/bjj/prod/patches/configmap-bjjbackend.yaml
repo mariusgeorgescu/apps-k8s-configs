@@ -11,7 +11,7 @@ data:
   DATA_PATH: "/data" # Calea DB-ului local pentru api
 
   #api
-  LOOKUP_PATH: "$(DATA_PATH)/chainsync.sqlite" # Calea DB-ului local pentru lookup
+  LOOKUP_PATH: "/data/chainsync.sqlite" # Calea DB-ului local pentru lookup
   PORT: "8082" # Portul HTTP expus de server
   BASIC_USER: "cardano" # Username pentru basic authentication
   BASIC_PASS: "lovelace" # Password pentru basic authentication
