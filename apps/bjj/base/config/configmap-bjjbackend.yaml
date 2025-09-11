@@ -10,7 +10,7 @@ data: # Chei/valori expuse ca variabile de mediu sau fișiere
   BATCH_SIZE: "100000000" # Dimensiune batch pentru procesare
   FETCH_BATCH_SIZE: "10000000" # Dimensiune batch pentru fetch
   PORT: "8082" # Portul HTTP expus de server
-  GHCRTS: "-M768m -A64m" # RTS flags pentru runtime Haskell (fără -N pentru chainsync)
+  # GHCRTS: "-M768m -A64m" # RTS flags dezactivate pentru chainsync (nu a fost compilat cu -rtsopts)
   GOMAESTRO_API_URL: "https://preview.gomaestro-api.org" # URL pentru API-ul Gomaestro
   GHC_NETWORK_IPV4_ONLY: "1" # Forțează IPv4 pentru aplicația Haskell
   RESOLV_CONF: "/etc/resolv.conf" # Forțează folosirea resolver-ului cluster
