@@ -11,4 +11,4 @@ spec:
   ports: # Porturile expuse de Service
   - name: http # Numele portului (util pentru referințe)
     port: 8082 # Portul pe care Service-ul ascultă în cluster
-    targetPort: 8082 # Portul containerului către care se forwardează traficul
+    # targetPort omis: Kubernetes îl deduce egal cu "port"
