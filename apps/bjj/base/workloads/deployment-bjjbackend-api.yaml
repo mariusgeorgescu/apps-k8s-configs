@@ -19,17 +19,7 @@ spec: # Specificația Deployment-ului
       labels:
         app: bjjbackend-api-pod-label # Etichetă pentru selectare și servicii
     spec: # Specificația Pod-ului
-      initContainers:
-      - name: wait-for-maestro
-        image: busybox:1.36
-        command: ["sh","-c"]
-        args:
-        - >-
-          set -e;
-          echo "Waiting for DNS: preview.gomaestro-api.org";
-          until nslookup preview.gomaestro-api.org >/dev/null 2>&1; do sleep 5; done;
-          echo "Waiting for HTTPS: https://preview.gomaestro-api.org/v1/chain-tip";
-          until wget -q --spider https://preview.gomaestro-api.org/v1/chain-tip; do sleep 5; done;
+
 
       containers: # Lista containerelor din Pod
       - name: container-bjjbackend-api # Numele containerului
@@ -53,7 +43,7 @@ spec: # Specificația Deployment-ului
             path: /swagger-ui # Endpoint de health
             port: 8082 # Portul probei
             scheme: HTTP # Protocolul probei
-          initialDelaySeconds: 5 # Întârzierea inițială
+          initialDelaySeconds: 60 # Întârzierea inițială
           periodSeconds: 10 # Frecvența
           timeoutSeconds: 2 # Timeout pe probă
           failureThreshold: 3 # Număr de eșecuri permise
@@ -62,7 +52,7 @@ spec: # Specificația Deployment-ului
             path: /swagger-ui # Endpoint pentru liveness
             port: 8082 # Portul probei
             scheme: HTTP # Protocolul probei
-          initialDelaySeconds: 10 # Întârzierea inițială
+          initialDelaySeconds: 60 # Întârzierea inițială
           periodSeconds: 20 # Frecvența
           timeoutSeconds: 2 # Timeout
           failureThreshold: 3 # Număr de eșecuri permise
