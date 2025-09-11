@@ -15,6 +15,6 @@ patchesStrategicMerge: # Patches pentru a adăuga atribute dev
 - patches/configmap-bjjbackend.yaml
 images: # Re-scrieri pentru imaginile containerelor
 - name: mariusgeorgescu/bjjserver # Numele imaginii principale
-  newTag: latest # Tag-ul folosit în dezvoltare
+  newTag: 988d3e55 # Tag-ul folosit în dezvoltare
 - name: mariusgeorgescu/chainsync # Imaginea chain-sync
   newTag: chainsync # Tag-ul folosit în dezvoltare
