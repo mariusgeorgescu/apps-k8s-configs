@@ -1,0 +1,18 @@
+# HTTPRoute pentru redirect de la HTTP la HTTPS pentru bjjbackend dev.
+apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru HTTPRoute
+kind: HTTPRoute # Tipul resursei este HTTPRoute
+metadata: # Metadate Kubernetes
+  name: httproute-bjjbackend-dev-api-redirect # Numele rutei de redirect dev
+  namespace: bjj # Namespace-ul resursei
+spec: # Specificația rutei
+  parentRefs: # Gateway/Listener la care se atașează ruta
+  - name: gateway-bjjbackend-dev-api # Numele Gateway-ului dev
+    sectionName: http # Listener-ul HTTP pe portul 80
+  hostnames: # Domeniile pentru care se aplică ruta
+  - dev.bjjbackend.cardano.vip # Domeniul dev al aplicației
+  rules: # Reguli de rutare
+  - filters: # Filtre aplicate request-urilor
+    - type: RequestRedirect # Tipul filtrului: redirect
+      requestRedirect: # Config redirect
+        scheme: https # Forțează HTTPS
+        statusCode: 301 # Status code permanent redirect

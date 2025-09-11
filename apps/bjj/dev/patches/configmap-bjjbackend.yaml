@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-bjjbackend
+  namespace: bjj
+data:
+  #chainsync
+  KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run"
+  BATCH_SIZE: "100000" # Valori mai mici pentru dev
+  FETCH_BATCH_SIZE: "10000" # Valori mai mici pentru dev
+  DATA_PATH: "/data" # Calea DB-ului local pentru api
+
+  #api
+  LOOKUP_PATH: "$(DATA_PATH)/chainsync.sqlite" # Calea DB-ului local pentru lookup
+  PORT: "8082" # Portul HTTP expus de server
+  BASIC_USER: "dev" # Username pentru basic authentication dev
+  BASIC_PASS: "dev123" # Password pentru basic authentication dev

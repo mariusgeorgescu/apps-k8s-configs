@@ -1,0 +1,16 @@
+# Certificate (cert-manager) pentru domeniul dev.bjjbackend.cardano.vip.
+# Generează secretul TLS `secret-bjjbackend-dev-cardano-vip-tls` folosind `ClusterIssuer`-ul
+# `letsencrypt-godaddy-staging` cu DNS-01 challenge via GoDaddy webhook.
+apiVersion: cert-manager.io/v1 # Versiunea API a cert-manager pentru Certificate
+kind: Certificate # Resursă de tip Certificate
+metadata: # Metadate Kubernetes
+  name: certificate-bjjbackend-dev-cardano-vip # Numele certificatului 
+  namespace: bjj # Namespace-ul în care va exista certificatul și secretul TLS
+spec: # Specificații pentru emiterea certificatului
+  secretName: secret-bjjbackend-dev-cardano-vip-tls # Numele secretului TLS care va fi creat/actualizat
+  dnsNames: # Numele DNS pentru care certificatul este valid
+  - dev.bjjbackend.cardano.vip # Domeniul dev al aplicației
+  issuerRef: # Referință către issuer-ul care emite certificatul
+    name: letsencrypt-godaddy-staging # Numele ClusterIssuer-ului cu DNS-01 challenge (GoDaddy staging)
+    kind: ClusterIssuer # Tipul issuer-ului (la nivel de cluster)
+    group: cert-manager.io # Grupul API al issuer-ului

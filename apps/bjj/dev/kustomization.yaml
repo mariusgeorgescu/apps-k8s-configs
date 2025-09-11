@@ -1,0 +1,19 @@
+# Kustomization overlay "dev" pentru aplicația bjjbackend: referă baza și configurează pentru dezvoltare.
+apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
+kind: Kustomization # Declară acest fișier ca o Kustomization
+namespace: bjj # Namespace implicit pentru resurse namespaced
+resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
+- ../base # Include toate resursele din base
+- networking/certificates/certificate-bjjbackend-dev-cardano-vip.yaml # Certificat TLS (dev)
+- networking/gateways/gateway-bjjbackend-dev-api.yaml # Gateway (dev)
+- networking/routes/httproute-bjjbackend-dev-api-redirect.yaml # HTTP->HTTPS redirect (dev)
+- networking/routes/httproute-bjjbackend-dev-api.yaml # Ruta principală (dev)
+- policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (dev)
+patchesStrategicMerge: # Patches pentru a adăuga atribute dev
+- patches/deployment-bjjbackend-api.yaml
+- patches/configmap-bjjbackend.yaml
+images: # Re-scrieri pentru imaginile containerelor
+- name: mariusgeorgescu/bjjserver # Numele imaginii principale
+  newTag: latest # Tag-ul folosit în dezvoltare
+- name: mariusgeorgescu/chainsync # Imaginea chain-sync
+  newTag: chainsync # Tag-ul folosit în dezvoltare
