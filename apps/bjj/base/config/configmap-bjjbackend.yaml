@@ -9,5 +9,5 @@ data: # Chei/valori expuse ca variabile de mediu sau fișiere
   LOOKUP_PATH: "/data/chainsync.sqlite" # Calea DB-ului local pentru lookup
   BATCH_SIZE: "1000000" # Valoare minimă; overlay-urile o pot mări
   FETCH_BATCH_SIZE: "100000" # Valoare minimă; overlay-urile o pot mări
-  PORT: "8082" # Portul HTTP expus de server
+
 

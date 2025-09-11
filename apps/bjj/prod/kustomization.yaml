@@ -6,8 +6,8 @@ resources: # Manifeste incluse din baza aplicației + resurse only-in-prod
 - ../base # Include toate resursele din base
 - certificates/certificate-bjjbackend-cardano-vip.yaml # Certificat TLS (prod)
 - networking/gateways/gateway-bjjbackend-api.yaml # Gateway (prod)
-- routes/httproute-bjjbackend-api-redirect.yaml # HTTP->HTTPS redirect (prod)
-- routes/httproute-bjjbackend-api.yaml # Ruta principală (prod)
+- networking/routes/httproute-bjjbackend-api-redirect.yaml # HTTP->HTTPS redirect (prod)
+- networking/routes/httproute-bjjbackend-api.yaml # Ruta principală (prod)
 - policies/pdb-bjjbackend-api.yaml # PDB (prod)
 - policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (prod)
 patchesStrategicMerge: # Patches pentru a adăuga atribute non-minime
