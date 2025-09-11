@@ -15,3 +15,15 @@ spec: # Specificația Gateway-ului
     allowedRoutes: # Politica pentru rutele permise
       namespaces:
         from: All # Permite rute din orice namespace (cu ReferenceGrant dacă e necesar)
+  - name: https # Numele listener-ului HTTPS
+    hostname: bjjbackend.cardano.vip # Domeniul asociat listener-ului
+    port: 443 # Portul pentru HTTPS
+    protocol: HTTPS # Protocolul folosit de listener
+    tls: # Configurația TLS pentru HTTPS
+      mode: Terminate # Termination TLS la nivel de Gateway
+      certificateRefs: # Secretul TLS care conține certificatul
+      - kind: Secret # Tipul referinței (Secret)
+        name: secret-bjjbackend-cardano-vip-tls # Numele Secretului TLS
+    allowedRoutes: # Politica pentru rutele permise
+      namespaces:
+        from: All # Permite rute din orice namespace
