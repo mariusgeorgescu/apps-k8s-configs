@@ -29,21 +29,7 @@ spec: # Specificația Deployment-ului
           value: "2"
         - name: attempts
           value: "3"
-      hostAliases:
-      - ip: "34.107.158.158"
-        hostnames:
-        - preview.gomaestro-api.org
-      initContainers:
-      - name: wait-for-maestro
-        image: busybox:1.36
-        command: ["sh","-c"]
-        args:
-        - >-
-          set -e;
-          echo "Waiting for DNS: preview.gomaestro-api.org";
-          until nslookup preview.gomaestro-api.org >/dev/null 2>&1; do sleep 5; done;
-          echo "Waiting for TCP 443 connectivity";
-          until nc -z -w 5 preview.gomaestro-api.org 443 >/dev/null 2>&1; do sleep 5; done;
+
 
       containers: # Lista containerelor din Pod
       - name: container-bjjbackend-api # Numele containerului
