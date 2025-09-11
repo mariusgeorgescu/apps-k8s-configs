@@ -20,3 +20,6 @@ resources: # Listează toate manifestele care compun baza
 - routes/httproute-bjjbackend-api-redirect.yaml # HTTPRoute de redirect
 - routes/httproute-bjjbackend-api.yaml # HTTPRoute principal
 
+patchesStrategicMerge:
+- policies/networkpolicy-bjj-egress-patch.yaml # Override common labels for DNS selector
+
