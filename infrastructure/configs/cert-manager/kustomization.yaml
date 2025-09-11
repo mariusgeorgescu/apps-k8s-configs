@@ -4,7 +4,5 @@ resources:
 - secret-godaddy-api-token.yaml
 - clusterissuer-godaddy-staging.yaml
 - clusterissuer-godaddy-prod.yaml
-- clusterissuer-letsencrypt-http01-staging.yaml
-- clusterissuer-letsencrypt-http01-prod.yaml
 
 
