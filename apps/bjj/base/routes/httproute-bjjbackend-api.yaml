@@ -8,6 +8,8 @@ spec: # Specificația rutei
   parentRefs: # Gateway/Listener părinte
   - name: gateway-bjjbackend-api # Gateway-ul definit în base
     sectionName: https # Listener-ul HTTPS pe portul 443
+  - name: gateway-bjjbackend-api # Gateway-ul definit în base
+    sectionName: http # Listener-ul HTTP pe portul 80
   hostnames: # Domeniile pentru care se aplică ruta
   - bjjbackend.cardano.vip # Domeniul aplicației
   rules: # Reguli de rutare
