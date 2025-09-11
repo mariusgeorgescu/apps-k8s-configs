@@ -15,7 +15,6 @@ resources: # Listează toate manifestele care compun baza
 - storage/pvc-bjjbackend-lookup.yaml # PersistentVolumeClaim pentru fișierul DB
 - services/service-bjjbackend-api.yaml # Service pentru expunerea internă a aplicației
 - policies/pdb-bjjbackend-api.yaml # PDB pentru disponibilitate la evictions
-- policies/networkpolicy-bjj-egress.yaml # Egress policy to allow DNS/HTTPS
 - workloads/deployment-bjjbackend-chainsync.yaml # Deployment pentru procesul chainsync
 - workloads/deployment-bjjbackend-api.yaml # Deployment pentru serverul principal
 - routes/httproute-bjjbackend-api-redirect.yaml # HTTPRoute de redirect
