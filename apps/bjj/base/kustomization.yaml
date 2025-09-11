@@ -9,11 +9,11 @@ commonLabels: # Etichete aplicate tuturor resurselor generate
 resources: # Listează toate manifestele care compun baza
 - namespace.yaml # Creează namespace-ul aplicației
 - config/configmap-bjjbackend.yaml # ConfigMap cu variabile de configurare
+- config/configmap-hosts.yaml # ConfigMap cu hosts custom pentru DNS
 - certificates/certificate-bjjbackend-cardano-vip.yaml # Certificat TLS pentru domeniu
 - networking/gateways/gateway-bjjbackend-api.yaml # Gateway cu listener-ele HTTP/HTTPS
 - storage/pvc-bjjbackend-lookup.yaml # PersistentVolumeClaim pentru fișierul DB
 - services/service-bjjbackend-api.yaml # Service pentru expunerea internă a aplicației
-- services/service-preview-gomaestro-alias.yaml # Service pentru redirecționarea preview.gomaestro-api.org
 - policies/pdb-bjjbackend-api.yaml # PDB pentru disponibilitate la evictions
 - policies/networkpolicy-bjj-egress.yaml # Egress policy to allow DNS/HTTPS
 - workloads/deployment-bjjbackend-chainsync.yaml # Deployment pentru procesul chainsync
