@@ -19,8 +19,8 @@ spec: # Specificația Deployment-ului
         app: bjjbackend-api-pod-label # Etichetă pentru selectare și servicii
     spec: # Specificația Pod-ului
       containers: # Lista containerelor din Pod
-      - name: container-bjjbackend-api # Numele containerului
-        image: mariusgeorgescu/bjjserver # Imaginea containerului
+      - name: container-bjjbackend-api  
+        image: mariusgeorgescu/bjjserver  
         imagePullPolicy: IfNotPresent # Politica de pull a imaginii
         envFrom: # Surse de variabile de mediu
         - configMapRef:

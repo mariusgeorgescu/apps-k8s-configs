@@ -4,7 +4,7 @@ kind: Kustomization # Declară acest fișier ca o Kustomization
 namespace: bjj # Namespace implicit pentru resurse namespaced
 resources: # Manifeste incluse din baza aplicației + resurse only-in-prod
 - ../base # Include toate resursele din base
-- certificates/certificate-bjjbackend-cardano-vip.yaml # Certificat TLS (prod)
+- networking/certificates/certificate-bjjbackend-cardano-vip.yaml # Certificat TLS (prod)
 - networking/gateways/gateway-bjjbackend-api.yaml # Gateway (prod)
 - networking/routes/httproute-bjjbackend-api-redirect.yaml # HTTP->HTTPS redirect (prod)
 - networking/routes/httproute-bjjbackend-api.yaml # Ruta principală (prod)
