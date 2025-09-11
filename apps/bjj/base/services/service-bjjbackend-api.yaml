@@ -5,7 +5,7 @@ metadata: # Metadate Kubernetes
   name: service-bjjbackend-api  
   namespace: bjj  
 spec:  
-  type: ClusterIP
+  type: NodePort
   selector: # Etichete pentru a selecta Pods-urile țintă
     app: bjjbackend-api-pod-label # Trebuie să corespundă cu labels din Deployment
   ports: # Porturile expuse de Service
