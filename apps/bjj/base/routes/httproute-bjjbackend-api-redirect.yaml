@@ -1,4 +1,4 @@
-# HTTPRoute: redirect HTTP to HTTPS for bjjbackend.
+# HTTPRoute pentru redirect de la HTTP la HTTPS pentru bjjbackend.
 apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru HTTPRoute
 kind: HTTPRoute # Tipul resursei este HTTPRoute
 metadata: # Metadate Kubernetes

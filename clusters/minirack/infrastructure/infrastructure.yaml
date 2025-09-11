@@ -1,4 +1,4 @@
-# Flux Kustomization for infrastructure: applies the repo's infrastructure directory.
+# Flux Kustomization "infrastructure": aplică controllerele de infrastructură din repo.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:

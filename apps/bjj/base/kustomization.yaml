@@ -1,6 +1,5 @@
-# Kustomize base pentru aplicația bjj (model app-owned)
-# Setează namespace-ul implicit și etichetele comune, apoi compune
-# resursele namespaced (ConfigMap, Gateway, Service, Deployments, etc.).
+# Kustomization base pentru aplicația bjjbackend (model app-owned).
+# Setează namespace-ul și etichetele comune, apoi compune resursele (ConfigMap, Gateway, Service, Deployments, Routes, etc.).
 apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
 kind: Kustomization # Declară acest fișier ca o Kustomization
 namespace: bjj # Namespace implicit pentru toate resursele namespaced

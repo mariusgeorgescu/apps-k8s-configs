@@ -1,3 +1,5 @@
+# Kustomization de nivel cluster pentru mediul "minirack".
+# Aplica flux-system (bootstrap), infrastructura și aplicațiile (bjjbackend).
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:

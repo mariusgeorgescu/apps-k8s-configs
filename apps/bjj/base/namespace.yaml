@@ -1,5 +1,4 @@
-# Namespace-ul aplicației bjj. Fiind model app-owned, aplicația își
-# gestionează propriul ciclu de viață al namespace-ului.
+# Namespace-ul aplicației bjjbackend (model app-owned): aplicația își gestionează propriul ciclu de viață.
 apiVersion: v1 # Versiunea API pentru resurse de tip v1 (core)
 kind: Namespace # Tipul resursei este Namespace
 metadata: # Metadate despre resursă

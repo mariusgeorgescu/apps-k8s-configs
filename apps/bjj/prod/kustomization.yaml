@@ -1,4 +1,4 @@
-# Overlay-ul prod: referă baza și fixează imaginile containerelor.
+# Kustomization overlay "prod" pentru aplicația bjjbackend: referă baza și fixează imaginile containerelor.
 apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
 kind: Kustomization # Declară acest fișier ca o Kustomization
 namespace: bjj # Namespace implicit pentru resurse namespaced

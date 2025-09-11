@@ -1,4 +1,4 @@
-# Service pentru expunerea aplicației bjj-server în interiorul clusterului.
+# Service pentru expunerea aplicației bjjbackend în interiorul clusterului.
 apiVersion: v1 # Versiunea API pentru resurse de bază
 kind: Service # Tipul resursei este Service
 metadata: # Metadate Kubernetes

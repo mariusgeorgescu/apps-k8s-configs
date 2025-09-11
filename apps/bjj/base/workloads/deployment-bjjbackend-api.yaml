@@ -1,4 +1,4 @@
-# Deployment pentru aplicația bjj-server (3 replici, probe HTTP, resurse setate).
+# Deployment pentru aplicația bjjbackend API (3 replici, probe HTTP, resurse setate).
 apiVersion: apps/v1 # Versiunea API pentru Deployment
 kind: Deployment # Tipul resursei este Deployment
 metadata: # Metadate Kubernetes

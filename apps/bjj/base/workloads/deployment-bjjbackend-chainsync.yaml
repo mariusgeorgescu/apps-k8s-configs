@@ -1,4 +1,4 @@
-# Deployment pentru jobul chainsync (gestionează populația DB /data/chainsync.sqlite).
+# Deployment pentru procesul chainsync al bjjbackend (populează DB-ul /data/chainsync.sqlite).
 apiVersion: apps/v1 # Versiunea API pentru Deployment
 kind: Deployment # Tipul resursei este Deployment
 metadata: # Metadate Kubernetes

@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.30.0-standalone/poddisruptionbudget-policy-v1.json
 # PodDisruptionBudget pentru a menține disponibilitatea minimă a pods-urilor
-# bjj-server în timpul operațiilor de mentenanță/eviction.
+# bjjbackend API în timpul operațiilor de mentenanță/eviction.
 apiVersion: policy/v1 # Versiunea API pentru PDB
 kind: PodDisruptionBudget # Tipul resursei este PDB
 metadata: # Metadate Kubernetes

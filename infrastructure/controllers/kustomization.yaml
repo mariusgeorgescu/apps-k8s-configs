@@ -1,3 +1,5 @@
+## Kustomization care orchestrează controllerele de infrastructură instalate prin Flux.
+## Include: Traefik Gateway, CoreDNS, Local Path Provisioner, cert-manager, GoDaddy webhook, MetalLB.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:

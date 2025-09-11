@@ -1,4 +1,4 @@
-# PersistentVolumeClaim pentru baza de date chain lookup (citire/scriere locală).
+# PersistentVolumeClaim pentru baza de date chain lookup a bjjbackend (citire/scriere locală).
 apiVersion: v1 # Versiunea API pentru resurse de bază
 kind: PersistentVolumeClaim # Tipul resursei este PVC
 metadata: # Metadate Kubernetes

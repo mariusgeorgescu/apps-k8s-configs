@@ -1,4 +1,4 @@
-# ConfigMap cu variabile de configurare pentru bjj (consumat de Deployments).
+# ConfigMap cu variabile de configurare pentru bjjbackend (consumat de Deployments).
 apiVersion: v1 # Versiunea API pentru resurse de bază
 kind: ConfigMap # Tipul resursei este ConfigMap
 metadata: # Metadate despre ConfigMap

@@ -9,11 +9,11 @@ apps-k8s-configs/
   apps/
     <app>/
       base/                # manifestele generice ale aplicației (namespace, servicii, rute, workloads)
-      dev/                 # overlay de mediu (setări/patch-uri specifice dev)
-      prod/                # overlay de mediu (setări/patch-uri specifice prod)
+      dev/                 # overlay de mediu (opțional)
+      prod/                # overlay de mediu (producție)
   infrastructure/
     controllers/           # instalări de controlere via Helm (Flux HelmRelease/HelmRepository)
-    configs/               # resurse dependente de controlere (ex: ClusterIssuer pentru cert-manager)
+    configs/               # resurse dependente de controlere (ex: ClusterIssuer pentru cert-manager, MetalLB AddressPool)
   clusters/
     <cluster>/
       flux-system/         # bootstrap Flux (generat de flux bootstrap)
@@ -36,8 +36,12 @@ apps-k8s-configs/
 
 ### infrastructure/controllers
 - Conține controlere și CRD-uri instalate cu Flux Helm:
-  - `cert-manager/` — instalează cert-manager (CRD + controller)
-  - `traefik-gateway/` — instalează Traefik cu suport Kubernetes Gateway și CRD-urile Gateway API
+  - `traefik-gateway/` — Traefik Gateway Controller (GatewayClass + controller)
+  - `coredns/` — CoreDNS (SA/RBAC/Config/Deployment)
+  - `local-path/` — Local Path Provisioner (StorageClass implicit)
+  - `cert-manager/` — cert-manager (CRD + controller)
+  - `cert-manager-godaddy-webhook/` — Webhook GoDaddy pentru solver DNS-01
+  - `metallb/` — MetalLB (load balancer L2)
 
 ### infrastructure/configs
 - Conține resurse dependente de controlerele instalate:
@@ -45,23 +49,25 @@ apps-k8s-configs/
 
 ### clusters/<cluster>
 - Conține Kustomization-urile Flux care „leagă” repo-ul de cluster:
-  - `infrastructure/` — include `infrastructure.yaml` (Kustomization Flux pentru `infrastructure/`) și Kustomization-uri dedicate (ex: `cert-manager.yaml`)
-  - `<app>/` — Kustomization-uri Flux care aplică overlay-urile aplicațiilor (`apps/<app>/dev` / `prod`)
+  - `infrastructure/` — Kustomization-uri Flux pentru controllere (ex: `infrastructure.yaml`, `cert-manager.yaml`, `cert-manager-configs.yaml`, `metallb-configs.yaml`)
+  - `<app>/` — Kustomization-uri Flux pentru aplicații (ex: `bjjbackend/bjjbackend-prod.yaml`)
 
 ## Conveții de denumire
 
-- Consistență nume aplicație: folosește același identificator în tot repo-ul, de ex. `bjjbackend` (fără cratime) și menține `metadata.name` aliniat cu numele fișierului.
-- Prefix tip resursă: include tipul resursei în `metadata.name` și în etichetele podurilor, de ex. `bjjbackend-api`, respectiv etichete precum `bjjbackend-api-pod-label`.
-- Fișiere ↔ resurse: numele fișierelor reflectă numele resurselor; `metadata.name` corespunde numelui fișierului.
-- Separare: controlerele/CRD-urile sunt în `infrastructure/controllers`, resursele care depind de ele (ex: `ClusterIssuer`) în `infrastructure/configs`.
+- **Consistență nume aplicație**: folosește același identificator în tot repo-ul, ex. `bjjbackend` (fără cratime) și menține `metadata.name` aliniat cu numele fișierului.
+- **Prefix tip resursă**: include tipul resursei în `metadata.name` și în etichetele podurilor, ex. `bjjbackend-api`, respectiv `bjjbackend-api-pod-label`.
+- **Fișiere ↔ resurse**: numele fișierelor reflectă numele resurselor; `metadata.name` corespunde numelui fișierului.
+- **Separare**: controlerele/CRD-urile sunt în `infrastructure/controllers`, resursele dependente (ex: `ClusterIssuer`, MetalLB AddressPool) în `infrastructure/configs`.
 
 ## FluxCD: cum se aplică
 
 - `clusters/<cluster>/kustomization.yaml` include directoare precum `flux-system`, `infrastructure`, `<app>`.
-- `clusters/<cluster>/infrastructure/*.yaml` sunt resurse `Kustomization` Flux care indică părți din repo:
-  - `infrastructure.yaml` -> `./infrastructure`
+- `clusters/<cluster>/infrastructure/*.yaml` sunt resurse `Kustomization` Flux care indică părți din repo. Exemple în `minirack`:
+  - `infrastructure.yaml` -> `./infrastructure/controllers`
   - `cert-manager.yaml` -> `./infrastructure/controllers/cert-manager`
-- `infrastructure/kustomization.yaml` agregă controllerele și config-urile (ordinea poate fi separată prin Kustomization-uri Flux distincte pentru a impune dependențe).
+  - `cert-manager-configs.yaml` -> `./infrastructure/configs/cert-manager`
+  - `metallb-configs.yaml` -> `./infrastructure/configs/metallb`
+- `infrastructure/kustomization.yaml` agregă controllerele principale și aplică patch-ul pentru `StorageClass` implicit.
 
 ## Resurse și scop
 
@@ -144,10 +150,10 @@ Presupuneri: ai deja un cluster cu Flux și infrastructura necesară (Traefik Ga
 
 ## Exemple din repo
 
-- Aplicație: `bjjbackend`
+- **Aplicație: `bjjbackend`**
   - Base: `apps/bjj/base/`
-  - Overlays: `apps/bjj/dev`, `apps/bjj/prod`
-  - Kustomization Flux: `clusters/minirack/bjjbackend/bjjbackend-dev.yaml`, `clusters/minirack/bjjbackend/bjjbackend-prod.yaml`
+  - Overlay prod: `apps/bjj/prod`
+  - Kustomization Flux: `clusters/minirack/bjjbackend/bjjbackend-prod.yaml`
 - Infrastructură:
   - Controller Traefik + Gateway API: `infrastructure/controllers/traefik-gateway/`
   - cert-manager: `infrastructure/controllers/cert-manager/`

@@ -1,4 +1,4 @@
-# Gateway (Gateway API) pentru aplicația bjj. Folosește GatewayClass-ul Traefik
+# Gateway (Gateway API) pentru aplicația bjjbackend. Folosește GatewayClass-ul Traefik
 # și gestionează listener-ele HTTP/HTTPS pentru hostul aplicației.
 apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru Gateway API
 kind: Gateway # Resursă de tip Gateway

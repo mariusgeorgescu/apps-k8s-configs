@@ -9,6 +9,7 @@ spec:
   - Egress
   egress:
   # Allow DNS to CoreDNS in kube-system (TCP/UDP 53)
+  # Notă: dacă IP-ul ClusterIP CoreDNS se schimbă, actualizează și regula explicită de mai jos.
   - to:
     - namespaceSelector:
         matchLabels:

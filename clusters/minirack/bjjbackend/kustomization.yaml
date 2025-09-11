@@ -1,3 +1,4 @@
+# Kustomization pentru aplicația bjjbackend (overlay prod). Se aplică prin Flux.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
