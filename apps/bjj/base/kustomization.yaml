@@ -13,5 +13,22 @@ resources: # Listează toate manifestele care compun baza
 - workloads/deployment-bjjbackend-chainsync.yaml # Deployment pentru procesul chainsync
 - workloads/deployment-bjjbackend-api.yaml # Deployment pentru serverul principal
 
+replacements:
+- source:
+    kind: ConfigMap
+    name: configmap-bjjbackend
+    fieldPath: data.DATA_PATH
+  targets:
+  - select:
+      kind: Deployment
+      name: deployment-bjjbackend-api
+    fieldPaths:
+    - spec.template.spec.containers.[name=container-bjjbackend-api].volumeMounts.[name=lookup-db].mountPath
+  - select:
+      kind: Deployment
+      name: deployment-bjjbackend-chainsync
+    fieldPaths:
+    - spec.template.spec.containers.[name=container-bjjbackend-chainsync].volumeMounts.[name=lookup-db].mountPath
+
 
 
