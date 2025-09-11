@@ -4,6 +4,7 @@ resources:
 - controllers/traefik-gateway
 - controllers/coredns
 - controllers/local-path
+- controllers/cert-manager-godaddy-webhook
 patches:
 - target:
     kind: StorageClass

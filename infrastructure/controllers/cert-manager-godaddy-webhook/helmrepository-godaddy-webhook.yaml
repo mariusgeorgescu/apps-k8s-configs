@@ -1,0 +1,9 @@
+# HelmRepository pentru GoDaddy webhook
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: godaddy-webhook
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://snowdrop.github.io/godaddy-webhook
