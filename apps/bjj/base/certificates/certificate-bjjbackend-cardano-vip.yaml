@@ -1,6 +1,6 @@
 # Certificate (cert-manager) pentru domeniul bjjbackend.cardano.vip.
 # Generează secretul TLS `secret-bjjbackend-cardano-vip-tls` folosind ClusterIssuer-ul
-# `letsencrypt-godaddy-prod` (definit în infrastructură).
+# `letsencrypt-http01-prod` cu HTTP-01 challenge (definit în infrastructură).
 apiVersion: cert-manager.io/v1 # Versiunea API a cert-manager pentru Certificate
 kind: Certificate # Resursă de tip Certificate
 metadata: # Metadate Kubernetes
@@ -11,6 +11,6 @@ spec: # Specificații pentru emiterea certificatului
   dnsNames: # Numele DNS pentru care certificatul este valid
   - bjjbackend.cardano.vip # Domeniul principal servit de aplicație
   issuerRef: # Referință către issuer-ul care emite certificatul
-    name: letsencrypt-godaddy-prod # Numele ClusterIssuer-ului folosit
+    name: letsencrypt-http01-prod # Numele ClusterIssuer-ului cu HTTP-01 challenge
     kind: ClusterIssuer # Tipul issuer-ului (la nivel de cluster)
     group: cert-manager.io # Grupul API al issuer-ului
