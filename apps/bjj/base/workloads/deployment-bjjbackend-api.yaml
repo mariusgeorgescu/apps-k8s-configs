@@ -19,10 +19,7 @@ spec: # Specificația Deployment-ului
       labels:
         app: bjjbackend-api-pod-label # Etichetă pentru selectare și servicii
     spec: # Specificația Pod-ului
-      dnsConfig: # Configurația DNS pentru Pod
-        options:
-        - name: ndots
-          value: "1"
+
       containers: # Lista containerelor din Pod
       - name: container-bjjbackend-api # Numele containerului
         image: mariusgeorgescu/bjjserver:988d3e55 # Imaginea containerului

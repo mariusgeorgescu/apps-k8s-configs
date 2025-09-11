@@ -14,10 +14,7 @@ spec: # Specificația Deployment-ului
       labels:
         app: bjjbackend-chainsync-pod-label # Etichetă pentru selectare
     spec: # Specificația Pod-ului
-      dnsConfig: # Configurația DNS pentru Pod
-        options:
-        - name: ndots
-          value: "1"
+
       containers: # Lista containerelor din Pod
       - name: container-bjjbackend-chainsync # Numele containerului
         image: mariusgeorgescu/chainsync:chainsync # Imaginea containerului
