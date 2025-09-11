@@ -6,7 +6,7 @@ metadata: # Metadate Kubernetes
   namespace: bjj # Namespace-ul resursei
 spec: # Specificația rutei  
   parentRefs: # Gateway/Listener părinte
-  - name: gateway-bjjbackend-dev-api # Gateway-ul dev
+  - name: dev-gateway-bjjbackend-dev-api # Gateway-ul dev cu prefix
     sectionName: https # Listener-ul HTTPS pe portul 443
   hostnames: # Domeniile pentru care se aplică ruta
   - dev.bjjbackend.cardano.vip # Domeniul dev al aplicației
@@ -16,5 +16,5 @@ spec: # Specificația rutei
         type: PathPrefix # Tipul de potrivire pe cale
         value: / # Toate căile
     backendRefs: # Backendurile către care se forwardează traficul
-    - name: service-bjjbackend-api # Numele Service-ului backend
+    - name: dev-service-bjjbackend-api # Numele Service-ului backend cu prefix
       port: 8082 # Portul backendului

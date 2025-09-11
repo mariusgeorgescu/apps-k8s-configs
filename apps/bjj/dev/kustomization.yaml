@@ -2,6 +2,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
 kind: Kustomization # Declară acest fișier ca o Kustomization
 namespace: bjj # Namespace implicit pentru resurse namespaced
+namePrefix: dev- # Prefixează toate resursele cu "dev-"
 resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
 - ../base # Include toate resursele din base
 - networking/certificates/certificate-bjjbackend-dev-cardano-vip.yaml # Certificat TLS (dev)

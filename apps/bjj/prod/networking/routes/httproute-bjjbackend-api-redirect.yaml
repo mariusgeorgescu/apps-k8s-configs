@@ -6,7 +6,7 @@ metadata:
   namespace: bjj  
 spec: # Specificația rutei
   parentRefs: # Gateway/Listener la care se atașează ruta
-  - name: gateway-bjjbackend-api # Numele Gateway-ului părinte
+  - name: prod-gateway-bjjbackend-api # Numele Gateway-ului prod cu prefix
     sectionName: http # Listener-ul HTTP pe portul 80
   hostnames: # Domeniile pentru care se aplică ruta
   - bjjbackend.cardano.vip # Domeniul aplicației
