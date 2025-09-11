@@ -1,14 +1,13 @@
 # Service pentru expunerea aplicației bjjbackend în interiorul clusterului.
 apiVersion: v1 # Versiunea API pentru resurse de bază
-kind: Service  
+kind: Service
 metadata: # Metadate Kubernetes
-  name: service-bjjbackend-api  
-  namespace: bjj  
-spec:  
-  type: NodePort
+  name: service-bjjbackend-api
+  namespace: bjj
+spec:
+  type: ClusterIP
   selector: # Etichete pentru a selecta Pods-urile țintă
     app: bjjbackend-api-pod-label # Trebuie să corespundă cu labels din Deployment
   ports: # Porturile expuse de Service
   - name: http # Numele portului (util pentru referințe)
     port: 8082 # Portul pe care Service-ul ascultă în cluster
-    # targetPort omis: Kubernetes îl deduce egal cu "port"

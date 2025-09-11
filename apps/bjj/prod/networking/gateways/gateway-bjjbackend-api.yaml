@@ -2,9 +2,9 @@
 # și gestionează listener-ele HTTP/HTTPS pentru hostul aplicației.
 apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru Gateway API
 kind: Gateway # Resursă de tip Gateway
-metadata: # Metadate Kubernetes
+metadata:   
   name: gateway-bjjbackend-api # Numele Gateway-ului
-  namespace: bjj # Namespace-ul în care este creat Gateway-ul
+  namespace: bjj  
 spec: # Specificația Gateway-ului
   gatewayClassName: traefik # Folosește GatewayClass-ul definit de controller-ul Traefik
   listeners: # Lista listener-elor expuse de Gateway

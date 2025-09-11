@@ -2,7 +2,7 @@
 # Setează namespace-ul și etichetele comune, apoi compune resursele (ConfigMap, Gateway, Service, Deployments, Routes, etc.).
 apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
 kind: Kustomization # Declară acest fișier ca o Kustomization
-namespace: bjj # Namespace implicit pentru toate resursele namespaced
+namespace: bjj  
 commonLabels: # Etichete aplicate tuturor resurselor generate
   app.kubernetes.io/part-of: bjj # Grupează resursele ca parte a aplicației bjj
 resources: # Listează toate manifestele care compun baza
