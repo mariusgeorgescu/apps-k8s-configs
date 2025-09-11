@@ -17,8 +17,6 @@ spec:
       interval: 1m
   # Instalează în cert-manager namespace pentru a fi alături de cert-manager
   targetNamespace: cert-manager
-  # Creează namespace-ul dacă nu există
-  createNamespace: false
   # Configurare specifică pentru webhook
   values:
     # Configurări pentru integrarea cu cert-manager
