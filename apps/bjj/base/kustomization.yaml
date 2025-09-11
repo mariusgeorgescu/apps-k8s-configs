@@ -20,11 +20,4 @@ resources: # Listează toate manifestele care compun baza
 - routes/httproute-bjjbackend-api-redirect.yaml # HTTPRoute de redirect
 - routes/httproute-bjjbackend-api.yaml # HTTPRoute principal
 
-patches:
-- target:
-    kind: NetworkPolicy
-    name: networkpolicy-bjj-egress
-  patch: |-
-    - op: remove
-      path: /spec/egress/0/to/0/podSelector/matchLabels/app.kubernetes.io~1part-of
 
