@@ -16,3 +16,4 @@ spec: # Specificația rutei
       requestRedirect: # Config redirect
         scheme: https # Forțează HTTPS
         statusCode: 301 # Status code permanent redirect
+

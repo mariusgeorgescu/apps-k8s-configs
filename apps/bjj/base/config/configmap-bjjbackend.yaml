@@ -5,9 +5,9 @@ metadata: # Metadate despre ConfigMap
   name: configmap-bjjbackend # Numele ConfigMap-ului
   namespace: bjj # Namespace-ul în care se creează
 data: # Chei/valori expuse ca variabile de mediu sau fișiere
-  KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run" # Endpoint Kupo
+  KUPO_URL: "https://example.invalid" # Valoare minimă; overlay-urile o suprascriu
   LOOKUP_PATH: "/data/chainsync.sqlite" # Calea DB-ului local pentru lookup
-  BATCH_SIZE: "100000000" # Dimensiune batch pentru procesare
-  FETCH_BATCH_SIZE: "10000000" # Dimensiune batch pentru fetch
+  BATCH_SIZE: "1000000" # Valoare minimă; overlay-urile o pot mări
+  FETCH_BATCH_SIZE: "100000" # Valoare minimă; overlay-urile o pot mări
   PORT: "8082" # Portul HTTP expus de server
 

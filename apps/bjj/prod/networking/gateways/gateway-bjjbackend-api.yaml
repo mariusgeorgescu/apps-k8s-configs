@@ -27,3 +27,4 @@ spec: # Specificația Gateway-ului
     allowedRoutes: # Politica pentru rutele permise
       namespaces:
         from: All # Permite rute din orice namespace
+

@@ -17,7 +17,7 @@ spec: # Specificația Deployment-ului
 
       containers: # Lista containerelor din Pod
       - name: container-bjjbackend-chainsync # Numele containerului
-        image: mariusgeorgescu/chainsync:chainsync # Imaginea containerului
+        image: mariusgeorgescu/chainsync # Imaginea containerului (tag în overlay)
         imagePullPolicy: IfNotPresent # Politica de pull
         envFrom: # Variabile de mediu din ConfigMap
         - configMapRef:

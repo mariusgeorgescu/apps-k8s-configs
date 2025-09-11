@@ -8,14 +8,10 @@ commonLabels: # Etichete aplicate tuturor resurselor generate
 resources: # Listează toate manifestele care compun baza
 - namespace.yaml # Creează namespace-ul aplicației
 - config/configmap-bjjbackend.yaml # ConfigMap cu variabile de configurare
-- certificates/certificate-bjjbackend-cardano-vip.yaml # Certificat TLS pentru domeniu
-- networking/gateways/gateway-bjjbackend-api.yaml # Gateway cu listener-ele HTTP/HTTPS
 - storage/pvc-bjjbackend-lookup.yaml # PersistentVolumeClaim pentru fișierul DB
 - services/service-bjjbackend-api.yaml # Service pentru expunerea internă a aplicației
-- policies/pdb-bjjbackend-api.yaml # PDB pentru disponibilitate la evictions
 - workloads/deployment-bjjbackend-chainsync.yaml # Deployment pentru procesul chainsync
 - workloads/deployment-bjjbackend-api.yaml # Deployment pentru serverul principal
-- routes/httproute-bjjbackend-api-redirect.yaml # HTTPRoute de redirect
-- routes/httproute-bjjbackend-api.yaml # HTTPRoute principal
+
 
 

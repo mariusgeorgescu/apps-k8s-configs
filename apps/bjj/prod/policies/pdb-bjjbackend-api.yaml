@@ -11,3 +11,4 @@ spec: # Specificația PDB-ului
   selector: # Selectează pods-urile țintă pe baza etichetelor
     matchLabels:
       app: bjjbackend-api-pod-label # Trebuie să corespundă cu labels din Deployment
+

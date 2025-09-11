@@ -14,3 +14,4 @@ spec: # Specificații pentru emiterea certificatului
     name: letsencrypt-godaddy-prod # Numele ClusterIssuer-ului cu DNS-01 challenge (GoDaddy)
     kind: ClusterIssuer # Tipul issuer-ului (la nivel de cluster)
     group: cert-manager.io # Grupul API al issuer-ului
+

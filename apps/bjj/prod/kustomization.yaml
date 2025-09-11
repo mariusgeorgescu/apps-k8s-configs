@@ -2,8 +2,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
 kind: Kustomization # Declară acest fișier ca o Kustomization
 namespace: bjj # Namespace implicit pentru resurse namespaced
-resources: # Manifeste incluse din baza aplicației
+resources: # Manifeste incluse din baza aplicației + resurse only-in-prod
 - ../base # Include toate resursele din base
+- certificates/certificate-bjjbackend-cardano-vip.yaml # Certificat TLS (prod)
+- networking/gateways/gateway-bjjbackend-api.yaml # Gateway (prod)
+- routes/httproute-bjjbackend-api-redirect.yaml # HTTP->HTTPS redirect (prod)
+- routes/httproute-bjjbackend-api.yaml # Ruta principală (prod)
+- policies/pdb-bjjbackend-api.yaml # PDB (prod)
+- policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (prod)
+patchesStrategicMerge: # Patches pentru a adăuga atribute non-minime
+- patches/deployment-bjjbackend-api.yaml
+- patches/configmap-bjjbackend.yaml
+- patches/pvc-bjjbackend-lookup.yaml
 images: # Re-scrieri pentru imaginile containerelor
 - name: mariusgeorgescu/bjjserver # Numele imaginii principale
   newTag: 988d3e55 # Tag-ul folosit în producție
