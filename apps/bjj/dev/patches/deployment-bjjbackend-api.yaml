@@ -21,7 +21,7 @@ spec:
             path: /swagger-ui
             port: http
             scheme: HTTP
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 2
           failureThreshold: 3
@@ -31,6 +31,6 @@ spec:
             port: http
             scheme: HTTP
           initialDelaySeconds: 10
-          periodSeconds: 30
+          periodSeconds: 20
           timeoutSeconds: 2
           failureThreshold: 3
