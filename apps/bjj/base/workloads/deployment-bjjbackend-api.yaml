@@ -59,14 +59,8 @@ spec: # Specificația Deployment-ului
         - name: lookup-db # Numele volumului definit mai jos
           mountPath: /data # Calea de montare în container
           readOnly: false # Montare R/W
-        - name: hosts-file # Numele volumului pentru hosts
-          mountPath: /etc/hosts # Calea de montare pentru hosts
-          subPath: hosts # Subpath-ul din ConfigMap
-          readOnly: true # Montare read-only
       volumes: # Volume disponibile în Pod
       - name: lookup-db # Numele volumului
         persistentVolumeClaim:
           claimName: pvc-bjjbackend-lookup # Referința către PVC
-      - name: hosts-file # Numele volumului pentru hosts
-        configMap:
-          name: configmap-hosts # Referința către ConfigMap
+
