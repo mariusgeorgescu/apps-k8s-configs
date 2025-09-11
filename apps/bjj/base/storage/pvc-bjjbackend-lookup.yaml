@@ -1,10 +1,10 @@
 # PersistentVolumeClaim pentru baza de date chain lookup a bjjbackend (citire/scriere locală).
 apiVersion: v1 # Versiunea API pentru resurse de bază
-kind: PersistentVolumeClaim # Tipul resursei este PVC
-metadata: # Metadate Kubernetes
+kind: PersistentVolumeClaim   
+metadata: 
   name: pvc-bjjbackend-lookup # Numele PVC-ului
-  namespace: bjj # Namespace-ul în care se creează
-spec: # Specificația PVC-ului
+  namespace: bjj  
+spec:  
   accessModes: # Modul de acces pentru volum
   - ReadWriteOnce # Volumul poate fi montat R/W de un singur nod
   resources: # Resurse solicitate de PVC

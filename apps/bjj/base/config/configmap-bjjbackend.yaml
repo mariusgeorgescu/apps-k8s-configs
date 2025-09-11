@@ -1,13 +1,12 @@
 # ConfigMap cu variabile de configurare pentru bjjbackend (consumat de Deployments).
 apiVersion: v1 # Versiunea API pentru resurse de bază
-kind: ConfigMap # Tipul resursei este ConfigMap
-metadata: # Metadate despre ConfigMap
-  name: configmap-bjjbackend # Numele ConfigMap-ului
-  namespace: bjj # Namespace-ul în care se creează
+kind: ConfigMap
+metadata:
+  name: configmap-bjjbackend
+  namespace: bjj
 data: # Chei/valori expuse ca variabile de mediu sau fișiere
   KUPO_URL: "https://example.invalid" # Valoare minimă; overlay-urile o suprascriu
   LOOKUP_PATH: "/data/chainsync.sqlite" # Calea DB-ului local pentru lookup
   BATCH_SIZE: "1000000" # Valoare minimă; overlay-urile o pot mări
   FETCH_BATCH_SIZE: "100000" # Valoare minimă; overlay-urile o pot mări
-
 
