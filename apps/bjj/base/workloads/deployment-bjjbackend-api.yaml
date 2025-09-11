@@ -1,11 +1,12 @@
 # Deployment pentru aplicația bjjbackend API (minimal base; overlays adaugă probe/resurse/replici/DNS).
-apiVersion: apps/v1  
-kind: Deployment  
-metadata:  
-  name: deployment-bjjbackend-api  
-  namespace: bjj  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-bjjbackend-api
+  namespace: bjj
 spec: # Specificația Deployment-ului
-  strategy:  
+  dnsPolicy: ClusterFirst
+  strategy:
     type: RollingUpdate # Update gradual fără downtime
     rollingUpdate: # Parametri ai rolling update-ului
       maxUnavailable: 0 # Nicio replică indisponibilă în timpul update-ului
@@ -14,26 +15,26 @@ spec: # Specificația Deployment-ului
     matchLabels:
       app: bjjbackend-api-pod-label # Trebuie să corespundă cu labels din template
   template: # Template-ul de Pod pentru replici
-    metadata:   
+    metadata:
       labels:
         app: bjjbackend-api-pod-label # Etichetă pentru selectare și servicii
     spec: # Specificația Pod-ului
       containers: # Lista containerelor din Pod
-      - name: container-bjjbackend-api  
-        image: mariusgeorgescu/bjjserver  
-        imagePullPolicy: IfNotPresent # Politica de pull a imaginii
-        envFrom: # Surse de variabile de mediu
-        - configMapRef:
-            name: configmap-bjjbackend # ConfigMap referit pentru variabile
-        ports: # Porturi expuse de container
-        - name: http # Numele portului
-          containerPort: 8082 # Portul pe care ascultă aplicația
-        volumeMounts: # Montări de volume în container
-        - name: lookup-db # Numele volumului definit mai jos
-          mountPath: /data # Calea de montare în container
-          readOnly: false # Montare R/W
+        - name: container-bjjbackend-api
+          image: mariusgeorgescu/bjjserver
+          imagePullPolicy: IfNotPresent # Politica de pull a imaginii
+          envFrom: # Surse de variabile de mediu
+            - configMapRef:
+                name: configmap-bjjbackend # ConfigMap referit pentru variabile
+          ports: # Porturi expuse de container
+            - name: http # Numele portului
+              containerPort: 8082 # Portul pe care ascultă aplicația
+          volumeMounts: # Montări de volume în container
+            - name: lookup-db # Numele volumului definit mai jos
+              mountPath: /data # Calea de montare în container
+              readOnly: false # Montare R/W
       volumes: # Volume disponibile în Pod
-      - name: lookup-db  
-        persistentVolumeClaim:
-          claimName: pvc-bjjbackend-lookup # Referința către PersistentVolumeClaim
+        - name: lookup-db
+          persistentVolumeClaim:
+            claimName: pvc-bjjbackend-lookup # Referința către PersistentVolumeClaim
 
