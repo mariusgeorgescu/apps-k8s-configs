@@ -4,6 +4,7 @@ resources:
 - infrastructure.yaml
 - cert-manager.yaml
 - cert-manager-configs.yaml
+- metallb-configs.yaml
 patches:
 - target:
     kind: Kustomization
