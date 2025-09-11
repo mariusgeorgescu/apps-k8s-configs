@@ -53,7 +53,7 @@ spec: # Specificația Deployment-ului
             path: /swagger-ui # Endpoint de health
             port: 8082 # Portul probei
             scheme: HTTP # Protocolul probei
-          initialDelaySeconds: 60 # Întârzierea inițială
+          initialDelaySeconds: 10 # Întârzierea inițială
           periodSeconds: 10 # Frecvența
           timeoutSeconds: 2 # Timeout pe probă
           failureThreshold: 3 # Număr de eșecuri permise
@@ -62,7 +62,7 @@ spec: # Specificația Deployment-ului
             path: /swagger-ui # Endpoint pentru liveness
             port: 8082 # Portul probei
             scheme: HTTP # Protocolul probei
-          initialDelaySeconds: 60 # Întârzierea inițială
+          initialDelaySeconds: 10 # Întârzierea inițială
           periodSeconds: 20 # Frecvența
           timeoutSeconds: 2 # Timeout
           failureThreshold: 3 # Număr de eșecuri permise
