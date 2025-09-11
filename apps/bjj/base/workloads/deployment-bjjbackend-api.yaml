@@ -28,8 +28,8 @@ spec: # Specificația Deployment-ului
           set -e;
           echo "Waiting for DNS: preview.gomaestro-api.org";
           until nslookup preview.gomaestro-api.org >/dev/null 2>&1; do sleep 5; done;
-          echo "Waiting for HTTPS: https://preview.gomaestro-api.org/v1/chain-tip";
-          until wget -q --spider https://preview.gomaestro-api.org/v1/chain-tip; do sleep 5; done;
+          echo "Waiting for TCP 443 connectivity";
+          until nc -z -w 5 preview.gomaestro-api.org 443 >/dev/null 2>&1; do sleep 5; done;
 
       containers: # Lista containerelor din Pod
       - name: container-bjjbackend-api # Numele containerului
