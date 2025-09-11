@@ -6,12 +6,13 @@ metadata:
 data:
   #chainsync
   KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run"
-  BATCH_SIZE: "100000" # Valori mai mici pentru dev
-  FETCH_BATCH_SIZE: "10000" # Valori mai mici pentru dev
+  BATCH_SIZE: "10000000"  
+  FETCH_BATCH_SIZE: "1000000"  
   DATA_PATH: "/data" # Calea DB-ului local pentru api
 
   #api
   LOOKUP_PATH: "/data/chainsync.sqlite" # Calea DB-ului local pentru lookup
   PORT: "8082" # Portul HTTP expus de server
-  BASIC_USER: "dev" # Username pentru basic authentication dev
-  BASIC_PASS: "dev123" # Password pentru basic authentication dev
+  BASIC_USER: "cardano" # Username pentru basic authentication
+  BASIC_PASS: "lovelace" # Password pentru basic authentication
+
