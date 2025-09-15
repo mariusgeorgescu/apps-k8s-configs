@@ -11,6 +11,6 @@ spec: # Specificații pentru emiterea certificatului
   dnsNames: # Numele DNS pentru care certificatul este valid
   - dev.bjjbackend.cardano.vip # Domeniul dev al aplicației
   issuerRef: # Referință către issuer-ul care emite certificatul
-    name: letsencrypt-godaddy-staging # Numele ClusterIssuer-ului cu DNS-01 challenge (GoDaddy staging)
+    name: letsencrypt-godaddy-prod # Numele ClusterIssuer-ului cu DNS-01 challenge (GoDaddy staging)
     kind: ClusterIssuer # Tipul issuer-ului (la nivel de cluster)
     group: cert-manager.io # Grupul API al issuer-ului
