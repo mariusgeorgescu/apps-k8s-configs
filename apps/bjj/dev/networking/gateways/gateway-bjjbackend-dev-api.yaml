@@ -14,7 +14,7 @@ spec: # Specificația Gateway-ului
     protocol: HTTP # Protocolul folosit de listener
     allowedRoutes: # Politica pentru rutele permise
       namespaces:
-        from: Same # Permite rute doar din același namespace
+        from: All # Permite rute din orice namespace (cu ReferenceGrant dacă e necesar)
   - name: https # Numele listener-ului HTTPS
     hostname: dev.bjjbackend.cardano.vip # Domeniul dev asociat listener-ului
     port: 443 # Portul pentru HTTPS
@@ -26,4 +26,4 @@ spec: # Specificația Gateway-ului
         name: secret-bjjbackend-dev-cardano-vip-tls # Numele Secretului TLS dev
     allowedRoutes: # Politica pentru rutele permise
       namespaces:
-        from: Same # Permite rute doar din același namespace
+        from: All # Permite rute din orice namespace (cu ReferenceGrant dacă e necesar)
