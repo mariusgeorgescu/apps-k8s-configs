@@ -6,12 +6,9 @@ namePrefix: prod- # Prefixează toate resursele cu "prod-"
 resources: # Manifeste incluse din baza aplicației + resurse only-in-prod
 - ../base # Include toate resursele din base
 - networking/certificates/certificate-bjjbackend-cardano-vip.yaml # Certificat TLS (prod)
-- networking/certificates/certificate-grafana-cardano-vip.yaml # Certificat TLS pentru Grafana (prod)
 - networking/gateways/gateway-bjjbackend-api.yaml # Gateway (prod)
-- networking/gateways/gateway-grafana.yaml # Gateway pentru Grafana (prod)
 - networking/routes/httproute-bjjbackend-api-redirect.yaml # HTTP->HTTPS redirect (prod)
 - networking/routes/httproute-bjjbackend-api.yaml # Ruta principală (prod)
-- networking/routes/httproute-grafana-prod.yaml # Ruta pentru Grafana (prod)
 - policies/pdb-bjjbackend-api.yaml # PDB (prod)
 - policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (prod)
 patchesStrategicMerge: # Patches pentru a adăuga atribute non-minime

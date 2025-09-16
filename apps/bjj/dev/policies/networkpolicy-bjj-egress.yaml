@@ -35,11 +35,3 @@ spec:
     ports:
     - protocol: TCP
       port: 443
-  # Allow access to monitoring namespace for Grafana
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: monitoring
-    ports:
-    - protocol: TCP
-      port: 80
