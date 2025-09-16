@@ -16,7 +16,6 @@ spec:
         namespace: flux-system
       interval: 12h
   targetNamespace: monitoring
-  createNamespace: true
   install:
     remediation:
       retries: 3
