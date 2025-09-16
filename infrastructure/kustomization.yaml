@@ -7,6 +7,8 @@ resources:
 - controllers/local-path
 - controllers/cert-manager-godaddy-webhook
 - controllers/metallb
+- controllers/prometheus
+- configs/monitoring
 patches:
 - target:
     kind: StorageClass

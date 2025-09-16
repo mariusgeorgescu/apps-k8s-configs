@@ -1,0 +1,18 @@
+# Flux Kustomization "monitoring": aplică configurațiile de monitoring din repo
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: monitoring
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./infrastructure/configs/monitoring
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  dependsOn:
+  - name: infrastructure
+  wait: true
+  timeout: 5m0s
+  # monitoring configs depend on infrastructure being ready

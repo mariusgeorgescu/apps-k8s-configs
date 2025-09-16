@@ -1,0 +1,21 @@
+## ServiceMonitor pentru BJJ Backend API - monitorizează metrici Prometheus
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: bjj-backend-api
+  namespace: monitoring
+  labels:
+    app: bjj-backend-api
+spec:
+  selector:
+    matchLabels:
+      app: bjjbackend-api
+  namespaceSelector:
+    matchNames:
+    - bjj-dev
+    - bjj-prod
+  endpoints:
+  - port: http
+    interval: 30s
+    path: /metrics
+    honorLabels: true

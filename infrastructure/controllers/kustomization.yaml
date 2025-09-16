@@ -9,5 +9,6 @@ resources:
 - cert-manager
 - cert-manager-godaddy-webhook
 - metallb
+- prometheus
 
 
