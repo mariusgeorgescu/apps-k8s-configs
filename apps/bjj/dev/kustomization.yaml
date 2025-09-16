@@ -8,6 +8,7 @@ resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
 - networking/certificates/certificate-bjjbackend-dev-cardano-vip.yaml
 - networking/certificates/certificate-grafana-dev-cardano-vip.yaml # Certificat TLS (dev)
 - networking/gateways/gateway-bjjbackend-dev-api.yaml # Gateway (dev)
+- networking/gateways/gateway-grafana-dev.yaml # Gateway pentru Grafana (dev)
 - networking/routes/httproute-bjjbackend-dev-api-redirect.yaml # HTTP->HTTPS redirect (dev)
 - networking/routes/httproute-bjjbackend-dev-api.yaml # Ruta principală (dev)
 - networking/routes/httproute-grafana-dev.yaml # Ruta pentru Grafana (dev)

@@ -6,7 +6,7 @@ metadata:
   namespace: bjj
 spec:
   parentRefs:
-  - name: gateway-bjjbackend-api
+  - name: gateway-grafana
     sectionName: https
   hostnames:
   - grafana.cardano.vip
