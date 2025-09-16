@@ -9,14 +9,14 @@ spec: # Specificația Gateway-ului
   gatewayClassName: traefik # Folosește GatewayClass-ul definit de controller-ul Traefik
   listeners: # Lista listener-elor expuse de Gateway
   - name: http # Numele listener-ului HTTP
-    hostname: dev.bjjbackend.cardano.vip # Domeniul dev asociat listener-ului
+    hostname: dev-bjjbackend.cardano.vip # Domeniul dev asociat listener-ului
     port: 80 # Portul pentru HTTP
     protocol: HTTP # Protocolul folosit de listener
     allowedRoutes: # Politica pentru rutele permise
       namespaces:
         from: All # Permite rute din orice namespace (cu ReferenceGrant dacă e necesar)
   - name: https # Numele listener-ului HTTPS
-    hostname: dev.bjjbackend.cardano.vip # Domeniul dev asociat listener-ului
+    hostname: dev-bjjbackend.cardano.vip # Domeniul dev asociat listener-ului
     port: 443 # Portul pentru HTTPS
     protocol: HTTPS # Protocolul folosit de listener
     tls: # Configurația TLS pentru HTTPS

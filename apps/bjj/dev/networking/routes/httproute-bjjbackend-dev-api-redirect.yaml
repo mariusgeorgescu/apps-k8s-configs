@@ -9,7 +9,7 @@ spec: # Specificația rutei
   - name: dev-gateway-bjjbackend-dev-api # Numele Gateway-ului dev cu prefix
     sectionName: http # Listener-ul HTTP pe portul 80
   hostnames: # Domeniile pentru care se aplică ruta
-  - dev.bjjbackend.cardano.vip # Domeniul dev al aplicației
+  - dev-bjjbackend.cardano.vip # Domeniul dev al aplicației
   rules: # Reguli de rutare
   - filters: # Filtre aplicate request-urilor
     - type: RequestRedirect # Tipul filtrului: redirect
