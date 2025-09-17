@@ -47,8 +47,8 @@ spec: # Specificația rutei
     - type: URLRewrite
       urlRewrite:
         path:
-          type: ReplaceFullPath
-          replaceFullPath: /swagger-ui
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /swagger-ui
     backendRefs: # Backendurile către care se forwardează traficul
     - name: dev-service-bjjbackend-query-api # Service-ul query API
       port: 8083 # Portul backendului
