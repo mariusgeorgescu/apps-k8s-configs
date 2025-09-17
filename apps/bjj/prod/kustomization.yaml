@@ -9,15 +9,17 @@ resources: # Manifeste incluse din baza aplicației + resurse only-in-prod
 - networking/gateways/gateway-bjjbackend-api.yaml # Gateway (prod)
 - networking/routes/httproute-bjjbackend-api-redirect.yaml # HTTP->HTTPS redirect (prod)
 - networking/routes/httproute-bjjbackend-api.yaml # Ruta principală (prod)
-- policies/pdb-bjjbackend-api.yaml # PDB (prod)
 - policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (prod)
+- policies/pdb-bjjbackend-query-api.yaml # PDB (prod)
+- policies/pdb-bjjbackend-interaction-api.yaml # PDB (prod)
 patchesStrategicMerge: # Patches pentru a adăuga atribute non-minime
-- patches/deployment-bjjbackend-api.yaml
-- patches/configmap-bjjbackend.yaml
-- patches/pvc-bjjbackend-lookup.yaml
+  - patches/configmap-bjjbackend.yaml
+  - patches/deployment-bjjbackend-query-api.yaml 
+  - patches/deployment-bjjbackend-interaction-api.yaml
 images: # Re-scrieri pentru imaginile containerelor
-- name: mariusgeorgescu/bjjserver # Numele imaginii principale
-  newTag: 988d3e55 # Tag-ul folosit în producție
-- name: mariusgeorgescu/chainsync # Imaginea chain-sync
-  newTag: chainsync # Tag-ul folosit în producție
-
+  - name: mariusgeorgescu/bjj-interaction-api # Numele imaginii principale
+    newTag: 0bef711 # Tag-ul folosit în dezvoltare
+  - name: mariusgeorgescu/bjj-query-api # Imaginea query-api
+    newTag: 0bef711 # Tag-ul folosit în dezvoltare
+  - name: mariusgeorgescu/bjj-chainsync # Imaginea chain-sync
+    newTag: 0bef711 # Tag-ul folosit în dezvoltare

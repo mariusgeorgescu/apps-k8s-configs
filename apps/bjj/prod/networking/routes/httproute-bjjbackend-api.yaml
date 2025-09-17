@@ -14,7 +14,41 @@ spec: # Specificația rutei
   - matches: # Tipare de potrivire pentru cereri
     - path:
         type: PathPrefix # Tipul de potrivire pe cale
+        value: /build-tx # Toate căile
+    - path:
+        type: PathPrefix # Tipul de potrivire pe cale
+        value: /submit-tx # Toate căile
+    backendRefs: # Backendurile către care se forwardează traficul
+    - name: prod-service-bjjbackend-interaction-api # Numele Service-ului backend cu prefix
+      port: 8082 # Portul backendului
+  - matches: # Tipare de potrivire pentru cereri
+    - path:
+        type: PathPrefix # Tipul de potrivire pe cale
+        value: /interaction/swagger-ui # Swagger UI pentru interaction API
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          replacePrefixMatch: /swagger-ui
+    backendRefs: # Backendurile către care se forwardează traficul
+    - name: prod-service-bjjbackend-interaction-api # Service-ul interaction API
+      port: 8082 # Portul backendului
+  - matches: # Tipare de potrivire pentru cereri
+    - path:
+        type: PathPrefix # Tipul de potrivire pe cale
+        value: /query/swagger-ui # Swagger UI pentru query API
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          replacePrefixMatch: /swagger-ui
+    backendRefs: # Backendurile către care se forwardează traficul
+    - name: prod-service-bjjbackend-query-api # Service-ul query API
+      port: 8083 # Portul backendului
+  - matches: # Tipare de potrivire pentru cereri
+    - path:
+        type: PathPrefix # Tipul de potrivire pe cale
         value: / # Toate căile
     backendRefs: # Backendurile către care se forwardează traficul
-    - name: prod-service-bjjbackend-api # Numele Service-ului backend cu prefix
-      port: 8082 # Portul backendului
+    - name: prod-service-bjjbackend-query-api # Numele Service-ului backend cu prefix
+      port: 8083 # Portul backendului

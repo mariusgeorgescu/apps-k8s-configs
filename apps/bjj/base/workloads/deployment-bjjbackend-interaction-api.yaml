@@ -1,0 +1,67 @@
+# Deployment pentru aplicația bjjbackend API (minimal base; overlays adaugă probe/resurse/replici/DNS).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-bjjbackend-interaction-api
+  namespace: bjj
+spec: # Specificația Deployment-ului
+  strategy:
+    type: RollingUpdate # Update gradual fără downtime
+    rollingUpdate: # Parametri ai rolling update-ului
+      maxUnavailable: 0 # Nicio replică indisponibilă în timpul update-ului
+      maxSurge: 1 # Cel mult o replică în plus față de numărul dorit
+  selector: # Selectează pods-urile gestionate de acest Deployment
+    matchLabels:
+      app: bjjbackend-interaction-api-pod-label # Trebuie să corespundă cu labels din template
+  template: # Template-ul de Pod pentru replici
+    metadata:
+      labels:
+        app: bjjbackend-interaction-api-pod-label # Etichetă pentru selectare și servicii
+    spec: # Specificația Pod-ului
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+          - name: single-request-reopen
+          - name: timeout
+            value: "2"
+          - name: attempts
+        value: "3"
+      containers: # Lista containerelor din Pod
+        - name: container-bjjbackend-interaction-api
+          image: mariusgeorgescu/bjj-interaction-api
+          imagePullPolicy: IfNotPresent # Politica de pull a imaginii
+          envFrom: # Surse de variabile de mediu
+            - configMapRef:
+                name: configmap-bjjbackend # ConfigMap referit pentru variabile
+            - secretRef:
+                name: secret-bjjbackend # Secret cu variabile sensibile
+          ports: # Porturi expuse de container
+            - name: interactionapiport # Numele portului
+              containerPort: 8082 # Portul pe care ascultă aplicația
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: interactionapiport
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: interactionapiport
+              scheme: HTTP
+          initialDelaySeconds: 25
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: interactionapiport
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 600

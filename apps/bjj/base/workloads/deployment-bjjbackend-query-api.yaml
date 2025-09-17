@@ -1,18 +1,22 @@
-# Deployment pentru procesul chainsync al bjjbackend (populează DB-ul /data/chainsync.sqlite).
+# Deployment pentru aplicația bjjbackend API (minimal base; overlays adaugă probe/resurse/replici/DNS).
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deployment-bjjbackend-chainsync
+  name: deployment-bjjbackend-query-api
   namespace: bjj
 spec: # Specificația Deployment-ului
-  replicas: 1 # O singură replică pentru jobul chainsync
-  selector: # Selectează pods-urile gestionate
+  strategy:
+    type: RollingUpdate # Update gradual fără downtime
+    rollingUpdate: # Parametri ai rolling update-ului
+      maxUnavailable: 0 # Nicio replică indisponibilă în timpul update-ului
+      maxSurge: 2 # Cel mult o replică în plus față de numărul dorit
+  selector: # Selectează pods-urile gestionate de acest Deployment
     matchLabels:
-      app: bjjbackend-chainsync-pod-label # Etichetă folosită și în template
+      app: bjjbackend-query-api-pod-label # Trebuie să corespundă cu labels din template
   template: # Template-ul de Pod pentru replici
     metadata:
       labels:
-        app: bjjbackend-chainsync-pod-label # Etichetă pentru selectare
+        app: bjjbackend-query-api-pod-label # Etichetă pentru selectare și servicii
     spec: # Specificația Pod-ului
       dnsPolicy: ClusterFirst
       dnsConfig:
@@ -25,18 +29,21 @@ spec: # Specificația Deployment-ului
           - name: attempts
         value: "3"
       containers: # Lista containerelor din Pod
-        - name: container-bjjbackend-chainsync
-          image: mariusgeorgescu/bjj-chainsync # Imaginea containerului (tag în overlay)
-          imagePullPolicy: IfNotPresent # Politica de pull
-          envFrom: # Variabile de mediu din ConfigMap
+        - name: container-bjjbackend-query-api
+          image: mariusgeorgescu/bjj-query-api
+          imagePullPolicy: IfNotPresent # Politica de pull a imaginii
+          envFrom: # Surse de variabile de mediu
             - configMapRef:
-                name: configmap-bjjbackend # ConfigMap referit
+                name: configmap-bjjbackend # ConfigMap referit pentru variabile
             - secretRef:
                 name: secret-bjjbackend # Secret cu variabile sensibile
+          ports: # Porturi expuse de container
+            - name: queryapiport # Numele portului
+              containerPort: 8082 # Portul pe care ascultă aplicația
           readinessProbe:
             httpGet:
               path: /ready
-              port: chainsyncport
+              port: queryapiport
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 5
@@ -45,7 +52,7 @@ spec: # Specificația Deployment-ului
           livenessProbe:
             httpGet:
               path: /health
-              port: chainsyncport
+              port: queryapiport
               scheme: HTTP
           initialDelaySeconds: 25
           periodSeconds: 10
@@ -54,7 +61,7 @@ spec: # Specificația Deployment-ului
           startupProbe:
             httpGet:
               path: /ready
-              port: chainsyncport
+              port: queryapiport
             periodSeconds: 10
             timeoutSeconds: 3
             failureThreshold: 600
