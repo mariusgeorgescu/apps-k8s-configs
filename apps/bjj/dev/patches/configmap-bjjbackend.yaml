@@ -6,5 +6,5 @@ metadata:
 data:
   #chainsync
   KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run"
-  BATCH_SIZE: "1000000" # Valoare minimă; overlay-urile o pot mări
-  FETCH_BATCH_SIZE: "100000" # Valoare minimă; overlay-urile o pot mări
+  BATCH_SIZE: "10000000" # Valoare minimă; overlay-urile o pot mări
+  FETCH_BATCH_SIZE: "1000000" # Valoare minimă; overlay-urile o pot mări
