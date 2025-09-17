@@ -43,12 +43,7 @@ spec: # Specificația rutei
     - path:
         type: PathPrefix # Tipul de potrivire pe cale
         value: /query/swagger-ui # Swagger UI pentru query API
-    filters:
-    - type: URLRewrite
-      urlRewrite:
-        path:
-          type: ReplacePrefixMatch
-          replacePrefixMatch: /swagger-ui
+    # Note: Traefik Gateway does not support URLRewrite; keep as plain forward
     backendRefs: # Backendurile către care se forwardează traficul
     - name: prod-service-bjjbackend-query-api # Service-ul query API
       port: 8083 # Portul backendului
