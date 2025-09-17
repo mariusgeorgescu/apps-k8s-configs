@@ -16,7 +16,3 @@ spec:
   dependsOn:
   - name: infrastructure
   - name: cert-manager
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
