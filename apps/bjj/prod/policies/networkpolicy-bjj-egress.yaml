@@ -28,6 +28,11 @@ spec:
       port: 53
     - protocol: TCP
       port: 53
+  # Allow internal communication within BJJ namespace
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: bjj
   # Allow HTTPS to the Internet
   - to:
     - ipBlock:
