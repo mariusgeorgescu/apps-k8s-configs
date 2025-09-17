@@ -16,6 +16,7 @@ patchesStrategicMerge: # Patches pentru a adăuga atribute non-minime
   - patches/configmap-bjjbackend.yaml
   - patches/deployment-bjjbackend-query-api.yaml 
   - patches/deployment-bjjbackend-interaction-api.yaml
+  - patches/secret-bjjbackend.yaml
 images: # Re-scrieri pentru imaginile containerelor
   - name: mariusgeorgescu/bjj-interaction-api # Numele imaginii principale
     newTag: 0bef711 # Tag-ul folosit în dezvoltare

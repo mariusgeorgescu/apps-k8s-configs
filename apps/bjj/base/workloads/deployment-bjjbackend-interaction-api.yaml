@@ -27,7 +27,7 @@ spec: # Specificația Deployment-ului
           - name: timeout
             value: "2"
           - name: attempts
-        value: "3"
+            value: "3"
       containers: # Lista containerelor din Pod
         - name: container-bjjbackend-interaction-api
           image: mariusgeorgescu/bjj-interaction-api
@@ -38,12 +38,12 @@ spec: # Specificația Deployment-ului
             - secretRef:
                 name: secret-bjjbackend # Secret cu variabile sensibile
           ports: # Porturi expuse de container
-            - name: interactionapiport # Numele portului
+            - name: http # Numele portului
               containerPort: 8082 # Portul pe care ascultă aplicația
           readinessProbe:
             httpGet:
               path: /ready
-              port: interactionapiport
+              port: http
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 5
@@ -52,7 +52,7 @@ spec: # Specificația Deployment-ului
           livenessProbe:
             httpGet:
               path: /health
-              port: interactionapiport
+              port: http
               scheme: HTTP
           initialDelaySeconds: 25
           periodSeconds: 10
@@ -61,7 +61,7 @@ spec: # Specificația Deployment-ului
           startupProbe:
             httpGet:
               path: /ready
-              port: interactionapiport
+              port: http
             periodSeconds: 10
             timeoutSeconds: 3
             failureThreshold: 600

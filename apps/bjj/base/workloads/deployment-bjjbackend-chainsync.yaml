@@ -23,7 +23,7 @@ spec: # Specificația Deployment-ului
           - name: timeout
             value: "2"
           - name: attempts
-        value: "3"
+            value: "3"
       containers: # Lista containerelor din Pod
         - name: container-bjjbackend-chainsync
           image: mariusgeorgescu/bjj-chainsync # Imaginea containerului (tag în overlay)
@@ -33,10 +33,13 @@ spec: # Specificația Deployment-ului
                 name: configmap-bjjbackend # ConfigMap referit
             - secretRef:
                 name: secret-bjjbackend # Secret cu variabile sensibile
+          ports:
+            - name: http
+              containerPort: 8084
           readinessProbe:
             httpGet:
               path: /ready
-              port: chainsyncport
+              port: http
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 5
@@ -45,7 +48,7 @@ spec: # Specificația Deployment-ului
           livenessProbe:
             httpGet:
               path: /health
-              port: chainsyncport
+              port: http
               scheme: HTTP
           initialDelaySeconds: 25
           periodSeconds: 10
@@ -54,7 +57,7 @@ spec: # Specificația Deployment-ului
           startupProbe:
             httpGet:
               path: /ready
-              port: chainsyncport
+              port: http
             periodSeconds: 10
             timeoutSeconds: 3
             failureThreshold: 600
