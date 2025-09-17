@@ -35,9 +35,10 @@ spec: # Specificația rutei
     filters:
     - type: RequestRedirect
       requestRedirect:
+        statusCode: 301
         path:
+          type: ReplaceFullPath
           replaceFullPath: /swagger-ui
-        statusCode: 308
   - matches: # Tipare de potrivire pentru cereri
     - path:
         type: PathPrefix # Tipul de potrivire pe cale
