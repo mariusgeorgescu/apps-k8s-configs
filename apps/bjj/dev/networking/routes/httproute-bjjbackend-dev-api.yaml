@@ -11,6 +11,13 @@ spec: # Specificația rutei
   hostnames: # Domeniile pentru care se aplică ruta
   - dev-bjjbackend.cardano.vip # Domeniul dev al aplicației
   rules: # Reguli de rutare
+  - matches: # Rutează direct către UI-ul Swagger al interaction API
+    - path:
+        type: PathPrefix # Potrivire pe calea /swagger-ui
+        value: /swagger-ui
+    backendRefs: # Trimite direct către serviciul interaction API
+    - name: dev-service-bjjbackend-interaction-api # Service-ul interaction API
+      port: 8082 # Portul backendului
   - matches: # Tipare de potrivire pentru cereri
     - path:
         type: PathPrefix # Tipul de potrivire pe cale
@@ -21,19 +28,16 @@ spec: # Specificația rutei
     backendRefs: # Backendurile către care se forwardează traficul
     - name: dev-service-bjjbackend-interaction-api # Numele Service-ului backend cu prefix
       port: 8082 # Portul backendului
-  - matches: # Tipare de potrivire pentru cereri
+  - matches: # Redirectează la /swagger-ui pentru compatibilitate
     - path:
-        type: PathPrefix # Tipul de potrivire pe cale
-        value: /interaction/swagger-ui # Swagger UI pentru interaction API
+        type: PathPrefix # Potrivire pe cale
+        value: /interaction/swagger-ui # Endpoint accesat de utilizatori
     filters:
-    - type: URLRewrite
-      urlRewrite:
+    - type: RequestRedirect
+      requestRedirect:
         path:
-          type: ReplacePrefixMatch
-          replacePrefixMatch: /swagger-ui
-    backendRefs: # Backendurile către care se forwardează traficul
-    - name: dev-service-bjjbackend-interaction-api # Service-ul interaction API
-      port: 8082 # Portul backendului
+          replaceFullPath: /swagger-ui
+        statusCode: 308
   - matches: # Tipare de potrivire pentru cereri
     - path:
         type: PathPrefix # Tipul de potrivire pe cale
