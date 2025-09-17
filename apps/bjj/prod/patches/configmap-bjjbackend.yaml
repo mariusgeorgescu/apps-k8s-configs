@@ -8,11 +8,3 @@ data:
   KUPO_URL: "https://kupo16cdjk05emessgrpy45t.preview-v2.kupo-m1.demeter.run"
   BATCH_SIZE: "1000000" # Valoare minimă; overlay-urile o pot mări
   FETCH_BATCH_SIZE: "100000" # Valoare minimă; overlay-urile o pot mări
-  DATA_PATH: "/data" # Calea DB-ului local pentru api
-
-  #api
-  LOOKUP_PATH: "/data/chainsync.sqlite" # Calea DB-ului local pentru lookup
-  PORT: "8082" # Portul HTTP expus de server
-  BASIC_USER: "cardano" # Username pentru basic authentication
-  BASIC_PASS: "lovelace" # Password pentru basic authentication
-

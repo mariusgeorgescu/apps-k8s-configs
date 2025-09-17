@@ -9,11 +9,25 @@ data: # Chei/valori expuse ca variabile de mediu sau fișiere
   KUPO_URL: "https://example.invalid" # Valoare minimă; overlay-urile o suprascriu
   BATCH_SIZE: "1000000" # Valoare minimă; overlay-urile o pot mări
   FETCH_BATCH_SIZE: "100000" # Valoare minimă; overlay-urile o pot mări
-  DATA_PATH: "/data" # Calea DB-ului local pentru api
 
-  #api
-  LOOKUP_PATH: "/data/chainsync.sqlite" # Calea DB-ului local pentru lookup
-  PORT: "8082" # Portul HTTP expus de server
-  BASIC_USER: "cardano" # Username pentru basic authentication
-  BASIC_PASS: "lovelace" # Password pentru basic authentication
+  #postgres (non-sensitive)
+  PG_HOST: "service-bjjbackend-postgres"
+  PG_PORT: "5432"
+  PG_DBNAME: "chainsync"
 
+  #interaction api and chainsync (non-sensitive)
+  DEPLOYED_VALIDATORS_CONFIG: |
+    {
+      "mintingPolicyHashAndRef": [
+        "3ec796518e1839584b6c8825cbb9d679f6952acafb3daccb7a8d6619",
+        "707042a866239678702b45c6e05afddc04d9a3cb4b13c409d07ad70103db75a6#0"
+      ],
+      "profilesValidatorHashAndRef": [
+        "a92a50d75e98e56d6e0808fb1269e7db32d1708752f550a713e0b9d5",
+        "3e70e6a7f4b51971fc0b69f2ff63f5a600b039452bfc4da465278c77fa17000a#0"
+      ],
+      "ranksValidatorHashAndRef": [
+        "b7f1f704ff6e18df49dbb1d26b8a42f578fb70ea3ac3a450976b5ae0",
+        "edfe7188a463d0da375d1462af02a47d83dd13b83aede7ada0e8b98f402b0ec8#0"
+      ]
+    }

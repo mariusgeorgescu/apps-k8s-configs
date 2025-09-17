@@ -4,17 +4,20 @@ kind: Kustomization # Declară acest fișier ca o Kustomization
 namespace: bjj # Namespace implicit pentru resurse namespaced
 namePrefix: dev- # Prefixează toate resursele cu "dev-"
 resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
-- ../base # Include toate resursele din base
-- networking/certificates/certificate-bjjbackend-dev-cardano-vip.yaml
-- networking/gateways/gateway-bjjbackend-dev-api.yaml # Gateway (dev)
-- networking/routes/httproute-bjjbackend-dev-api-redirect.yaml # HTTP->HTTPS redirect (dev)
-- networking/routes/httproute-bjjbackend-dev-api.yaml # Ruta principală (dev)
-- policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (dev)
+  - ../base # Include toate resursele din base
+  - networking/certificates/certificate-bjjbackend-dev-cardano-vip.yaml
+  - networking/gateways/gateway-bjjbackend-dev-api.yaml # Gateway (dev)
+  - networking/routes/httproute-bjjbackend-dev-api-redirect.yaml # HTTP->HTTPS redirect (dev)
+  - networking/routes/httproute-bjjbackend-dev-api.yaml # Ruta principală (dev)
+  - policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (dev)
 patchesStrategicMerge: # Patches pentru a adăuga atribute dev
-- patches/deployment-bjjbackend-api.yaml
-- patches/configmap-bjjbackend.yaml
+  - patches/configmap-bjjbackend.yaml
+  - patches/secret-bjjbackend.yaml
 images: # Re-scrieri pentru imaginile containerelor
-- name: mariusgeorgescu/bjjserver # Numele imaginii principale
-  newTag: 988d3e55 # Tag-ul folosit în dezvoltare
-- name: mariusgeorgescu/chainsync # Imaginea chain-sync
-  newTag: chainsync # Tag-ul folosit în dezvoltare
+  - name: mariusgeorgescu/bjj-interaction-api # Numele imaginii principale
+    newTag: 0bef711 # Tag-ul folosit în dezvoltare
+  - name: mariusgeorgescu/bjj-query-api # Imaginea query-api
+    newTag: 0bef711 # Tag-ul folosit în dezvoltare
+  - name: mariusgeorgescu/bjj-chainsync # Imaginea chain-sync
+    newTag: 0bef711 # Tag-ul folosit în dezvoltare
+
