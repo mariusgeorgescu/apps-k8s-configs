@@ -42,7 +42,7 @@ spec: # Specificația Deployment-ului
               containerPort: 8082 # Portul pe care ascultă aplicația
           readinessProbe:
             httpGet:
-              path: /ready
+              path: /health
               port: http
               scheme: HTTP
             initialDelaySeconds: 10
