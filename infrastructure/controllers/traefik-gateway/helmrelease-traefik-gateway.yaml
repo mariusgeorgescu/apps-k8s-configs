@@ -26,6 +26,19 @@ spec:
     deployment:
       enabled: true
       replicas: 2
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - traefik
+          topologyKey: kubernetes.io/hostname
     experimental:
       kubernetesGateway:
         enabled: true
@@ -38,5 +51,7 @@ spec:
           enabled: true
     service:
       type: LoadBalancer
+      spec:
+        externalTrafficPolicy: Local
 
 
