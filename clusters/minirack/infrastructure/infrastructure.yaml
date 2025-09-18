@@ -13,7 +13,6 @@ spec:
     name: flux-system
   dependsOn:
   - name: namespaces
-  dependsOn:
   - name: cert-manager
   wait: true
   timeout: 5m0s
