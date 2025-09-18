@@ -1,5 +1,5 @@
 ## HelmRelease pentru kube-prometheus-stack: Prometheus, Grafana, AlertManager, și operatori
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
@@ -17,6 +17,7 @@ spec:
       interval: 12h
   targetNamespace: monitoring
   install:
+    createNamespace: true
     remediation:
       retries: 3
   upgrade:
