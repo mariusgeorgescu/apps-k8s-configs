@@ -29,21 +29,21 @@ spec:
         effect: NoSchedule
       containers:
       - name: keepalived
-        image: ghcr.io/acassen/keepalived:v2.2.8
+        image: debian:12-slim
         imagePullPolicy: IfNotPresent
         command:
-        - keepalived
-        - --dont-fork
-        - --log-console
-        - --log-detail
-        - --vrrp
+        - /bin/bash
+        - -c
+        - |
+          apt-get update && apt-get install -y keepalived curl procps iproute2 iputils-ping
+          exec keepalived --dont-fork --log-console --log-detail --vrrp
         securityContext:
           privileged: true
           capabilities:
             add: ["NET_ADMIN", "NET_RAW", "NET_BROADCAST"]
         volumeMounts:
         - name: keepalived-config
-          mountPath: /usr/local/etc/keepalived/keepalived.conf
+          mountPath: /etc/keepalived/keepalived.conf
           subPath: keepalived.conf
           readOnly: true
         resources:
