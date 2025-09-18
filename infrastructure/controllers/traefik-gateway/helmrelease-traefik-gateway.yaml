@@ -26,6 +26,7 @@ spec:
     deployment:
       enabled: true
       replicas: 2
+
     podDisruptionBudget:
       enabled: true
       minAvailable: 1
@@ -39,6 +40,7 @@ spec:
               values:
               - traefik
           topologyKey: kubernetes.io/hostname
+
     experimental:
       kubernetesGateway:
         enabled: true
