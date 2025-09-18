@@ -25,6 +25,7 @@ spec:
   values:
     deployment:
       enabled: true
+      replicas: 2
     experimental:
       kubernetesGateway:
         enabled: true
