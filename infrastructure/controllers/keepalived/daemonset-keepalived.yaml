@@ -29,23 +29,33 @@ spec:
         effect: NoSchedule
       containers:
       - name: keepalived
-        image: debian:12-slim
+        image: busybox:1.36
         imagePullPolicy: IfNotPresent
         command:
-        - /bin/bash
+        - /bin/sh
         - -c
         - |
-          apt-get update && apt-get install -y keepalived curl procps iproute2 iputils-ping
-          exec keepalived --dont-fork --log-console --log-detail --vrrp
+          # Simple approach - use busybox with manual VIP management
+          echo "Starting simple VIP management for 192.168.1.200"
+          # Add VIP to interface
+          ip addr add 192.168.1.200/24 dev eth0
+          # Keep container alive and monitor API
+          while true; do
+            if curl -k -s https://127.0.0.1:6443/healthz > /dev/null; then
+              # API is healthy, ensure VIP is present
+              if ! ip addr show eth0 | grep -q 192.168.1.200; then
+                ip addr add 192.168.1.200/24 dev eth0
+              fi
+            else
+              # API is unhealthy, remove VIP
+              ip addr del 192.168.1.200/24 dev eth0 2>/dev/null || true
+            fi
+            sleep 5
+          done
         securityContext:
           privileged: true
           capabilities:
             add: ["NET_ADMIN", "NET_RAW", "NET_BROADCAST"]
-        volumeMounts:
-        - name: keepalived-config
-          mountPath: /etc/keepalived/keepalived.conf
-          subPath: keepalived.conf
-          readOnly: true
         resources:
           requests:
             memory: "64Mi"
@@ -58,8 +68,8 @@ spec:
             command:
             - /bin/sh
             - -c
-            - "pgrep keepalived || exit 1"
-          initialDelaySeconds: 30
+            - "ps | grep -v grep | grep -q 'sleep 5' || exit 1"
+          initialDelaySeconds: 10
           periodSeconds: 20
           timeoutSeconds: 3
           failureThreshold: 3
@@ -68,13 +78,8 @@ spec:
             command:
             - /bin/sh
             - -c
-            - "pgrep keepalived && ip addr show eth0 | grep -q 192.168.1.200 || exit 1"
-          initialDelaySeconds: 30
+            - "ip addr show eth0 | grep -q 192.168.1.200 || exit 1"
+          initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 3
           failureThreshold: 3
-      volumes:
-      - name: keepalived-config
-        configMap:
-          name: keepalived-config
-          defaultMode: 0644
