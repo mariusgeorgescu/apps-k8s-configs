@@ -11,6 +11,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  dependsOn:
+  - name: cert-manager
   wait: true
   timeout: 5m0s
   # ensure controllers (Traefik, MetalLB, etc.) are deployed

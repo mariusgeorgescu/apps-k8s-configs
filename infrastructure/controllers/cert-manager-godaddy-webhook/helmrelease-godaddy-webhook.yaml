@@ -1,10 +1,16 @@
 # HelmRelease pentru instalarea GoDaddy webhook în cert-manager namespace
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: acme-godaddy-webhook
   namespace: flux-system
 spec:
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
   interval: 5m
   chart:
     spec:
@@ -17,6 +23,9 @@ spec:
       interval: 1m
   # Instalează în cert-manager namespace pentru a fi alături de cert-manager
   targetNamespace: cert-manager
+  dependsOn:
+  - name: cert-manager
+    namespace: flux-system
   # Configurare specifică pentru webhook
   values:
     # Configurări pentru integrarea cu cert-manager
