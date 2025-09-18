@@ -29,24 +29,21 @@ spec:
         effect: NoSchedule
       containers:
       - name: keepalived
-        image: osixia/keepalived:2.2.8
+        image: alpine:3.19
         imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - -c
+        - |
+          apk add --no-cache keepalived curl
+          exec keepalived --dont-fork --log-console --log-detail --vrrp
         securityContext:
           privileged: true
           capabilities:
             add: ["NET_ADMIN", "NET_RAW", "NET_BROADCAST"]
-        env:
-        - name: KEEPALIVED_INTERFACE
-          value: "eth0"
-        - name: KEEPALIVED_VIRTUAL_IPS
-          value: "192.168.1.200"
-        - name: KEEPALIVED_UNICAST_PEERS
-          value: "#PYTHON2BASH:[]"
-        - name: KEEPALIVED_PRIORITY
-          value: "100"
         volumeMounts:
         - name: keepalived-config
-          mountPath: /usr/local/etc/keepalived/keepalived.conf
+          mountPath: /etc/keepalived/keepalived.conf
           subPath: keepalived.conf
           readOnly: true
         resources:
@@ -61,8 +58,8 @@ spec:
             command:
             - /bin/sh
             - -c
-            - "ps aux | grep '[k]eepalived' || exit 1"
-          initialDelaySeconds: 15
+            - "pgrep keepalived || exit 1"
+          initialDelaySeconds: 30
           periodSeconds: 20
           timeoutSeconds: 3
           failureThreshold: 3
@@ -71,8 +68,8 @@ spec:
             command:
             - /bin/sh
             - -c
-            - "ps aux | grep '[k]eepalived' || exit 1"
-          initialDelaySeconds: 15
+            - "pgrep keepalived && ip addr show eth0 | grep -q 192.168.1.200 || exit 1"
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 3
           failureThreshold: 3
