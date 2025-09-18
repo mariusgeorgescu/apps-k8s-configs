@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: keepalived
+  namespace: kube-system
+  labels:
+    app: keepalived
+    component: network
+spec:
+  selector:
+    matchLabels:
+      app: keepalived
+  template:
+    metadata:
+      labels:
+        app: keepalived
+        component: network
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: "true"
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: keepalived
+        image: osixia/keepalived:2.2.8
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["NET_ADMIN", "NET_RAW", "NET_BROADCAST"]
+        env:
+        - name: KEEPALIVED_INTERFACE
+          value: "eth0"
+        - name: KEEPALIVED_VIRTUAL_IPS
+          value: "192.168.1.200"
+        - name: KEEPALIVED_UNICAST_PEERS
+          value: "#PYTHON2BASH:[]"
+        - name: KEEPALIVED_PRIORITY
+          value: "100"
+        volumeMounts:
+        - name: keepalived-config
+          mountPath: /usr/local/etc/keepalived/keepalived.conf
+          subPath: keepalived.conf
+          readOnly: true
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "ps aux | grep '[k]eepalived' || exit 1"
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "ps aux | grep '[k]eepalived' || exit 1"
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: keepalived-config
+        configMap:
+          name: keepalived-config
+          defaultMode: 0644

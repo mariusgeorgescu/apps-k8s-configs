@@ -8,6 +8,7 @@ resources:
 - cert-manager-configs.yaml
 - metallb-configs.yaml
 - monitoring.yaml
+- keepalived.yaml
 patches:
 - target:
     kind: Kustomization

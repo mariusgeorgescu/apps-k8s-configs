@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keepalived-config
+  namespace: kube-system
+data:
+  keepalived.conf: |
+    global_defs {
+      router_id LVS_DEVEL
+      vrrp_skip_check_adv_addr
+      vrrp_strict
+      vrrp_garp_interval 0
+      vrrp_gna_interval 0
+    }
+
+    vrrp_script chk_kubeapi {
+      script "/usr/bin/curl -kfsS https://127.0.0.1:6443/healthz"
+      interval 2
+      timeout 1
+      weight -2
+      fall 3
+      rise 2
+    }
+
+    vrrp_instance VI_APISERVER {
+      state BACKUP
+      interface eth0
+      virtual_router_id 51
+      priority 100
+      advert_int 1
+      nopreempt
+      virtual_ipaddress {
+        192.168.1.200/24 dev eth0
+      }
+      track_script {
+        chk_kubeapi
+      }
+    }
