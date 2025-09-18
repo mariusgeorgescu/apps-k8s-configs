@@ -29,21 +29,21 @@ spec:
         effect: NoSchedule
       containers:
       - name: keepalived
-        image: alpine:3.19
+        image: ghcr.io/acassen/keepalived:v2.2.8
         imagePullPolicy: IfNotPresent
         command:
-        - /bin/sh
-        - -c
-        - |
-          apk add --no-cache keepalived curl
-          exec keepalived --dont-fork --log-console --log-detail --vrrp
+        - keepalived
+        - --dont-fork
+        - --log-console
+        - --log-detail
+        - --vrrp
         securityContext:
           privileged: true
           capabilities:
             add: ["NET_ADMIN", "NET_RAW", "NET_BROADCAST"]
         volumeMounts:
         - name: keepalived-config
-          mountPath: /etc/keepalived/keepalived.conf
+          mountPath: /usr/local/etc/keepalived/keepalived.conf
           subPath: keepalived.conf
           readOnly: true
         resources:
