@@ -13,6 +13,7 @@ spec:
     name: flux-system
   wait: true
   timeout: 5m0s
+  skipDryRun: true
   dependsOn:
   - name: infrastructure
 
