@@ -1,4 +1,5 @@
-# Flux Kustomization "infrastructure": aplică controllerele de infrastructură din repo.
+# Rol: Kustomization Flux care aplică controllerele de infrastructură (Traefik, MetalLB, DNS, monitoring, etc.)
+# Scop: Asigură instalarea/actualizarea componentelor de infrastructură din directorul `infrastructure/controllers`.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -16,7 +17,6 @@ spec:
   - name: cert-manager
   wait: true
   timeout: 5m0s
-  # ensure controllers (Traefik, MetalLB, etc.) are deployed
-  # no dependsOn needed; keep simple
+  # Notă: Această Kustomization rulează înaintea configurațiilor dependente (ex. monitoring, MetalLB configs)
 
 

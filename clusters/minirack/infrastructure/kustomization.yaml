@@ -1,5 +1,5 @@
-# Kustomization pentru infrastructura clusterului minirack.
-# Definește Kustomization-urile Flux care aplică controllerele și configurările.
+## Rol: Kustomization de orchestrare pentru infrastructura clusterului minirack
+## Scop: Listează Kustomization-urile Flux (controllers + configs) și aplică un patch de path pentru `infrastructure`.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:

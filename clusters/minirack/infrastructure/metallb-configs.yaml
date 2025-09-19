@@ -1,4 +1,5 @@
-## Flux Kustomization care aplică configurațiile MetalLB (AddressPool, L2Advertisement).
+## Rol: Kustomization Flux pentru aplicarea configurațiilor MetalLB (AddressPool, L2Advertisement)
+## Scop: Publică IP-urile și anunțurile Layer 2 pentru serviciile LoadBalancer prin MetalLB.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:

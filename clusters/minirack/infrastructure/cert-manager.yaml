@@ -1,3 +1,5 @@
+## Rol: Kustomization Flux care instalează controllerele cert-manager (CRDs + Deployment)
+## Scop: Oferă managementul certificatelor x509 în cluster, folosit de ingress/gateway.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
