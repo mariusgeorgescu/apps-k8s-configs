@@ -76,6 +76,22 @@ Kustomization‑urile Flux leagă componentele de mai sus în ordinea corectă:
 
 Notă: Ordinea este controlată prin `dependsOn`, `wait: true`, `healthChecks` și `timeout` în resursele `Kustomization` ale Flux. Aceasta asigură că CRD‑urile și controllerele sunt operaționale înainte să fie aplicate resursele dependente (ex. MetalLB configs, issuers cert-manager).
 
+### Ordinea de reconciliere (minirack)
+
+Ordinea efectivă rezultă din câmpurile `dependsOn`/`wait`/`healthChecks` (nu din ordinea listării în fișier):
+
+1. `clusters/minirack/infrastructure/namespaces.yaml` — creează namespace‑uri comune (blocant pentru restul prin `dependsOn`).
+2. `clusters/minirack/infrastructure/cert-manager.yaml` — instalează CRD‑urile și controllerul cert-manager (necesare înainte de issuers/secrete).
+3. `clusters/minirack/infrastructure/infrastructure.yaml` — instalează restul controlerelor din `infrastructure/controllers/` (Traefik Gateway, MetalLB, CoreDNS, Local Path, Prometheus, Keepalived). Are `dependsOn: [namespaces, cert-manager]` deci așteaptă cert-manager înainte.
+4. `clusters/minirack/infrastructure/cert-manager-configs.yaml` — aplică issuers/secrete pentru cert-manager; depinde explicit de `cert-manager` și folosește SOPS pentru decriptare.
+5. `clusters/minirack/infrastructure/metallb-configs.yaml` — aplică `IPAddressPool`/`L2Advertisement`; depinde de `infrastructure` și are `healthChecks` pe `Deployment/controller` din `metallb-system` (evită eșecurile webhook la dry‑run după restart).
+6. `clusters/minirack/infrastructure/monitoring.yaml` — aplică configurările de monitoring; are `dependsOn: [namespaces, infrastructure]` ca să se asigure că CRD‑urile Prometheus Operator există.
+7. `clusters/minirack/infrastructure/keepalived.yaml` — reconciliere separată (fără `dependsOn`); include `healthChecks` pe `DaemonSet/keepalived`. Poate rula în paralel, dar devine „Ready” independent de celelalte.
+
+Important:
+- Ordinea în care sunt listate resursele într‑un `kustomization.yaml` nu garantează secvențierea în Flux; `dependsOn` este mecanismul recomandat pentru ordine.
+- `wait: true` și `healthChecks` asigură că resursele target sunt „Ready” înainte de pașii dependenți (ex. webhook‑uri disponibile, CRD‑uri gata).
+
 ### clusters/<cluster>
 - Conține Kustomization-urile Flux care „leagă” repo-ul de cluster:
   - `infrastructure/` — Kustomization-uri Flux pentru controllere (ex: `infrastructure.yaml`, `cert-manager.yaml`, `cert-manager-configs.yaml`, `metallb-configs.yaml`)
