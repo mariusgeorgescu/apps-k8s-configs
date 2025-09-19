@@ -48,6 +48,34 @@ apps-k8s-configs/
 - Conține resurse dependente de controlerele instalate:
   - `cert-manager/clusterissuer-*.yaml` — `ClusterIssuer` ce folosesc cert-manager
 
+## Infrastructură: componente și roluri
+
+- **Traefik Gateway Controller**: Controller L7 care implementează Gateway API; rutează HTTP/HTTPS către servicii din cluster. Definițiile sunt în `infrastructure/controllers/traefik-gateway/` (include și `GatewayClass`).
+- **Gateway API (Gateway, HTTPRoute)**: Resurse care definesc rutarea aplicațiilor. Se află în overlay-urile de app (ex. `apps/<app>/prod/networking`).
+- **cert-manager**: Gestionează ciclul de viață al certificatelor x509; instalat din `infrastructure/controllers/cert-manager/`.
+- **GoDaddy webhook (cert-manager)**: Solver DNS-01 pentru validări ACME bazate pe GoDaddy; `infrastructure/controllers/cert-manager-godaddy-webhook/`.
+- **MetalLB**: Load balancer de tip L2 pentru expunerea serviciilor `LoadBalancer`; `infrastructure/controllers/metallb/`.
+- **Configuri MetalLB**: Pooluri de IP și anunțuri L2 (ex. `ipaddresspool-prod.yaml`, `l2advertisement-prod.yaml`) în `infrastructure/configs/metallb/`.
+- **Keepalived**: Gestionează adrese IP virtuale (VRRP) pentru disponibilitate de rețea; `infrastructure/controllers/keepalived/`.
+- **CoreDNS**: DNS-ul clusterului (SA/RBAC/Config/Deployment) în `infrastructure/controllers/coredns/`.
+- **Local Path Provisioner**: Provisionare dinamică PV local, oferă `StorageClass` implicit; `infrastructure/controllers/local-path/`.
+- **Prometheus Stack**: Observabilitate (Prometheus, Alertmanager, Grafana) instalată via Helm în `infrastructure/controllers/prometheus/`.
+- **Configuri Monitoring**: `ServiceMonitor` și alte resurse pentru scraping țintit (ex. `infrastructure/configs/monitoring/servicemonitor-bjj-backend.yaml`).
+- **Namespaces**: Namespace‑uri comune/partajate pentru infrastructură în `infrastructure/configs/namespaces/` (legate în `clusters/<cluster>/infrastructure/namespaces.yaml`).
+
+### Orchestrare în `clusters/<cluster>/infrastructure`
+
+Kustomization‑urile Flux leagă componentele de mai sus în ordinea corectă:
+- **`namespaces.yaml`**: creează namespace‑uri comune înaintea restului.
+- **`infrastructure.yaml`**: aplică controllerele (Traefik, MetalLB, cert-manager, CoreDNS, Local Path, Prometheus, Keepalived) din `infrastructure/controllers/`.
+- **`cert-manager.yaml`**: instalează cert-manager (dacă este separat).
+- **`cert-manager-configs.yaml`**: aplică issuers/secrete pentru cert-manager (cu SOPS pentru secrete). Depinde de `cert-manager`.
+- **`metallb-configs.yaml`**: aplică `IPAddressPool` și `L2Advertisement` după ce MetalLB este instalat; include `healthChecks` pe `Deployment/controller` din `metallb-system` pentru a evita erori de tip webhook în timpul reconcilierii după restart.
+- **`monitoring.yaml`**: aplică configurări de monitoring după ce infrastructura este gata.
+- **`keepalived.yaml`**: instalează și verifică daemonul Keepalived (health check pe `DaemonSet/keepalived`).
+
+Notă: Ordinea este controlată prin `dependsOn`, `wait: true`, `healthChecks` și `timeout` în resursele `Kustomization` ale Flux. Aceasta asigură că CRD‑urile și controllerele sunt operaționale înainte să fie aplicate resursele dependente (ex. MetalLB configs, issuers cert-manager).
+
 ### clusters/<cluster>
 - Conține Kustomization-urile Flux care „leagă” repo-ul de cluster:
   - `infrastructure/` — Kustomization-uri Flux pentru controllere (ex: `infrastructure.yaml`, `cert-manager.yaml`, `cert-manager-configs.yaml`, `metallb-configs.yaml`)
@@ -69,6 +97,14 @@ apps-k8s-configs/
   - `cert-manager-configs.yaml` -> `./infrastructure/configs/cert-manager`
   - `metallb-configs.yaml` -> `./infrastructure/configs/metallb`
 - `infrastructure/kustomization.yaml` agregă controllerele principale și aplică patch-ul pentru `StorageClass` implicit.
+
+Pentru reconciliere forțată a unei Kustomization (de ex. după un restart de cluster):
+```bash
+flux reconcile kustomization infrastructure -n flux-system
+flux reconcile kustomization metallb-configs -n flux-system
+flux reconcile kustomization cert-manager -n flux-system
+flux reconcile kustomization cert-manager-configs -n flux-system
+```
 
 ## Resurse și scop
 
