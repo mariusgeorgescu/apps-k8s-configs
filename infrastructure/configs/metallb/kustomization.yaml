@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
 - ipaddresspool-prod.yaml
 - l2advertisement-prod.yaml
+ - ipaddresspool-traefik.yaml
 
 
