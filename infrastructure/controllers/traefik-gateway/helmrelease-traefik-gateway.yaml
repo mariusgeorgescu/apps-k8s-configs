@@ -38,7 +38,7 @@ spec:
           enabled: true
     service:
       type: LoadBalancer
-      loadBalancerIP: 192.168.1.220
+      loadBalancerIP: 192.168.1.240
       annotations:
         metallb.universe.tf/address-pool: metallb-traefik-pool
 

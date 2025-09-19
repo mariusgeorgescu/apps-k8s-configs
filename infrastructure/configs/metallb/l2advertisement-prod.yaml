@@ -6,6 +6,5 @@ metadata:
 spec:
   ipAddressPools:
   - metallb-public-pool
-  - metallb-traefik-pool
 
 
