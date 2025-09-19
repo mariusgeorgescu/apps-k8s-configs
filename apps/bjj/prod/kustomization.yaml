@@ -12,11 +12,11 @@ resources: # Manifeste incluse din baza aplicației + resurse only-in-prod
 - policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (prod)
 - policies/pdb-bjjbackend-query-api.yaml # PDB (prod)
 - policies/pdb-bjjbackend-interaction-api.yaml # PDB (prod)
+- secrets/secret-bjjbackend.yaml # Secret specific environment-ului (prod)
 patchesStrategicMerge: # Patches pentru a adăuga atribute non-minime
   - patches/configmap-bjjbackend.yaml
   - patches/deployment-bjjbackend-query-api.yaml 
   - patches/deployment-bjjbackend-interaction-api.yaml
-  - patches/secret-bjjbackend.yaml
 images: # Re-scrieri pentru imaginile containerelor
   - name: mariusgeorgescu/bjj-interaction-api # Numele imaginii principale
     newTag: 0bef711 # Tag-ul folosit în dezvoltare

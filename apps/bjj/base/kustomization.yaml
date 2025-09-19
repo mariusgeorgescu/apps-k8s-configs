@@ -8,7 +8,6 @@ commonLabels: # Etichete aplicate tuturor resurselor generate
 resources: # Listează toate manifestele care compun baza
 - namespace.yaml # Creează namespace-ul aplicației
 - config/configmap-bjjbackend.yaml # ConfigMap cu variabile de configurare
-- secrets/secret-bjjbackend.yaml # Secret cu variabile sensibile
 - storage/pvc-bjjbackend-lookup.yaml # PersistentVolumeClaim pentru fișierul DB
 - services/service-bjjbackend-query-api.yaml # Service pentru expunerea internă a aplicației
 - services/service-bjjbackend-interaction-api.yaml # Service pentru expunerea internă a aplicației

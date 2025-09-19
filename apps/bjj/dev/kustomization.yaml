@@ -10,9 +10,9 @@ resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
   - networking/routes/httproute-bjjbackend-dev-api-redirect.yaml # HTTP->HTTPS redirect (dev)
   - networking/routes/httproute-bjjbackend-dev-api.yaml # Ruta principală (dev)
   - policies/networkpolicy-bjj-egress.yaml # NetworkPolicy (dev)
+  - secrets/secret-bjjbackend.yaml # Secret specific environment-ului (dev)
 patchesStrategicMerge: # Patches pentru a adăuga atribute dev
   - patches/configmap-bjjbackend.yaml
-  - patches/secret-bjjbackend.yaml
 images: # Re-scrieri pentru imaginile containerelor
   - name: mariusgeorgescu/bjj-interaction-api # Numele imaginii principale
     newTag: 0bef711 # Tag-ul folosit în dezvoltare
