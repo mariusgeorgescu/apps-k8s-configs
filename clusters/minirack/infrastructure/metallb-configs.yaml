@@ -13,8 +13,12 @@ spec:
     name: flux-system
   wait: true
   timeout: 5m0s
-  skipDryRun: true
   dependsOn:
   - name: infrastructure
+  healthChecks:
+  - apiVersion: apps/v1
+    kind: Deployment
+    name: controller
+    namespace: metallb-system
 
 
