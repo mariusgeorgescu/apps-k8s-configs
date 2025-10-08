@@ -1,0 +1,15 @@
+# Certificate (cert-manager) for the domain entangled.cardano.vip.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate-entangled-frontend-dev-cardano-vip
+  namespace: entangled-frontend
+spec:
+  secretName: secret-entangled-frontend-dev-cardano-vip-tls
+  dnsNames:
+  - entangled.cardano.vip
+  issuerRef:
+    name: letsencrypt-godaddy-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+

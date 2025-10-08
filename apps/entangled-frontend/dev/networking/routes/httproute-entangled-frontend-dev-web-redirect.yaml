@@ -1,0 +1,19 @@
+# HTTPRoute for HTTP to HTTPS redirect for entangled-frontend dev.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute-entangled-frontend-dev-web-redirect
+  namespace: entangled-frontend
+spec:
+  parentRefs:
+  - name: dev-gateway-entangled-frontend-dev-web
+    sectionName: http
+  hostnames:
+  - entangled.cardano.vip
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        statusCode: 301
+

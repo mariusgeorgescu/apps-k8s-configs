@@ -1,0 +1,15 @@
+# Service for exposing the entangled-frontend application within the cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-entangled-frontend-web
+  namespace: entangled-frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: entangled-frontend-web-pod-label
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+

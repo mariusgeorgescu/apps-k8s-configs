@@ -1,0 +1,15 @@
+# Kustomization overlay "dev" for the entangled-frontend application.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: entangled-frontend
+namePrefix: dev-
+resources:
+  - ../base
+  - networking/certificates/certificate-entangled-frontend-dev-cardano-vip.yaml
+  - networking/gateways/gateway-entangled-frontend-dev-web.yaml
+  - networking/routes/httproute-entangled-frontend-dev-web-redirect.yaml
+  - networking/routes/httproute-entangled-frontend-dev-web.yaml
+images:
+  - name: mariusgeorgescu/entangled-frontend
+    newTag: latest
+

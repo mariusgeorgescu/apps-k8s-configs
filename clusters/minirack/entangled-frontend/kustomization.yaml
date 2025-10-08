@@ -1,0 +1,6 @@
+# Kustomization for the entangled-frontend application (dev overlay). Applied via Flux.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- entangled-frontend-dev.yaml
+
