@@ -11,5 +11,5 @@ resources:
   - networking/routes/httproute-entangled-frontend-dev-web.yaml
 images:
   - name: mariusgeorgescu/entangled-frontend
-    newTag: arm64
+    newTag: latest
 

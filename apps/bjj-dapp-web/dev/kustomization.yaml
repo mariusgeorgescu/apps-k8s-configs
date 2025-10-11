@@ -15,4 +15,4 @@ patches:
   - path: patches/deployment-bjj-dapp-web.yaml
 images:
   - name: mariusgeorgescu/bjj-dapp-web
-    newTag: arm64
+    newTag: latest
