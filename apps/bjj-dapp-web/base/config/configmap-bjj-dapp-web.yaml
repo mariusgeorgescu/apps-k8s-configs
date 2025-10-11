@@ -5,9 +5,6 @@ metadata:
   name: configmap-bjj-dapp-web
   namespace: bjj-dapp-web
 data:
-  # API credentials
-  API_USER: "cardano"
-  API_PASS: "lovelace"
   # Backend API base URL for local scripts
   API_URL: "https://bjjbackend.cardano.vip"
   # Next.js public API base URL (used in client and server)
