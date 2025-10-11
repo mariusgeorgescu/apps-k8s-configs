@@ -38,8 +38,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: configmap-bjj-dapp-web
-            - secretRef:
-                name: secret-bjj-dapp-web
           readinessProbe:
             httpGet:
               path: /

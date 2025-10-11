@@ -1,0 +1,16 @@
+# Deployment patch for bjj-dapp-web dev environment to add secret reference.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-bjj-dapp-web
+  namespace: bjj-dapp-web
+spec:
+  template:
+    spec:
+      containers:
+        - name: container-bjj-dapp-web
+          envFrom:
+            - configMapRef:
+                name: configmap-bjj-dapp-web
+            - secretRef:
+                name: secret-bjj-dapp-web

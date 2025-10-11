@@ -8,7 +8,6 @@ commonLabels:
 resources:
 - namespace.yaml
 - config/configmap-bjj-dapp-web.yaml
-- secrets/secret-bjj-dapp-web.yaml
 - storage/pvc-bjj-dapp-web-data.yaml
 - storage/pvc-bjj-dapp-web-uploads.yaml
 - services/service-bjj-dapp-web.yaml
