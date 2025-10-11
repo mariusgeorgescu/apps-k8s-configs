@@ -13,6 +13,9 @@ resources:
 patches:
   - path: patches/configmap-bjj-dapp-web.yaml
   - path: patches/deployment-bjj-dapp-web.yaml
+    target:
+      kind: Deployment
+      name: deployment-bjj-dapp-web
 images:
   - name: mariusgeorgescu/bjj-dapp-web
     newTag: latest
