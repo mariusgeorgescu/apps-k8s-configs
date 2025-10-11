@@ -1,0 +1,20 @@
+# HTTPRoute main route for HTTPS traffic to bjj-dapp-web dev.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute-bjj-dapp-web-dev
+  namespace: bjj-dapp-web
+spec:
+  parentRefs:
+    - name: dev-gateway-bjj-dapp-web-dev
+      sectionName: https
+  hostnames:
+    - bjj-belts.org
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: dev-service-bjj-dapp-web
+          port: 3000

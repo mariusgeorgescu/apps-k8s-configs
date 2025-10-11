@@ -1,0 +1,14 @@
+# PersistentVolumeClaim for bjj-dapp-web SQLite database storage.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-bjj-dapp-web-data
+  namespace: bjj-dapp-web
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-path
+

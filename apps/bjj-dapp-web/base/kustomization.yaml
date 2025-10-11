@@ -1,0 +1,15 @@
+# Kustomization base for the bjj-dapp-web application.
+# Sets namespace and common labels, then composes resources (ConfigMap, Service, Deployment, PVCs).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: bjj-dapp-web
+commonLabels:
+  app.kubernetes.io/part-of: bjj-dapp-web
+resources:
+- namespace.yaml
+- config/configmap-bjj-dapp-web.yaml
+- storage/pvc-bjj-dapp-web-data.yaml
+- storage/pvc-bjj-dapp-web-uploads.yaml
+- services/service-bjj-dapp-web.yaml
+- workloads/deployment-bjj-dapp-web.yaml
+

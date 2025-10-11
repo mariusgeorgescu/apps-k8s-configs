@@ -1,0 +1,5 @@
+# Kustomization for the bjj-dapp-web application (dev overlay). Applied via Flux.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- bjj-dapp-web-dev.yaml

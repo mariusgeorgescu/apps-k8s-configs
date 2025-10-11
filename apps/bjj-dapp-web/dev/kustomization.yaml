@@ -1,0 +1,16 @@
+# Kustomization overlay "dev" for the bjj-dapp-web application.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: bjj-dapp-web
+namePrefix: dev-
+resources:
+  - ../base
+  - networking/certificates/certificate-bjj-dapp-web-dev-bjj-belts-org.yaml
+  - networking/gateways/gateway-bjj-dapp-web-dev.yaml
+  - networking/routes/httproute-bjj-dapp-web-dev-redirect.yaml
+  - networking/routes/httproute-bjj-dapp-web-dev.yaml
+patches:
+  - path: patches/configmap-bjj-dapp-web.yaml
+images:
+  - name: mariusgeorgescu/bjj-dapp-web
+    newTag: arm64

@@ -1,0 +1,28 @@
+# Gateway (Gateway API) for the bjj-dapp-web dev environment.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gateway-bjj-dapp-web-dev
+  namespace: bjj-dapp-web
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    hostname: bjj-belts.org
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https
+    hostname: bjj-belts.org
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: secret-bjj-dapp-web-dev-bjj-belts-org-tls
+    allowedRoutes:
+      namespaces:
+        from: All

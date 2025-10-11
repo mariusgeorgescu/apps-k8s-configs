@@ -1,0 +1,14 @@
+# PersistentVolumeClaim for bjj-dapp-web uploads storage.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-bjj-dapp-web-uploads
+  namespace: bjj-dapp-web
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-path
+

@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+Do not change anything directly to the cluster.
+Always use the gitops way.

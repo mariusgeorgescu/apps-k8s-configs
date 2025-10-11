@@ -1,0 +1,6 @@
+# Namespace for the bjj-dapp-web application.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bjj-dapp-web
+

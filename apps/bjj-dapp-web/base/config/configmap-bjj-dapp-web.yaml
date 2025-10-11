@@ -1,0 +1,14 @@
+# ConfigMap with configuration variables for bjj-dapp-web (consumed by Deployments).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-bjj-dapp-web
+  namespace: bjj-dapp-web
+data:
+  # Next.js environment variables
+  NEXT_PUBLIC_API_URL: "https://bjjbackend.cardano.vip" # Base value; overlays override
+  NEXT_PUBLIC_PROFILE_POLICY_ID: "placeholder_policy_id" # Base value; overlays override
+  NEXT_PUBLIC_NETWORK_ID: "1" # Mainnet by default
+  NODE_ENV: "production"
+  PORT: "3000"
+

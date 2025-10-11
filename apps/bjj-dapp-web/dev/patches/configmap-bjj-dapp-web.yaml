@@ -1,0 +1,14 @@
+# ConfigMap patch for bjj-dapp-web dev environment.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-bjj-dapp-web
+  namespace: bjj-dapp-web
+data:
+  # Dev-specific API URL
+  NEXT_PUBLIC_API_URL: "https://dev-bjjbackend.cardano.vip"
+  # Dev-specific policy ID (placeholder - update with actual value)
+  NEXT_PUBLIC_PROFILE_POLICY_ID: "dev_policy_id_placeholder"
+  # Development network (testnet)
+  NEXT_PUBLIC_NETWORK_ID: "0"
+  NODE_ENV: "development"

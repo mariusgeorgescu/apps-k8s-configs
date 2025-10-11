@@ -1,0 +1,15 @@
+# Service for exposing the bjj-dapp-web application within the cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-bjj-dapp-web
+  namespace: bjj-dapp-web
+spec:
+  type: ClusterIP
+  selector:
+    app: bjj-dapp-web-pod-label
+  ports:
+  - name: http
+    port: 3000
+    targetPort: http
+

@@ -1,0 +1,86 @@
+# Deployment for the bjj-dapp-web Next.js application.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-bjj-dapp-web
+  namespace: bjj-dapp-web
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: bjj-dapp-web-pod-label
+  template:
+    metadata:
+      labels:
+        app: bjj-dapp-web-pod-label
+    spec:
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+          - name: single-request-reopen
+          - name: timeout
+            value: "2"
+          - name: attempts
+            value: "3"
+      containers:
+        - name: container-bjj-dapp-web
+          image: mariusgeorgescu/bjj-dapp-web:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: configmap-bjj-dapp-web
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 30
+          volumeMounts:
+            - name: data-volume
+              mountPath: /app/data
+            - name: uploads-volume
+              mountPath: /app/public/uploads
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: pvc-bjj-dapp-web-data
+        - name: uploads-volume
+          persistentVolumeClaim:
+            claimName: pvc-bjj-dapp-web-uploads
+
