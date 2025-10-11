@@ -1,13 +1,13 @@
-# Certificate (cert-manager) for the domain bjj-belts.org.
+# Certificate (cert-manager) for the domain bjj.cardano.vip.
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: certificate-bjj-dapp-web-dev-bjj-belts-org
+  name: certificate-bjj-dapp-web-dev-cardano-vip
   namespace: bjj-dapp-web
 spec:
-  secretName: secret-bjj-dapp-web-dev-bjj-belts-org-tls
+  secretName: secret-bjj-dapp-web-dev-cardano-vip-tls
   dnsNames:
-  - bjj-belts.org
+  - bjj.cardano.vip
   issuerRef:
     name: letsencrypt-godaddy-prod
     kind: ClusterIssuer

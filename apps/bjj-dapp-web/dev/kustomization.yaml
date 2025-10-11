@@ -6,7 +6,7 @@ namePrefix: dev-
 resources:
   - ../base
   - secrets/secret-bjj-dapp-web.yaml
-  - networking/certificates/certificate-bjj-dapp-web-dev-bjj-belts-org.yaml
+  - networking/certificates/certificate-bjj-dapp-web-dev-cardano-vip.yaml
   - networking/gateways/gateway-bjj-dapp-web-dev.yaml
   - networking/routes/httproute-bjj-dapp-web-dev-redirect.yaml
   - networking/routes/httproute-bjj-dapp-web-dev.yaml

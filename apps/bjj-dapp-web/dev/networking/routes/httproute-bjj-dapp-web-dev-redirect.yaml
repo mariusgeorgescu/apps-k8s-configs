@@ -9,7 +9,7 @@ spec:
   - name: dev-gateway-bjj-dapp-web-dev
     sectionName: http
   hostnames:
-  - bjj-belts.org
+  - bjj.cardano.vip
   rules:
   - filters:
     - type: RequestRedirect

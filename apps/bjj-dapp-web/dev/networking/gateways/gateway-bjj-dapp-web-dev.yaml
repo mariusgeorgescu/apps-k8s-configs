@@ -8,21 +8,21 @@ spec:
   gatewayClassName: traefik
   listeners:
   - name: http
-    hostname: bjj-belts.org
+    hostname: bjj.cardano.vip
     port: 80
     protocol: HTTP
     allowedRoutes:
       namespaces:
         from: All
   - name: https
-    hostname: bjj-belts.org
+    hostname: bjj.cardano.vip
     port: 443
     protocol: HTTPS
     tls:
       mode: Terminate
       certificateRefs:
       - kind: Secret
-        name: secret-bjj-dapp-web-dev-bjj-belts-org-tls
+        name: secret-bjj-dapp-web-dev-cardano-vip-tls
     allowedRoutes:
       namespaces:
         from: All
