@@ -5,10 +5,16 @@ metadata:
   name: configmap-bjj-dapp-web
   namespace: bjj-dapp-web
 data:
-  # Next.js environment variables
-  NEXT_PUBLIC_API_URL: "https://bjjbackend.cardano.vip" # Base value; overlays override
-  NEXT_PUBLIC_PROFILE_POLICY_ID: "placeholder_policy_id" # Base value; overlays override
-  NEXT_PUBLIC_NETWORK_ID: "1" # Mainnet by default
+  # API credentials
+  API_USER: "cardano"
+  API_PASS: "lovelace"
+  # Backend API base URL for local scripts
+  API_URL: "https://bjjbackend.cardano.vip"
+  # Next.js public API base URL (used in client and server)
+  NEXT_PUBLIC_API_URL: "https://bjjbackend.cardano.vip"
+  # Chain config used by the app
+  NEXT_PUBLIC_PROFILE_POLICY_ID: "b831e9c236a1068f969db151a96b92004e8b1eb0ea3f82d6f373eccc"
+  NEXT_PUBLIC_NETWORK_ID: "1" # Mainnet
   NODE_ENV: "production"
   PORT: "3000"
 
