@@ -5,9 +5,9 @@ metadata:
   name: configmap-bjj-dapp-web
   namespace: bjj-dapp-web
 data:
-  # Backend API base URL for local scripts
-  API_URL: "https://bjjbackend.cardano.vip"
-  # Next.js public API base URL (used in client and server)
+  # Backend API base URL for server-side calls (internal service)
+  API_URL: "http://service-bjjbackend-query-api.bjj.svc.cluster.local:8083"
+  # Next.js public API base URL for client-side calls (external domain)
   NEXT_PUBLIC_API_URL: "https://bjjbackend.cardano.vip"
   # Chain config used by the app
   NEXT_PUBLIC_PROFILE_POLICY_ID: "b831e9c236a1068f969db151a96b92004e8b1eb0ea3f82d6f373eccc"

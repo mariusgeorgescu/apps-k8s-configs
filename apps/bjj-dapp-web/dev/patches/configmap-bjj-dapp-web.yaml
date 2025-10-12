@@ -5,9 +5,10 @@ metadata:
   name: configmap-bjj-dapp-web
   namespace: bjj-dapp-web
 data:
-  # Dev environment uses production API
-  API_URL: "https://bjjbackend.cardano.vip"
-  NEXT_PUBLIC_API_URL: "https://bjjbackend.cardano.vip"
+  # Server-side API calls use internal dev service (no hairpin issues)
+  API_URL: "http://dev-service-bjjbackend-query-api.bjj.svc.cluster.local:8083"
+  # Client-side calls use external dev domain
+  NEXT_PUBLIC_API_URL: "https://dev-bjjbackend.cardano.vip"
   # Production policy ID and network for dev environment
   NEXT_PUBLIC_PROFILE_POLICY_ID: "b831e9c236a1068f969db151a96b92004e8b1eb0ea3f82d6f373eccc"
   NEXT_PUBLIC_NETWORK_ID: "1"

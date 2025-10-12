@@ -7,6 +7,7 @@ spec:
   podSelector: {}
   policyTypes:
   - Egress
+  - Ingress
   egress:
   # Allow DNS to CoreDNS in kube-system (TCP/UDP 53)
   # Notă: dacă IP-ul ClusterIP CoreDNS se schimbă, actualizează și regula explicită de mai jos.
@@ -40,3 +41,19 @@ spec:
     ports:
     - protocol: TCP
       port: 443
+  # Allow incoming traffic from bjj-dapp-web namespace to bjj services
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: bjj-dapp-web
+    ports:
+    - protocol: TCP
+      port: 8083  # Query API port
+    - protocol: TCP
+      port: 8082  # Interaction API port
+  # Allow internal communication within BJJ namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: bjj
