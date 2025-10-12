@@ -30,7 +30,7 @@ spec:
             value: "3"
       containers:
         - name: container-bjj-dapp-web
-          image: mariusgeorgescu/bjj-dapp-web:latest
+          image: mariusgeorgescu/bjj-dapp-web:develop-af9136b74386c2e8217cc9934825b26e4665f02f
           imagePullPolicy: Always
           ports:
             - name: http
