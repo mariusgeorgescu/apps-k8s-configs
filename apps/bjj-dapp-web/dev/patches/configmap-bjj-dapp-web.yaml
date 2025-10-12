@@ -6,7 +6,7 @@ metadata:
   namespace: bjj-dapp-web
 data:
   # Server-side API calls use internal dev service (no hairpin issues)
-  API_URL: "http://dev-service-bjjbackend-query-api.bjj.svc.cluster.local:8083"
+  API_BASE_URL: "http://dev-service-bjjbackend-query-api.bjj.svc.cluster.local:8083"
   # Client-side calls use external dev domain
   NEXT_PUBLIC_API_URL: "http://dev-service-bjjbackend-query-api.bjj.svc.cluster.local:8083"
   # Production policy ID and network for dev environment
