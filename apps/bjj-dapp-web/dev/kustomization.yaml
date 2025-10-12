@@ -18,4 +18,4 @@ patches:
       name: deployment-bjj-dapp-web
 images:
   - name: mariusgeorgescu/bjj-dapp-web
-    newTag: develop-6e3fce0cbe8660e3bc972d4a5d936808d4e1bb35
+    newTag: develop-98d05b0
