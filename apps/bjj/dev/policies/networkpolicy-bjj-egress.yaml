@@ -41,8 +41,18 @@ spec:
     ports:
     - protocol: TCP
       port: 443
-  # Allow incoming traffic from bjj-dapp-web namespace to bjj services
+  # Allow incoming traffic from Traefik Gateway to bjj services
   ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: traefik
+    ports:
+    - protocol: TCP
+      port: 8083  # Query API port
+    - protocol: TCP
+      port: 8082  # Interaction API port
+  # Allow incoming traffic from bjj-dapp-web namespace to bjj services
   - from:
     - namespaceSelector:
         matchLabels:
