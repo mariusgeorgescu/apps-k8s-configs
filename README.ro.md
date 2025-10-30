@@ -2,6 +2,8 @@
 
 Acest depozit conține configurațiile Kubernetes gestionate de FluxCD pentru aplicații și infrastructură. Structura este orientată pe medii și pe separarea clară între controlere (instalate via Helm) și resurse declarative (YAML simple) aplicate prin Kustomize.
 
+> Ghid complet pentru deploy pe un cluster k3s HA (5x Raspberry Pi): vezi `docs/k3s-ha-raspberrypi-5nodes.md`.
+
 ## Structura depozitului
 
 ```
