@@ -10,6 +10,7 @@ resources:
 - metallb-configs.yaml
 - monitoring.yaml
 - keepalived.yaml
+- k3s-configs.yaml
 patches:
 - target:
     kind: Kustomization
