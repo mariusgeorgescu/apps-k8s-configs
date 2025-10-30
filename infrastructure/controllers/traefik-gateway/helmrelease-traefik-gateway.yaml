@@ -42,8 +42,8 @@ spec:
       type: LoadBalancer
       loadBalancerIP: 192.168.1.240
       annotations:
-        metallb.universe.tf/address-pool: metallb-public-pool
-        lb.k3s.cattle.io/enabled: "false"
+        metallb.io/address-pool: metallb-public-pool
+        lb.k3s.cattle.io/enable: "false"
         service.beta.kubernetes.io/load-balancer-source-ranges: "0.0.0.0/0"
 
 
