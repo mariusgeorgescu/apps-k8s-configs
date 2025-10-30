@@ -44,5 +44,6 @@ spec:
       annotations:
         metallb.universe.tf/address-pool: metallb-public-pool
         lb.k3s.cattle.io/enabled: "false"
+        service.beta.kubernetes.io/load-balancer-source-ranges: "0.0.0.0/0"
 
 
