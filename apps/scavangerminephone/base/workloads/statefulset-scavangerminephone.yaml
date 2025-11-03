@@ -6,7 +6,7 @@ metadata:
   namespace: scavangerminephone
 spec:
   serviceName: service-scavangerminephone
-  replicas: 20
+  replicas: 25
   selector:
     matchLabels:
       app: scavangerminephone-pod-label
@@ -15,19 +15,7 @@ spec:
       labels:
         app: scavangerminephone-pod-label
     spec:
-      # Node affinity: rulează doar pe nodurile Raspberry Pi 5 (exclude RockPi)
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                      - minirack-pi5-1
-                      - minirack-pi5-2
-                      - minirack-pi5-3
-                      - minirack-pi5-4
+      # Fără restricții de node affinity - poate rula pe orice nod (inclusiv RockPi)
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
