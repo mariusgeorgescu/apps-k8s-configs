@@ -1,0 +1,15 @@
+# Service pentru StatefulSet scavangerminephone
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-scavangerminephone
+  namespace: scavangerminephone
+spec:
+  clusterIP: None  # Headless service pentru StatefulSet
+  selector:
+    app: scavangerminephone-pod-label
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+
