@@ -54,8 +54,8 @@ spec:
             - name: http
               containerPort: 80
           # Setează ACCOUNT din fișierul creat de initContainer
-          # Nu suprascriem command - lăsăm aplicația să pornească cu ENTRYPOINT-ul original din Dockerfile
-          # Folosim un script init care setează ACCOUNT înainte de a rula aplicația
+          # Nu suprascriem command - lăsăm Kubernetes să folosească ENTRYPOINT + CMD din Dockerfile
+          # Folosim un script wrapper care setează ACCOUNT și apoi execută ENTRYPOINT-ul original
           command:
             - /bin/sh
             - -c
@@ -73,9 +73,18 @@ spec:
                 echo "ERROR: MNEMONIC is not set!"
                 exit 1
               fi
-              # Execută ENTRYPOINT-ul original al imaginii (shadow-harvester)
-              # cu CMD-ul din Dockerfile (dacă există)
-              exec shadow-harvester "$@"
+              # Execută ENTRYPOINT-ul original al imaginii
+              # ENTRYPOINT-ul este shadow-harvester (din Dockerfile)
+              # Când nu setăm args, CMD-ul este gol, deci executăm doar ENTRYPOINT-ul
+              # Dacă există args ($@), le pasăm la ENTRYPOINT
+              if [ $# -gt 0 ]; then
+                # Execută ENTRYPOINT cu argumentele din CMD
+                exec shadow-harvester "$@"
+              else
+                # Execută doar ENTRYPOINT-ul (fără argumente)
+                # Aplicația ar trebui să pornească și să ruleze continuu
+                exec shadow-harvester
+              fi
           envFrom:
             # Include secretul MNEMONIC din namespace-ul local
             - secretRef:
