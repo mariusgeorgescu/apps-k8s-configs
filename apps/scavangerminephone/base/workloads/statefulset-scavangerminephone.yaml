@@ -15,7 +15,7 @@ spec:
       labels:
         app: scavangerminephone-pod-label
     spec:
-      # Node affinity: rulează doar pe nodurile Raspberry Pi 5 (exclude RockPi)
+      # Node affinity: rulează doar pe nodurile Raspberry Pi 5 disponibile (exclude RockPi și minirack-pi5-4 care este offline)
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -27,7 +27,6 @@ spec:
                       - minirack-pi5-1
                       - minirack-pi5-2
                       - minirack-pi5-3
-                      - minirack-pi5-4
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
