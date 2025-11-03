@@ -16,7 +16,7 @@ spec:
     secretRef:
       name: sops-age
   wait: true
-  timeout: 5m0s
+  timeout: 15m0s
   dependsOn:
   - name: infrastructure
 
