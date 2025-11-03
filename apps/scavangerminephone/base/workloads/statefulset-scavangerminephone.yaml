@@ -53,47 +53,29 @@ spec:
           ports:
             - name: http
               containerPort: 80
-          # Citește ACCOUNT din fișierul creat de initContainer și îl setează ca env var
-          # Apoi execută aplicația originală cu ACCOUNT setat
+          # Setează ACCOUNT din fișierul creat de initContainer
+          # Nu suprascriem command - lăsăm aplicația să pornească cu ENTRYPOINT-ul original din Dockerfile
+          # Folosim un script init care setează ACCOUNT înainte de a rula aplicația
           command:
             - /bin/sh
             - -c
             - |
-              # Citește ACCOUNT din fișierul creat de initContainer
+              # Citește ACCOUNT din fișierul creat de initContainer și îl setează ca env var
               if [ -f /shared/account.txt ]; then
-                ACCOUNT_VALUE=$(cat /shared/account.txt)
-                export ACCOUNT=$ACCOUNT_VALUE
-                echo "Starting scavangerminephone with ACCOUNT=$ACCOUNT"
+                export ACCOUNT=$(cat /shared/account.txt)
+                echo "Starting with ACCOUNT=$ACCOUNT"
               else
                 export ACCOUNT=1
                 echo "Warning: account.txt not found, using default ACCOUNT=1"
               fi
-              # Verifică și afișează MNEMONIC (pentru debugging)
-              if [ -n "$MNEMONIC" ]; then
-                echo "MNEMONIC is set (length: ${#MNEMONIC})"
-              else
-                echo "Warning: MNEMONIC is not set"
+              # Verifică MNEMONIC
+              if [ -z "$MNEMONIC" ]; then
+                echo "ERROR: MNEMONIC is not set!"
+                exit 1
               fi
-              # Execută aplicația originală
-              # Caută entrypoint-ul în locațiile standard sau aplicația direct
-              if [ -f /docker-entrypoint.sh ]; then
-                exec /docker-entrypoint.sh
-              elif [ -f /entrypoint.sh ]; then
-                exec /entrypoint.sh
-              elif command -v shadow-harvester >/dev/null 2>&1; then
-                # Aplicația este shadow-harvester
-                exec shadow-harvester
-              elif [ $# -gt 0 ]; then
-                # Execută CMD-ul din Dockerfile (dacă există)
-                exec "$@"
-              else
-                # Dacă nu găsim nimic, încercăm să rulăm aplicația standard
-                # Aplicația ar trebui să aibă un ENTRYPOINT în Dockerfile
-                echo "WARNING: No entrypoint found. Trying to run default application."
-                echo "ACCOUNT=$ACCOUNT"
-                # Dacă aplicația nu pornește, verifică Dockerfile-ul imaginii
-                exec shadow-harvester 2>/dev/null || exec "$@"
-              fi
+              # Execută ENTRYPOINT-ul original al imaginii (shadow-harvester)
+              # cu CMD-ul din Dockerfile (dacă există)
+              exec shadow-harvester "$@"
           envFrom:
             # Include secretul MNEMONIC din namespace-ul local
             - secretRef:
