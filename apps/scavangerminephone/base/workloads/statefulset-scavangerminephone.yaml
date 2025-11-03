@@ -15,7 +15,22 @@ spec:
       labels:
         app: scavangerminephone-pod-label
     spec:
-      # Fără restricții de node affinity - poate rula pe orice nod (inclusiv RockPi)
+      # Preferă worker nodes (non-control-plane) pentru programare, dar permite și control-plane nodes dacă e necesar
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: In
+                    values:
+                      - "false"
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
