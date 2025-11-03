@@ -26,7 +26,7 @@ spec:
           - name: attempts
             value: "3"
       initContainers:
-        # InitContainer care calculează ACCOUNT bazat pe indexul pod-ului și îl scrie într-un fișier
+        # InitContainer care calculează ACCOUNT bazat pe indexul pod-ului și creează script wrapper
         - name: init-set-account
           image: busybox:1.36
           command:
@@ -40,6 +40,20 @@ spec:
               ACCOUNT=$((INDEX + 1))
               echo "$ACCOUNT" > /shared/account.txt
               echo "Set ACCOUNT to $ACCOUNT for pod $POD_NAME"
+              # Creează script wrapper care setează ACCOUNT și execută ENTRYPOINT-ul original
+              cat > /shared/entrypoint-wrapper.sh << 'EOF'
+              #!/bin/sh
+              # Citește ACCOUNT din fișier și îl setează ca env var
+              if [ -f /shared/account.txt ]; then
+                export ACCOUNT=$(cat /shared/account.txt)
+              else
+                export ACCOUNT=1
+              fi
+              # Execută ENTRYPOINT-ul original al imaginii (/app/entrypoint.sh)
+              exec /app/entrypoint.sh
+              EOF
+              chmod +x /shared/entrypoint-wrapper.sh
+              echo "Created entrypoint wrapper script"
           volumeMounts:
             - name: podinfo
               mountPath: /etc/podinfo
@@ -54,37 +68,9 @@ spec:
             - name: http
               containerPort: 80
           # Setează ACCOUNT din fișierul creat de initContainer
-          # Nu suprascriem command - lăsăm Kubernetes să folosească ENTRYPOINT + CMD din Dockerfile
-          # Folosim un script wrapper care setează ACCOUNT și apoi execută ENTRYPOINT-ul original
+          # Folosim un script wrapper minimal care setează ACCOUNT și execută ENTRYPOINT-ul original
           command:
-            - /bin/sh
-            - -c
-            - |
-              # Citește ACCOUNT din fișierul creat de initContainer și îl setează ca env var
-              if [ -f /shared/account.txt ]; then
-                export ACCOUNT=$(cat /shared/account.txt)
-                echo "Starting with ACCOUNT=$ACCOUNT"
-              else
-                export ACCOUNT=1
-                echo "Warning: account.txt not found, using default ACCOUNT=1"
-              fi
-              # Verifică MNEMONIC
-              if [ -z "$MNEMONIC" ]; then
-                echo "ERROR: MNEMONIC is not set!"
-                exit 1
-              fi
-              # Execută ENTRYPOINT-ul original al imaginii
-              # ENTRYPOINT-ul este shadow-harvester (din Dockerfile)
-              # Când nu setăm args, CMD-ul este gol, deci executăm doar ENTRYPOINT-ul
-              # Dacă există args ($@), le pasăm la ENTRYPOINT
-              if [ $# -gt 0 ]; then
-                # Execută ENTRYPOINT cu argumentele din CMD
-                exec shadow-harvester "$@"
-              else
-                # Execută doar ENTRYPOINT-ul (fără argumente)
-                # Aplicația ar trebui să pornească și să ruleze continuu
-                exec shadow-harvester
-              fi
+            - /shared/entrypoint-wrapper.sh
           envFrom:
             # Include secretul MNEMONIC din namespace-ul local
             - secretRef:
