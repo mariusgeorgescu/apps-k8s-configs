@@ -101,6 +101,13 @@ spec:
             # Include secretul MNEMONIC din namespace-ul local
             - secretRef:
                 name: secret-mnemonic
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 1536Mi
           volumeMounts:
             - name: shared-data
               mountPath: /shared
