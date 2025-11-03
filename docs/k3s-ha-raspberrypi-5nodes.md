@@ -182,3 +182,4 @@ Ancore rapide:
 - Controlere: `infrastructure/controllers/`
 - Configuri (MetalLB, cert-manager, k3s): `infrastructure/configs/`
 - Aplicații: `apps/`
+

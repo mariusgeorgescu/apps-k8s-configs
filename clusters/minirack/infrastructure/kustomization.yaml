@@ -7,6 +7,7 @@ resources:
 - infrastructure.yaml
 - cert-manager.yaml
 - cert-manager-configs.yaml
+- secrets-configs.yaml
 - metallb-configs.yaml
 - monitoring.yaml
 - keepalived.yaml
