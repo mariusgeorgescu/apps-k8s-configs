@@ -19,6 +19,7 @@ spec:
     spec:
       # Preferă worker nodes (non-control-plane) pentru programare, dar permite și control-plane nodes dacă e necesar
       # RockPi are weight mai mic (20) comparat cu alte worker nodes (100)
+      # Ensure only one pod per node using podAntiAffinity
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -48,6 +49,15 @@ spec:
                     operator: In
                     values:
                       - "false"
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - scavangerminephone-pod-label
+              topologyKey: kubernetes.io/hostname
       dnsPolicy: ClusterFirst
       dnsConfig:
         options:
@@ -108,7 +118,7 @@ spec:
               cpu: 500m
               memory: 512Mi
             limits:
-              cpu: 2000m
+              # No CPU limit to allow maximum CPU usage
               memory: 1536Mi
           volumeMounts:
             - name: shared-data
