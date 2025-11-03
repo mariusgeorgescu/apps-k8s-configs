@@ -75,28 +75,24 @@ spec:
                 echo "Warning: MNEMONIC is not set"
               fi
               # Execută aplicația originală
-              # Caută entrypoint-ul în locațiile standard
+              # Caută entrypoint-ul în locațiile standard sau aplicația direct
               if [ -f /docker-entrypoint.sh ]; then
                 exec /docker-entrypoint.sh
               elif [ -f /entrypoint.sh ]; then
                 exec /entrypoint.sh
+              elif command -v shadow-harvester >/dev/null 2>&1; then
+                # Aplicația este shadow-harvester
+                exec shadow-harvester
+              elif [ $# -gt 0 ]; then
+                # Execută CMD-ul din Dockerfile (dacă există)
+                exec "$@"
               else
-                # Dacă nu există entrypoint script, aplicația trebuie să pornească cu CMD-ul din Dockerfile
-                # Când nu setăm args, Kubernetes folosește CMD-ul din Dockerfile ca argumente pentru command
-                # Deci trebuie să executăm argumentele primite
-                echo "No entrypoint script found. Using CMD from Dockerfile."
+                # Dacă nu găsim nimic, încercăm să rulăm aplicația standard
+                # Aplicația ar trebui să aibă un ENTRYPOINT în Dockerfile
+                echo "WARNING: No entrypoint found. Trying to run default application."
                 echo "ACCOUNT=$ACCOUNT"
-                # Dacă există argumente (CMD din Dockerfile), le executăm
-                # Altfel, aplicația ar trebui să pornească automat
-                if [ $# -gt 0 ]; then
-                  exec "$@"
-                else
-                  # Dacă nu există CMD, aplicația ar trebui să aibă un ENTRYPOINT
-                  # Dacă nici asta nu funcționează, verifică Dockerfile-ul
-                  echo "No CMD found. Please check Docker image configuration."
-                  echo "Waiting for debugging..."
-                  tail -f /dev/null
-                fi
+                # Dacă aplicația nu pornește, verifică Dockerfile-ul imaginii
+                exec shadow-harvester 2>/dev/null || exec "$@"
               fi
           envFrom:
             # Include secretul MNEMONIC din namespace-ul local
