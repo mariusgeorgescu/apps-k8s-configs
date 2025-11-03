@@ -8,7 +8,7 @@ spec:
   serviceName: service-scavangerminephone
   replicas: 25
   updateStrategy:
-    type: OnDelete
+    type: RollingUpdate
   selector:
     matchLabels:
       app: scavangerminephone-pod-label
