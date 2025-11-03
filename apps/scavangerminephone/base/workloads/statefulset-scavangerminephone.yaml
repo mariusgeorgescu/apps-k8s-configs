@@ -53,12 +53,8 @@ spec:
           ports:
             - name: http
               containerPort: 80
-          env:
-            # Citește ACCOUNT din fișierul creat de initContainer
-            - name: ACCOUNT
-              value: "1"  # Default, va fi suprascris de script
-          # Script care citește ACCOUNT din fișier, îl setează ca env var și execută aplicația originală
-          # Setăm ACCOUNT dinamic bazat pe indexul pod-ului, apoi executăm entrypoint-ul original
+          # Citește ACCOUNT din fișierul creat de initContainer și îl setează ca env var
+          # Folosim un script wrapper care setează ACCOUNT și apoi execută aplicația originală
           command:
             - /bin/sh
             - -c
@@ -72,16 +68,21 @@ spec:
                 export ACCOUNT=1
                 echo "Warning: account.txt not found, using default ACCOUNT=1"
               fi
-              # Execută entrypoint-ul original al imaginii
-              # Caută entrypoint-ul în locațiile comune
+              # Execută entrypoint-ul original al imaginii (dacă există) sau aplicația direct
+              # Caută entrypoint-ul în locațiile standard
               if [ -f /docker-entrypoint.sh ]; then
-                exec /docker-entrypoint.sh "$@"
+                exec /docker-entrypoint.sh
               elif [ -f /entrypoint.sh ]; then
-                exec /entrypoint.sh "$@"
+                exec /entrypoint.sh
               else
-                # Dacă nu există entrypoint script, execută aplicația direct
-                # Kubernetes va folosi CMD-ul din Dockerfile (care va fi în $@)
-                exec "$@"
+                # Dacă nu există entrypoint script, folosim un fallback care așteaptă
+                # Va trebui să verifici Dockerfile-ul imaginii pentru a vedea care este CMD-ul
+                # și să-l adaugi aici sau să adaugi un entrypoint script în imagine
+                echo "ERROR: No entrypoint script found. Please check the Docker image."
+                echo "ACCOUNT is set to: $ACCOUNT"
+                echo "MNEMONIC is available from secret"
+                echo "Waiting for manual intervention..."
+                tail -f /dev/null
               fi
           envFrom:
             # Include secretul MNEMONIC din namespace-ul local
