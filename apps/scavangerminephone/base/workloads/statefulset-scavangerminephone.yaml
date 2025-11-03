@@ -1,4 +1,4 @@
-# StatefulSet pentru scavangerminephone cu 5 instanțe, fiecare cu ACCOUNT diferit (1-5)
+# StatefulSet pentru scavangerminephone - un pod per nod
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -6,7 +6,7 @@ metadata:
   namespace: scavangerminephone
 spec:
   serviceName: service-scavangerminephone
-  replicas: 25
+  replicas: 4
   updateStrategy:
     type: RollingUpdate
   selector:
