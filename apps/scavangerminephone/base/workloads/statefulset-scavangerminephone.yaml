@@ -26,7 +26,7 @@ spec:
           - name: attempts
             value: "3"
       initContainers:
-        # InitContainer care calculează ACCOUNT bazat pe indexul pod-ului și creează script wrapper
+        # InitContainer care calculează ACCOUNT bazat pe indexul pod-ului
         - name: init-set-account
           image: busybox:1.36
           command:
@@ -40,20 +40,6 @@ spec:
               ACCOUNT=$((INDEX + 1))
               echo "$ACCOUNT" > /shared/account.txt
               echo "Set ACCOUNT to $ACCOUNT for pod $POD_NAME"
-              # Creează script wrapper care setează ACCOUNT și execută ENTRYPOINT-ul original
-              cat > /shared/entrypoint-wrapper.sh << 'EOF'
-              #!/bin/sh
-              # Citește ACCOUNT din fișier și îl setează ca env var
-              if [ -f /shared/account.txt ]; then
-                export ACCOUNT=$(cat /shared/account.txt)
-              else
-                export ACCOUNT=1
-              fi
-              # Execută ENTRYPOINT-ul original al imaginii (/app/entrypoint.sh)
-              exec /app/entrypoint.sh
-              EOF
-              chmod +x /shared/entrypoint-wrapper.sh
-              echo "Created entrypoint wrapper script"
           volumeMounts:
             - name: podinfo
               mountPath: /etc/podinfo
@@ -67,10 +53,19 @@ spec:
           ports:
             - name: http
               containerPort: 80
-          # Setează ACCOUNT din fișierul creat de initContainer
-          # Folosim un script wrapper minimal care setează ACCOUNT și execută ENTRYPOINT-ul original
+          # Setează ACCOUNT din fișierul creat de initContainer și execută ENTRYPOINT-ul original
           command:
-            - /shared/entrypoint-wrapper.sh
+            - /bin/sh
+            - -c
+            - |
+              # Citește ACCOUNT din fișier
+              if [ -f /shared/account.txt ]; then
+                export ACCOUNT=$(cat /shared/account.txt)
+              else
+                export ACCOUNT=1
+              fi
+              # Execută ENTRYPOINT-ul original al imaginii
+              exec /app/entrypoint.sh
           envFrom:
             # Include secretul MNEMONIC din namespace-ul local
             - secretRef:
