@@ -17,13 +17,20 @@ spec:
       labels:
         app: scavangerminephone-pod-label
     spec:
-      # Preferă worker nodes (non-control-plane) pentru programare, dar permite și control-plane nodes dacă e necesar
-      # RockPi are weight mai mic (20) comparat cu alte worker nodes (100)
+      # Exclude rockpi-4a și preferă worker nodes (non-control-plane) pentru programare
       # Ensure only one pod per node using podAntiAffinity
       affinity:
         nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  # Exclude rockpi-4a - required rule
+                  - key: kubernetes.io/hostname
+                    operator: NotIn
+                    values:
+                      - rockpi-4a
           preferredDuringSchedulingIgnoredDuringExecution:
-            # Worker nodes (exclude RockPi) - prioritate mare
+            # Worker nodes (non-control-plane) - prioritate mare
             - weight: 100
               preference:
                 matchExpressions:
@@ -31,14 +38,6 @@ spec:
                     operator: DoesNotExist
                   - key: kubernetes.io/hostname
                     operator: NotIn
-                    values:
-                      - rockpi-4a
-            # RockPi specific - prioritate mai mică
-            - weight: 20
-              preference:
-                matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
                     values:
                       - rockpi-4a
             # Control-plane nodes cu label explicit false (fallback)
