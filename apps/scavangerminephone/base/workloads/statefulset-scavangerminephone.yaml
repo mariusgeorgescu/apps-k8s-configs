@@ -92,7 +92,7 @@ spec:
       containers:
         - name: container-scavangerminephone
           image: mariusgeorgescu/scavangerminephone
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
