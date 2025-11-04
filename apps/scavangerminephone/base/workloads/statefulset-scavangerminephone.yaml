@@ -117,7 +117,7 @@ spec:
               cpu: 500m
               memory: 512Mi
             limits:
-              # No CPU limit to allow maximum CPU usage
+              cpu: 2800m  # 70% din capacitatea nodului (4 cores = 2.8 cores)
               memory: 1536Mi
           volumeMounts:
             - name: shared-data
