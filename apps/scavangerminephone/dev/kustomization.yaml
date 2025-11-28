@@ -1,8 +1,0 @@
-# Kustomization overlay "dev" pentru aplicația scavangerminephone
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: scavangerminephone
-namePrefix: dev-
-resources:
-  - ../base
-

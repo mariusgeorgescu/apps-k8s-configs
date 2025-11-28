@@ -1,6 +1,0 @@
-# Namespace-ul aplicației scavangerminephone
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: scavangerminephone
-
