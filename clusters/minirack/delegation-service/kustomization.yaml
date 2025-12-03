@@ -1,0 +1,6 @@
+# Kustomization pentru aplicația delegation-service în clusterul minirack.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- delegation-service-dev.yaml
+

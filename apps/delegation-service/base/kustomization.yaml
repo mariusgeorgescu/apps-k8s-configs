@@ -1,0 +1,12 @@
+# Kustomization base pentru aplicația delegation-service (model app-owned).
+# Setează namespace-ul și etichetele comune, apoi compune resursele (Service, Deployment, etc.).
+apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
+kind: Kustomization # Declară acest fișier ca o Kustomization
+namespace: delegation-service  
+commonLabels: # Etichete aplicate tuturor resurselor generate
+  app.kubernetes.io/part-of: delegation-service # Grupează resursele ca parte a aplicației delegation-service
+resources: # Listează toate manifestele care compun baza
+- namespace.yaml # Creează namespace-ul aplicației
+- services/service-delegation-service.yaml # Service pentru expunerea internă a aplicației
+- workloads/deployment-delegation-service.yaml # Deployment pentru serverul de delegation
+

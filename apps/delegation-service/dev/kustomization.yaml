@@ -1,0 +1,13 @@
+# Kustomization overlay "dev" pentru aplicația delegation-service: referă baza și configurează pentru dezvoltare.
+apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
+kind: Kustomization # Declară acest fișier ca o Kustomization
+namespace: delegation-service # Namespace implicit pentru resurse namespaced
+namePrefix: dev- # Prefixează toate resursele cu "dev-"
+resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
+  - ../base # Include toate resursele din base
+  - networking/certificates/certificate-delegation-service-dev-cardano-vip.yaml
+  - networking/gateways/gateway-delegation-service-dev-api.yaml # Gateway (dev)
+  - networking/routes/httproute-delegation-service-dev-api-redirect.yaml # HTTP->HTTPS redirect (dev)
+  - networking/routes/httproute-delegation-service-dev-api.yaml # Ruta principală (dev)
+  - secrets/secret-delegation-service.yaml # Secret specific environment-ului (dev)
+
