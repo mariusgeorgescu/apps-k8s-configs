@@ -1,0 +1,13 @@
+# Service pentru forward către serviciul extern de pe 192.168.1.134:3001
+apiVersion: v1 # Versiunea API pentru resurse de bază
+kind: Service # Tipul resursei este Service
+metadata: # Metadate Kubernetes
+  name: service-blazarpay-external # Numele Service-ului
+  namespace: blazarpay # Namespace-ul în care este creat Service-ul
+spec: # Specificația Service-ului
+  type: ClusterIP # Tipul Service-ului (fără selector, va folosi Endpoints manual)
+  ports: # Porturile expuse de Service
+  - name: http # Numele portului
+    port: 3001 # Portul pe care Service-ul ascultă în cluster
+    targetPort: 3001 # Portul către care se forwardează traficul (către IP-ul extern)
+    protocol: TCP # Protocolul folosit

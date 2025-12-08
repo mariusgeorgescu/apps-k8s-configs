@@ -1,0 +1,20 @@
+# HTTPRoute principal pentru forward trafic HTTPS către serviciul extern de pe 192.168.1.134:3001.
+apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru HTTPRoute
+kind: HTTPRoute # Tipul resursei este HTTPRoute
+metadata: # Metadate Kubernetes
+  name: httproute-blazarpay # Numele rutei către serviciul extern
+  namespace: blazarpay # Namespace-ul resursei
+spec: # Specificația rutei
+  parentRefs: # Gateway/Listener părinte
+    - name: gateway-blazarpay # Gateway-ul
+      sectionName: https # Listener-ul HTTPS pe portul 443
+  hostnames: # Domeniile pentru care se aplică ruta
+    - blazarpay.cardano.vip # Domeniul aplicației
+  rules: # Reguli de rutare
+    - matches: # Tipare de potrivire pentru cereri
+        - path:
+            type: PathPrefix # Tipul de potrivire pe cale
+            value: / # Toate căile
+      backendRefs: # Backendurile către care se forwardează traficul
+        - name: service-blazarpay-external # Numele Service-ului care pointează către IP extern
+          port: 3001 # Portul Service-ului (care forwardează către 192.168.1.134:3001)

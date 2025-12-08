@@ -1,0 +1,16 @@
+# Certificate (cert-manager) pentru domeniul blazarpay.cardano.vip.
+# Generează secretul TLS `secret-blazarpay-cardano-vip-tls` folosind `ClusterIssuer`-ul
+# `letsencrypt-godaddy-prod` cu DNS-01 challenge via GoDaddy webhook.
+apiVersion: cert-manager.io/v1 # Versiunea API a cert-manager pentru Certificate
+kind: Certificate # Resursă de tip Certificate
+metadata: # Metadate Kubernetes
+  name: certificate-blazarpay-cardano-vip # Numele certificatului 
+  namespace: blazarpay # Namespace-ul în care va exista certificatul și secretul TLS
+spec: # Specificații pentru emiterea certificatului
+  secretName: secret-blazarpay-cardano-vip-tls # Numele secretului TLS care va fi creat/actualizat
+  dnsNames: # Numele DNS pentru care certificatul este valid
+  - blazarpay.cardano.vip # Domeniul aplicației
+  issuerRef: # Referință către issuer-ul care emite certificatul
+    name: letsencrypt-godaddy-prod # Numele ClusterIssuer-ului cu DNS-01 challenge (GoDaddy prod)
+    kind: ClusterIssuer # Tipul issuer-ului (la nivel de cluster)
+    group: cert-manager.io # Grupul API al issuer-ului

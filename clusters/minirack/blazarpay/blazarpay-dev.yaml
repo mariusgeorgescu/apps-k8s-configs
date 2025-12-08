@@ -1,0 +1,22 @@
+# Flux Kustomization "blazarpay-dev": aplică overlay-ul dev al aplicației blazarpay.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: blazarpay-dev
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./apps/blazarpay/dev
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  wait: true
+  timeout: 5m0s
+  dependsOn:
+  - name: infrastructure
+  - name: cert-manager

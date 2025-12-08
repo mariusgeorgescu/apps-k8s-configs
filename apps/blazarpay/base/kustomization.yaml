@@ -1,0 +1,11 @@
+# Kustomization base pentru aplicația blazarpay (model app-owned).
+# Setează namespace-ul și etichetele comune, apoi compune resursele (Service, Endpoints, etc.).
+apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
+kind: Kustomization # Declară acest fișier ca o Kustomization
+namespace: blazarpay # Namespace implicit pentru resurse namespaced
+commonLabels: # Etichete aplicate tuturor resurselor generate
+  app.kubernetes.io/part-of: blazarpay # Grupează resursele ca parte a aplicației blazarpay
+resources: # Listează toate manifestele care compun baza
+- namespace.yaml # Creează namespace-ul aplicației
+- services/service-blazarpay-external.yaml # Service pentru forward către IP extern
+- services/endpoints-blazarpay-external.yaml # Endpoints care pointează către IP extern

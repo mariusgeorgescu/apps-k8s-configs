@@ -1,0 +1,10 @@
+# Kustomization overlay "dev" pentru aplicația blazarpay: referă baza și configurează pentru dezvoltare.
+apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
+kind: Kustomization # Declară acest fișier ca o Kustomization
+namespace: blazarpay # Namespace implicit pentru resurse namespaced
+resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
+  - ../base # Include toate resursele din base
+  - networking/certificates/certificate-blazarpay-cardano-vip.yaml
+  - networking/gateways/gateway-blazarpay.yaml # Gateway
+  - networking/routes/httproute-blazarpay-http-redirect.yaml # HTTP->HTTPS redirect
+  - networking/routes/httproute-blazarpay.yaml # Ruta principală către serviciul extern

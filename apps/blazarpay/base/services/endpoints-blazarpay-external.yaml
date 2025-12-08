@@ -1,0 +1,13 @@
+# Endpoints care pointează către serviciul extern de pe 192.168.1.134:3001
+apiVersion: v1 # Versiunea API pentru resurse de bază
+kind: Endpoints # Tipul resursei este Endpoints
+metadata: # Metadate Kubernetes
+  name: service-blazarpay-external # Trebuie să corespundă cu numele Service-ului
+  namespace: blazarpay # Namespace-ul în care este creat Endpoints-ul
+subsets: # Subset-uri de adrese și porturi
+  - addresses: # Adresele IP către care se forwardează traficul
+      - ip: 192.168.1.134 # IP-ul serviciului extern
+    ports: # Porturile pe care serviciul extern ascultă
+      - port: 3001 # Portul serviciului extern
+        protocol: TCP # Protocolul folosit
+        name: http # Numele portului (trebuie să corespundă cu Service-ul)
