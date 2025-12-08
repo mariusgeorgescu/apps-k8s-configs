@@ -4,6 +4,9 @@ kind: Endpoints # Tipul resursei este Endpoints
 metadata: # Metadate Kubernetes
   name: service-blazarpay-external # Trebuie să corespundă cu numele Service-ului
   namespace: blazarpay # Namespace-ul în care este creat Endpoints-ul
+  annotations:
+    # Previne endpoint-controller-ul să suprascrie acest Endpoints manual
+    endpoints.kubernetes.io/managed-by: "manual"
 subsets: # Subset-uri de adrese și porturi
   - addresses: # Adresele IP către care se forwardează traficul
       - ip: 192.168.1.134 # IP-ul serviciului extern
