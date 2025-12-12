@@ -6,6 +6,7 @@ commonLabels:
   app.kubernetes.io/part-of: entangled-frontend
 resources:
 - namespace.yaml
+- config/configmap-entangled-frontend.yaml
 - services/service-entangled-frontend-web.yaml
 - workloads/deployment-entangled-frontend-web.yaml
 

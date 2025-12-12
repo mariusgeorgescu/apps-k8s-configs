@@ -1,0 +1,9 @@
+# ConfigMap with configuration variables for entangled-frontend (consumed by Deployments).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-entangled-frontend
+  namespace: entangled-frontend
+data:
+  # Delegation service URL for internal cluster communication (HTTP, not HTTPS)
+  DELEGATION_SERVICE_URL: "http://dev-service-delegation-service.delegation-service.svc.cluster.local:8082"

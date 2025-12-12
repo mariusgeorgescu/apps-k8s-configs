@@ -35,6 +35,9 @@ spec:
           ports:
             - name: http
               containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: configmap-entangled-frontend
           readinessProbe:
             httpGet:
               path: /

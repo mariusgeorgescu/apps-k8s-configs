@@ -9,6 +9,11 @@ resources:
   - networking/gateways/gateway-entangled-frontend-dev-web.yaml
   - networking/routes/httproute-entangled-frontend-dev-web-redirect.yaml
   - networking/routes/httproute-entangled-frontend-dev-web.yaml
+patches:
+  - path: patches/deployment-entangled-frontend-web.yaml
+    target:
+      kind: Deployment
+      name: dev-deployment-entangled-frontend-web
 images:
   - name: mariusgeorgescu/entangled-frontend
     newTag: latest

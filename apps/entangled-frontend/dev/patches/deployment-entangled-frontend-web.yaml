@@ -1,0 +1,14 @@
+# Deployment patch for entangled-frontend dev environment to update ConfigMap reference.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-entangled-frontend-web
+  namespace: entangled-frontend
+spec:
+  template:
+    spec:
+      containers:
+        - name: container-entangled-frontend-web
+          envFrom:
+            - configMapRef:
+                name: dev-configmap-entangled-frontend
