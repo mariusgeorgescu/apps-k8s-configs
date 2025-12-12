@@ -6,4 +6,5 @@ metadata:
   namespace: entangled-frontend
 data:
   # Delegation service URL for internal cluster communication (HTTP, not HTTPS)
-  DELEGATION_SERVICE_URL: "http://dev-service-delegation-service.delegation-service.svc.cluster.local:8082"
+  # This is the main variable used by the application
+  DELEGATION_SERVICE: "http://dev-service-delegation-service.delegation-service.svc.cluster.local:8082"
