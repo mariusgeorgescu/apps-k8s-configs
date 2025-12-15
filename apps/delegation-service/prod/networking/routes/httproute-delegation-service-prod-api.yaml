@@ -1,0 +1,43 @@
+# HTTPRoute principal pentru traficul HTTPS către delegation-service prod.
+apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru HTTPRoute
+kind: HTTPRoute # Tipul resursei este HTTPRoute
+metadata: # Metadate Kubernetes
+  name: httproute-delegation-service-prod-api # Numele rutei către backend prod
+  namespace: delegation-service # Namespace-ul resursei
+spec: # Specificația rutei
+  parentRefs: # Gateway/Listener părinte
+    - name: prod-gateway-delegation-service-prod-api # Gateway-ul prod cu prefix
+      sectionName: https # Listener-ul HTTPS pe portul 443
+  hostnames: # Domeniile pentru care se aplică ruta
+    - delegation-service.cardano.vip # Domeniul prod al aplicației
+  rules: # Reguli de rutare
+    - matches: # Rutează direct către UI-ul Swagger
+        - path:
+            type: PathPrefix # Potrivire pe calea /swagger-ui
+            value: /swagger-ui
+      backendRefs: # Trimite direct către serviciul delegation-service
+        - name: prod-service-delegation-service # Service-ul delegation-service
+          port: 8082 # Portul backendului
+    - matches: # Tipare de potrivire pentru cereri
+        - path:
+            type: PathPrefix # Tipul de potrivire pe cale
+            value: /build-tx # Endpoint pentru build transaction
+        - path:
+            type: PathPrefix # Tipul de potrivire pe cale
+            value: /submit-tx # Endpoint pentru submit transaction
+        - path:
+            type: PathPrefix # Tipul de potrivire pe cale
+            value: /health # Health check endpoint
+        - path:
+            type: PathPrefix # Tipul de potrivire pe cale
+            value: /ready # Readiness check endpoint
+      backendRefs: # Backendurile către care se forwardează traficul
+        - name: prod-service-delegation-service # Numele Service-ului backend cu prefix
+          port: 8082 # Portul backendului
+    - matches: # Tipare de potrivire pentru cereri
+        - path:
+            type: PathPrefix # Tipul de potrivire pe cale
+            value: / # Toate căile
+      backendRefs: # Backendurile către care se forwardează traficul
+        - name: prod-service-delegation-service # Numele Service-ului backend cu prefix
+          port: 8082 # Portul backendului

@@ -1,0 +1,19 @@
+# HTTPRoute pentru redirect HTTP->HTTPS pentru delegation-service prod.
+apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru HTTPRoute
+kind: HTTPRoute # Tipul resursei este HTTPRoute
+metadata: # Metadate Kubernetes
+  name: httproute-delegation-service-prod-api-redirect # Numele rutei de redirect
+  namespace: delegation-service # Namespace-ul resursei
+spec: # Specificația rutei
+  parentRefs: # Gateway/Listener părinte
+    - name: prod-gateway-delegation-service-prod-api # Gateway-ul prod cu prefix
+      sectionName: http # Listener-ul HTTP pe portul 80
+  hostnames: # Domeniile pentru care se aplică ruta
+    - delegation-service.cardano.vip # Domeniul prod al aplicației
+  rules: # Reguli de rutare
+    - filters: # Filtre aplicate cererii
+        - type: RequestRedirect # Tipul de filtru: redirect
+          requestRedirect: # Configurația redirect-ului
+            scheme: https # Redirect către HTTPS
+            statusCode: 301 # Codul de status pentru redirect permanent
+            port: 443 # Portul HTTPS

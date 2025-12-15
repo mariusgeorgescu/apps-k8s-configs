@@ -1,0 +1,12 @@
+# Kustomization overlay "prod" pentru aplicația delegation-service: referă baza și configurează pentru producție.
+apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
+kind: Kustomization # Declară acest fișier ca o Kustomization
+namespace: delegation-service # Namespace implicit pentru resurse namespaced
+namePrefix: prod- # Prefixează toate resursele cu "prod-"
+resources: # Manifeste incluse din baza aplicației + resurse only-in-prod
+  - ../base # Include toate resursele din base
+  - networking/certificates/certificate-delegation-service-prod-cardano-vip.yaml
+  - networking/gateways/gateway-delegation-service-prod-api.yaml # Gateway (prod)
+  - networking/routes/httproute-delegation-service-prod-api-redirect.yaml # HTTP->HTTPS redirect (prod)
+  - networking/routes/httproute-delegation-service-prod-api.yaml # Ruta principală (prod)
+  - secrets/secret-delegation-service.yaml # Secret specific environment-ului (prod)
