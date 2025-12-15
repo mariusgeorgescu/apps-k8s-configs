@@ -1,12 +1,12 @@
+# Deployment patch for bjjbackend interaction-api dev environment to add environment label.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: deployment-bjjbackend-interaction-api
   namespace: bjj
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
-        environment: prod
+        environment: dev
 

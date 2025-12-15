@@ -1,0 +1,12 @@
+# Deployment patch for delegation-service prod environment to add environment label.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-delegation-service
+  namespace: delegation-service
+spec:
+  template:
+    metadata:
+      labels:
+        environment: prod
+

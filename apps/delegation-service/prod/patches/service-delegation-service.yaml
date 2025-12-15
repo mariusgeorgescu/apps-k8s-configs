@@ -1,0 +1,11 @@
+# Service patch for delegation-service prod environment to add environment selector.
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-delegation-service
+  namespace: delegation-service
+spec:
+  selector:
+    app: delegation-service-pod-label
+    environment: prod
+

@@ -10,4 +10,7 @@ resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
   - networking/routes/httproute-delegation-service-dev-api-redirect.yaml # HTTP->HTTPS redirect (dev)
   - networking/routes/httproute-delegation-service-dev-api.yaml # Ruta principală (dev)
   - secrets/secret-delegation-service.yaml # Secret specific environment-ului (dev)
+patchesStrategicMerge:
+  - patches/deployment-delegation-service.yaml
+  - patches/service-delegation-service.yaml
 

@@ -1,0 +1,11 @@
+# Service patch for bjjbackend query-api dev environment to add environment selector.
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-bjjbackend-query-api
+  namespace: bjj
+spec:
+  selector:
+    app: bjjbackend-query-api-pod-label
+    environment: dev
+

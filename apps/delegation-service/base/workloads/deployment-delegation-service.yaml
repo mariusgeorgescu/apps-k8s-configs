@@ -17,6 +17,7 @@ spec: # Specificația Deployment-ului
     metadata:
       labels:
         app: delegation-service-pod-label # Etichetă pentru selectare și servicii
+        environment: placeholder
     spec: # Specificația Pod-ului
       dnsPolicy: ClusterFirst
       dnsConfig:

@@ -1,0 +1,11 @@
+# Service patch for bjjbackend interaction-api prod environment to add environment selector.
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-bjjbackend-interaction-api
+  namespace: bjj
+spec:
+  selector:
+    app: bjjbackend-interaction-api-pod-label
+    environment: prod
+
