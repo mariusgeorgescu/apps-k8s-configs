@@ -30,7 +30,7 @@ spec: # Specificația Deployment-ului
             value: "3"
       containers: # Lista containerelor din Pod
         - name: container-delegation-service
-          image: mariusgeorgescu/delegation-service:dev
+          image: mariusgeorgescu/delegation-service
           imagePullPolicy: Always # Politica de pull a imaginii
           envFrom: # Surse de variabile de mediu
             - secretRef:
