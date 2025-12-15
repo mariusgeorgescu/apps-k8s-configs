@@ -16,5 +16,5 @@ patches:
       name: dev-deployment-entangled-frontend-web
 images:
   - name: mariusgeorgescu/entangled-frontend
-    newTag: latest
+    newTag: dev
 

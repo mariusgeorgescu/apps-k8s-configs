@@ -30,7 +30,7 @@ spec:
             value: "3"
       containers:
         - name: container-entangled-frontend-web
-          image: mariusgeorgescu/entangled-frontend:dev
+          image: mariusgeorgescu/entangled-frontend:latest
           imagePullPolicy: Always
           ports:
             - name: http
