@@ -12,6 +12,7 @@ resources:
 patchesStrategicMerge:
   - patches/configmap-entangled-frontend.yaml
   - patches/deployment-entangled-frontend-web.yaml
+  - patches/service-entangled-frontend-web.yaml
 images:
   - name: mariusgeorgescu/entangled-frontend
     newTag: prod

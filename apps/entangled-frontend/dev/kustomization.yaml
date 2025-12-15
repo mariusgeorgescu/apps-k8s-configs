@@ -14,6 +14,10 @@ patches:
     target:
       kind: Deployment
       name: dev-deployment-entangled-frontend-web
+  - path: patches/service-entangled-frontend-web.yaml
+    target:
+      kind: Service
+      name: dev-service-entangled-frontend-web
 images:
   - name: mariusgeorgescu/entangled-frontend
     newTag: dev

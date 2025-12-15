@@ -8,6 +8,7 @@ spec:
   type: ClusterIP
   selector:
     app: entangled-frontend-web-pod-label
+    environment: placeholder
   ports:
   - name: http
     port: 80
