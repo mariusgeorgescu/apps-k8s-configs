@@ -1,0 +1,8 @@
+# ConfigMap patch for entangled-frontend prod environment to update DELEGATION_SERVICE.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-entangled-frontend
+  namespace: entangled-frontend
+data:
+  DELEGATION_SERVICE: "http://prod-service-delegation-service.delegation-service.svc.cluster.local:8082"
