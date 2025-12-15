@@ -14,4 +14,4 @@ patchesStrategicMerge:
   - patches/deployment-entangled-frontend-web.yaml
 images:
   - name: mariusgeorgescu/entangled-frontend
-    newTag: latest
+    newTag: prod
