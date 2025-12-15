@@ -2,7 +2,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: dev-gateway-entangled-frontend-dev-web
+  name: gateway-entangled-frontend-dev-web
   namespace: entangled-frontend
 spec:
   gatewayClassName: traefik
