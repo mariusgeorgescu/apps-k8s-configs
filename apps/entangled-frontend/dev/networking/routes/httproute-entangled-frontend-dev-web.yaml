@@ -9,7 +9,7 @@ spec:
     - name: dev-gateway-entangled-frontend-dev-web
       sectionName: https
   hostnames:
-    - entangled.cardano.vip
+    - dev-entangled.cardano.vip
   rules:
     - matches:
         - path:

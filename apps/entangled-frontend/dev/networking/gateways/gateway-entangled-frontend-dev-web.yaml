@@ -8,14 +8,14 @@ spec:
   gatewayClassName: traefik
   listeners:
   - name: http
-    hostname: entangled.cardano.vip
+    hostname: dev-entangled.cardano.vip
     port: 80
     protocol: HTTP
     allowedRoutes:
       namespaces:
         from: All
   - name: https
-    hostname: entangled.cardano.vip
+    hostname: dev-entangled.cardano.vip
     port: 443
     protocol: HTTPS
     tls:

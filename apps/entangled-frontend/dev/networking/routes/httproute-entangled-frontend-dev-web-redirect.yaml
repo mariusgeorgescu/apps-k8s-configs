@@ -9,7 +9,7 @@ spec:
   - name: dev-gateway-entangled-frontend-dev-web
     sectionName: http
   hostnames:
-  - entangled.cardano.vip
+  - dev-entangled.cardano.vip
   rules:
   - filters:
     - type: RequestRedirect
