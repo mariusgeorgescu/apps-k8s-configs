@@ -5,9 +5,6 @@ metadata:
   name: deployment-entangled-frontend-web
   namespace: entangled-frontend
 spec:
-  selector:
-    matchLabels:
-      environment: dev
   template:
     metadata:
       labels:
