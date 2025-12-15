@@ -7,6 +7,7 @@ metadata:
 spec:
   parentRefs:
   - name: dev-gateway-entangled-frontend-dev-web
+    namespace: entangled-frontend
     sectionName: http
   hostnames:
   - dev-entangled.cardano.vip
