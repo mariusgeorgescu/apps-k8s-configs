@@ -9,15 +9,9 @@ resources:
   - networking/gateways/gateway-entangled-frontend-prod-web.yaml
   - networking/routes/httproute-entangled-frontend-prod-web-redirect.yaml
   - networking/routes/httproute-entangled-frontend-prod-web.yaml
-patches:
-  - path: patches/configmap-entangled-frontend.yaml
-    target:
-      kind: ConfigMap
-      name: prod-configmap-entangled-frontend
-  - path: patches/deployment-entangled-frontend-web.yaml
-    target:
-      kind: Deployment
-      name: prod-deployment-entangled-frontend-web
+patchesStrategicMerge:
+  - patches/configmap-entangled-frontend.yaml
+  - patches/deployment-entangled-frontend-web.yaml
 images:
   - name: mariusgeorgescu/entangled-frontend
     newTag: latest
