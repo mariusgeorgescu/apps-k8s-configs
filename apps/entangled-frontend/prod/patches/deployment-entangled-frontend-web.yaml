@@ -15,3 +15,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: prod-configmap-entangled-frontend
+            - secretRef:
+                name: prod-secret-entangled-frontend

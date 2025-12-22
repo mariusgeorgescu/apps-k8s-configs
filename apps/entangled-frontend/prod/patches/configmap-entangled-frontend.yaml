@@ -1,4 +1,4 @@
-# ConfigMap patch for entangled-frontend prod environment to update DELEGATION_SERVICE.
+# ConfigMap patch for entangled-frontend prod environment to update DELEGATION_SERVICE and GOMAESTRO_ENV.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,3 +6,4 @@ metadata:
   namespace: entangled-frontend
 data:
   DELEGATION_SERVICE: "http://prod-service-delegation-service.delegation-service.svc.cluster.local:8082"
+  GOMAESTRO_ENV: "mainnet"
