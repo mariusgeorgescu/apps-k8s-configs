@@ -5,5 +5,6 @@ metadata:
   name: configmap-entangled-frontend
   namespace: entangled-frontend
 data:
+  DELEGATION_SERVICE: "http://dev-service-delegation-service.delegation-service.svc.cluster.local:8082"
   GOMAESTRO_ENV: "preprod"
 
