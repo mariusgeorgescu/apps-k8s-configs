@@ -1,4 +1,5 @@
-# HTTPRoute to redirect www.e7d.tech to e7d.tech (both HTTP and HTTPS).
+# HTTPRoute to redirect https://www.e7d.tech to https://e7d.tech.
+# HTTP redirect is handled globally by Traefik.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -6,9 +7,6 @@ metadata:
   namespace: entangled-frontend
 spec:
   parentRefs:
-  - name: prod-gateway-entangled-frontend-prod-web
-    namespace: entangled-frontend
-    sectionName: http-www-e7d-tech
   - name: prod-gateway-entangled-frontend-prod-web
     namespace: entangled-frontend
     sectionName: https-www-e7d-tech
@@ -19,6 +17,5 @@ spec:
     - type: RequestRedirect
       requestRedirect:
         hostname: e7d.tech
-        scheme: https
         statusCode: 301
 
