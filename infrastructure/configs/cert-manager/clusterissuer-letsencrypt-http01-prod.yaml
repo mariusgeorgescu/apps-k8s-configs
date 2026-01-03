@@ -1,0 +1,17 @@
+# ClusterIssuer for Let's Encrypt using HTTP-01 challenge.
+# Use this for domains not managed by GoDaddy DNS.
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-http01-prod
+spec:
+  acme:
+    email: georgescumarius@live.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-http01-prod
+    solvers:
+      - http01:
+          ingress:
+            ingressClassName: traefik
+

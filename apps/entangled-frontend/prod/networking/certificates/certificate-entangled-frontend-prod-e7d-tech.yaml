@@ -1,4 +1,5 @@
 # Certificate (cert-manager) for the domain e7d.tech.
+# Uses HTTP-01 challenge since domain is on Namecheap (not GoDaddy).
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -9,7 +10,7 @@ spec:
   dnsNames:
   - e7d.tech
   issuerRef:
-    name: letsencrypt-godaddy-prod
+    name: letsencrypt-http01-prod
     kind: ClusterIssuer
     group: cert-manager.io
 

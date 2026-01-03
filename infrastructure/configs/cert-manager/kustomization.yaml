@@ -1,9 +1,10 @@
-## Configurații pentru cert-manager: secret GoDaddy și doi ClusterIssuer (staging/prod).
+## Configurații pentru cert-manager: secret GoDaddy și ClusterIssuers.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - secret-godaddy-api-token.yaml
 - clusterissuer-godaddy-staging.yaml
 - clusterissuer-godaddy-prod.yaml
+- clusterissuer-letsencrypt-http01-prod.yaml
 
 
