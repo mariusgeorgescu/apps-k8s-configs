@@ -14,6 +14,19 @@ data:
     .:53 {
         errors
         health
+        # Resolve external domains to internal LoadBalancer IP for self-check
+        hosts {
+          192.168.1.240 e7d.tech
+          192.168.1.240 entangled.cardano.vip
+          192.168.1.240 dev-entangled.cardano.vip
+          192.168.1.240 bjjbackend.cardano.vip
+          192.168.1.240 dev-bjjbackend.cardano.vip
+          192.168.1.240 bjj.cardano.vip
+          192.168.1.240 blazarpay.cardano.vip
+          192.168.1.240 delegation-service.cardano.vip
+          192.168.1.240 dev-delegation-service.cardano.vip
+          fallthrough
+        }
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
