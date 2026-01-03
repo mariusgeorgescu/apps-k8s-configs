@@ -17,6 +17,7 @@ data:
         # Resolve external domains to internal LoadBalancer IP for self-check
         hosts {
           192.168.1.240 e7d.tech
+          192.168.1.240 www.e7d.tech
           192.168.1.240 entangled.cardano.vip
           192.168.1.240 dev-entangled.cardano.vip
           192.168.1.240 bjjbackend.cardano.vip

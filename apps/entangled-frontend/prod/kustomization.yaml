@@ -10,6 +10,7 @@ resources:
   - networking/gateways/gateway-entangled-frontend-prod-web.yaml
   - networking/routes/httproute-entangled-frontend-prod-web-redirect.yaml
   - networking/routes/httproute-entangled-frontend-prod-web.yaml
+  - networking/routes/httproute-entangled-frontend-prod-www-redirect.yaml
   - secrets/secret-entangled-frontend.yaml
 patchesStrategicMerge:
   - patches/configmap-entangled-frontend.yaml

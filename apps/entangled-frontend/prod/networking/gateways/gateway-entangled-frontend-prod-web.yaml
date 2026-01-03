@@ -47,3 +47,23 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
+  # www.e7d.tech listeners (redirect to e7d.tech)
+  - name: http-www-e7d-tech
+    hostname: www.e7d.tech
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https-www-e7d-tech
+    hostname: www.e7d.tech
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: secret-entangled-frontend-prod-e7d-tech-tls
+    allowedRoutes:
+      namespaces:
+        from: All
