@@ -1,6 +1,4 @@
 # Gateway (Gateway API) for the entangled-frontend prod environment.
-# NOTE: https-e7d-tech listener temporarily removed until certificate is issued.
-# After cert is ready, add back the HTTPS listener for e7d.tech.
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -29,11 +27,23 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
-  # e7d.tech listeners - HTTP only until certificate is issued
+  # e7d.tech listeners
   - name: http-e7d-tech
     hostname: e7d.tech
     port: 80
     protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https-e7d-tech
+    hostname: e7d.tech
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: secret-entangled-frontend-prod-e7d-tech-tls
     allowedRoutes:
       namespaces:
         from: All
