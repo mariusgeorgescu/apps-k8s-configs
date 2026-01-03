@@ -1,4 +1,6 @@
 # HTTPRoute for HTTP to HTTPS redirect for entangled-frontend prod.
+# Note: e7d.tech redirect is temporarily disabled to allow ACME HTTP-01 challenge.
+# After certificate is issued, e7d.tech can be added back.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,12 +11,8 @@ spec:
   - name: prod-gateway-entangled-frontend-prod-web
     namespace: entangled-frontend
     sectionName: http-cardano-vip
-  - name: prod-gateway-entangled-frontend-prod-web
-    namespace: entangled-frontend
-    sectionName: http-e7d-tech
   hostnames:
   - entangled.cardano.vip
-  - e7d.tech
   rules:
   - filters:
     - type: RequestRedirect
