@@ -6,6 +6,7 @@ namePrefix: prod-
 resources:
   - ../base
   - networking/certificates/certificate-entangled-frontend-prod-cardano-vip.yaml
+  - networking/certificates/certificate-entangled-frontend-prod-e7d-tech.yaml
   - networking/gateways/gateway-entangled-frontend-prod-web.yaml
   - networking/routes/httproute-entangled-frontend-prod-web-redirect.yaml
   - networking/routes/httproute-entangled-frontend-prod-web.yaml

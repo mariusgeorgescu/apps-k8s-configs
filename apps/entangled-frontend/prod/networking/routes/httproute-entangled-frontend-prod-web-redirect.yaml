@@ -8,9 +8,13 @@ spec:
   parentRefs:
   - name: prod-gateway-entangled-frontend-prod-web
     namespace: entangled-frontend
-    sectionName: http
+    sectionName: http-cardano-vip
+  - name: prod-gateway-entangled-frontend-prod-web
+    namespace: entangled-frontend
+    sectionName: http-e7d-tech
   hostnames:
   - entangled.cardano.vip
+  - e7d.tech
   rules:
   - filters:
     - type: RequestRedirect

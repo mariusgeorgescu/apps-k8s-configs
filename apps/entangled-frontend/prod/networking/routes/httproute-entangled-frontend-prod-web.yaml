@@ -8,9 +8,13 @@ spec:
   parentRefs:
     - name: prod-gateway-entangled-frontend-prod-web
       namespace: entangled-frontend
-      sectionName: https
+      sectionName: https-cardano-vip
+    - name: prod-gateway-entangled-frontend-prod-web
+      namespace: entangled-frontend
+      sectionName: https-e7d-tech
   hostnames:
     - entangled.cardano.vip
+    - e7d.tech
   rules:
     - matches:
         - path:
