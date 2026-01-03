@@ -1,4 +1,6 @@
-# HTTPRoute to redirect https://www.e7d.tech to https://e7d.tech.
+# HTTPRoute to serve www.e7d.tech with same content as e7d.tech.
+# Note: Traefik Gateway API doesn't support RequestRedirect filter properly,
+# so we serve the same content on both domains instead of redirecting.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -16,9 +18,7 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestRedirect
-      requestRedirect:
-        hostname: e7d.tech
-        statusCode: 301
+    backendRefs:
+    - name: prod-service-entangled-frontend-web
+      port: 80
 
