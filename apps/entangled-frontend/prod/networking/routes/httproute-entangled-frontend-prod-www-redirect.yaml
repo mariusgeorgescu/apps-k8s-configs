@@ -13,7 +13,11 @@ spec:
   hostnames:
   - www.e7d.tech
   rules:
-  - filters:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    filters:
     - type: RequestRedirect
       requestRedirect:
         hostname: e7d.tech
