@@ -1,4 +1,5 @@
 # HTTPRoute main route for HTTPS traffic to entangled-frontend prod.
+# NOTE: e7d.tech temporarily removed until certificate is issued.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,12 +10,8 @@ spec:
     - name: prod-gateway-entangled-frontend-prod-web
       namespace: entangled-frontend
       sectionName: https-cardano-vip
-    - name: prod-gateway-entangled-frontend-prod-web
-      namespace: entangled-frontend
-      sectionName: https-e7d-tech
   hostnames:
     - entangled.cardano.vip
-    - e7d.tech
   rules:
     - matches:
         - path:
