@@ -2,11 +2,14 @@
 # Setează namespace-ul și etichetele comune, apoi compune resursele (Service, Deployment, etc.).
 apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
 kind: Kustomization # Declară acest fișier ca o Kustomization
-namespace: raffleize-backend  
+namespace: raffleize-backend
 commonLabels: # Etichete aplicate tuturor resurselor generate
   app.kubernetes.io/part-of: raffleize-backend # Grupează resursele ca parte a aplicației raffleize-backend
 resources: # Listează toate manifestele care compun baza
-- namespace.yaml # Creează namespace-ul aplicației
-- services/service-raffleize-backend.yaml # Service pentru expunerea internă a aplicației
-- workloads/deployment-raffleize-backend.yaml # Deployment pentru serverul de raffleize
+  - namespace.yaml # Creează namespace-ul aplicației
+  - services/service-raffleize-backend.yaml # Service pentru expunerea internă a aplicației
+  - workloads/deployment-raffleize-backend.yaml # Deployment pentru serverul de raffleize
 
+images:
+  - name: mariusgeorgescu/raffleize-backend
+    newTag: dev
