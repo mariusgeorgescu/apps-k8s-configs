@@ -9,7 +9,7 @@ spec: # Specificația rutei
     - name: dev-gateway-raffleize-backend-dev-api # Gateway-ul dev cu prefix
       sectionName: https # Listener-ul HTTPS pe portul 443
   hostnames: # Domeniile pentru care se aplică ruta
-    - raffleize.cardano.vip # Domeniul dev al aplicației
+    - dev-raffleize-backend.cardano.vip # Domeniul dev al aplicației
   rules: # Reguli de rutare
     - matches: # Rutează direct către UI-ul Swagger
         - path:

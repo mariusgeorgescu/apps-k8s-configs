@@ -31,7 +31,7 @@ spec: # Specificația Deployment-ului
             value: "3"
       containers: # Lista containerelor din Pod
         - name: container-raffleize-backend
-          image: mariusgeorgescu/raffleize-backend
+          image: mariusgeorgescu/raffleize-backend:latest
           imagePullPolicy: Always # Politica de pull a imaginii
           envFrom: # Surse de variabile de mediu
             - secretRef:

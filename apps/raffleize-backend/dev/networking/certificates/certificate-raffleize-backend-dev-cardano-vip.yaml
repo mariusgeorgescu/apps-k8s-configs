@@ -9,7 +9,7 @@ metadata: # Metadate Kubernetes
 spec: # Specificații pentru emiterea certificatului
   secretName: secret-raffleize-backend-dev-cardano-vip-tls # Numele secretului TLS care va fi creat/actualizat
   dnsNames: # Numele DNS pentru care certificatul este valid
-  - raffleize.cardano.vip # Domeniul dev al aplicației
+  - dev-raffleize-backend.cardano.vip # Domeniul dev al aplicației
   issuerRef: # Referință către issuer-ul care emite certificatul
     name: letsencrypt-godaddy-prod # Numele ClusterIssuer-ului cu DNS-01 challenge (GoDaddy prod)
     kind: ClusterIssuer # Tipul issuer-ului (la nivel de cluster)
