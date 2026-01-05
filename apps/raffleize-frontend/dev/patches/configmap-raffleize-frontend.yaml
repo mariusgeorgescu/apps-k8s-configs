@@ -6,4 +6,4 @@ metadata:
   namespace: raffleize-frontend
 data:
   RAFFLEIZE_SERVICE: "http://dev-service-raffleize-backend.raffleize-backend.svc.cluster.local:8082"
-  KOIOS_BASE_URL : "https://preview.koios.rest/api/v1"
+  KOIOS_BASE_URL : "https://preview.koios.rest/api/v1/asset_info"
