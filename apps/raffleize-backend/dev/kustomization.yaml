@@ -1,0 +1,16 @@
+# Kustomization overlay "dev" pentru aplicația raffleize-backend: referă baza și configurează pentru dezvoltare.
+apiVersion: kustomize.config.k8s.io/v1beta1 # Versiunea API pentru Kustomize
+kind: Kustomization # Declară acest fișier ca o Kustomization
+namespace: raffleize-backend # Namespace implicit pentru resurse namespaced
+namePrefix: dev- # Prefixează toate resursele cu "dev-"
+resources: # Manifeste incluse din baza aplicației + resurse only-in-dev
+  - ../base # Include toate resursele din base
+  - networking/certificates/certificate-raffleize-backend-dev-cardano-vip.yaml
+  - networking/gateways/gateway-raffleize-backend-dev-api.yaml # Gateway (dev)
+  - networking/routes/httproute-raffleize-backend-dev-api-redirect.yaml # HTTP->HTTPS redirect (dev)
+  - networking/routes/httproute-raffleize-backend-dev-api.yaml # Ruta principală (dev)
+  - secrets/secret-raffleize-backend.yaml # Secret specific environment-ului (dev)
+patchesStrategicMerge:
+  - patches/deployment-raffleize-backend.yaml
+  - patches/service-raffleize-backend.yaml
+

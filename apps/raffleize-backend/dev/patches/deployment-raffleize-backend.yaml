@@ -1,0 +1,12 @@
+# Deployment patch for raffleize-backend dev environment to add environment label.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-raffleize-backend
+  namespace: raffleize-backend
+spec:
+  template:
+    metadata:
+      labels:
+        environment: dev
+

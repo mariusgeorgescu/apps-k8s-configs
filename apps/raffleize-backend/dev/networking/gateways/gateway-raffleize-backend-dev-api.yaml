@@ -1,0 +1,30 @@
+# Gateway (Gateway API) pentru aplicația raffleize-backend dev. Folosește GatewayClass-ul Traefik
+# și gestionează listener-ele HTTP/HTTPS pentru hostul aplicației dev.
+apiVersion: gateway.networking.k8s.io/v1 # Versiunea API pentru Gateway API
+kind: Gateway # Resursă de tip Gateway
+metadata: # Metadate Kubernetes
+  name: gateway-raffleize-backend-dev-api # Numele Gateway-ului dev
+  namespace: raffleize-backend # Namespace-ul în care este creat Gateway-ul
+spec: # Specificația Gateway-ului
+  gatewayClassName: traefik # Folosește GatewayClass-ul definit de controller-ul Traefik
+  listeners: # Lista listener-elor expuse de Gateway
+  - name: http # Numele listener-ului HTTP
+    hostname: raffleize.cardano.vip # Domeniul dev asociat listener-ului
+    port: 80 # Portul pentru HTTP
+    protocol: HTTP # Protocolul folosit de listener
+    allowedRoutes: # Politica pentru rutele permise
+      namespaces:
+        from: All # Permite rute din orice namespace (cu ReferenceGrant dacă e necesar)
+  - name: https # Numele listener-ului HTTPS
+    hostname: raffleize.cardano.vip # Domeniul dev asociat listener-ului
+    port: 443 # Portul pentru HTTPS
+    protocol: HTTPS # Protocolul folosit de listener
+    tls: # Configurația TLS pentru HTTPS
+      mode: Terminate # Termination TLS la nivel de Gateway
+      certificateRefs: # Secretul TLS care conține certificatul
+      - kind: Secret # Tipul referinței (Secret)
+        name: secret-raffleize-backend-dev-cardano-vip-tls # Numele Secretului TLS dev
+    allowedRoutes: # Politica pentru rutele permise
+      namespaces:
+        from: All # Permite rute din orice namespace (cu ReferenceGrant dacă e necesar)
+

@@ -1,0 +1,6 @@
+# Namespace-ul aplicației raffleize-backend (model app-owned): aplicația își gestionează propriul ciclu de viață.
+apiVersion: v1 # Versiunea API pentru resurse de tip v1 (core)
+kind: Namespace # Tipul resursei este Namespace
+metadata: # Metadate despre resursă
+  name: raffleize-backend # Numele namespace-ului creat
+

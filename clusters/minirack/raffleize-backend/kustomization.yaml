@@ -1,0 +1,6 @@
+# Kustomization pentru aplicația raffleize-backend în clusterul minirack.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- raffleize-backend-dev.yaml
+

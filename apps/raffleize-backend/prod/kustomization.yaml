@@ -1,0 +1,8 @@
+# Kustomization overlay "prod" pentru aplicația raffleize-backend.
+# Acest folder este rezervat pentru configurația de producție.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: raffleize-backend
+# Prod resources to be added later
+resources: []
+
