@@ -1,0 +1,9 @@
+# ConfigMap patch for raffleize-frontend dev environment.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-raffleize-frontend
+  namespace: raffleize-frontend
+data:
+  RAFFLEIZE_SERVICE: "http://dev-service-raffleize-backend.raffleize-backend.svc.cluster.local:8082"
+

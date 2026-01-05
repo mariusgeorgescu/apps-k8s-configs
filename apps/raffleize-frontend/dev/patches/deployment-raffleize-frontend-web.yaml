@@ -1,0 +1,20 @@
+# Deployment patch for raffleize-frontend dev environment to update ConfigMap reference and add environment label.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-raffleize-frontend-web
+  namespace: raffleize-frontend
+spec:
+  template:
+    metadata:
+      labels:
+        environment: dev
+    spec:
+      containers:
+        - name: container-raffleize-frontend-web
+          envFrom:
+            - configMapRef:
+                name: dev-configmap-raffleize-frontend
+            - secretRef:
+                name: dev-secret-raffleize-frontend
+

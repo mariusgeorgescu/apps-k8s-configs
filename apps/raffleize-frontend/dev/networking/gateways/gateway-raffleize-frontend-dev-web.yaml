@@ -1,0 +1,29 @@
+# Gateway (Gateway API) for the raffleize-frontend dev environment.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gateway-raffleize-frontend-dev-web
+  namespace: raffleize-frontend
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    hostname: dev-raffleize.cardano.vip
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https
+    hostname: dev-raffleize.cardano.vip
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: secret-raffleize-frontend-dev-cardano-vip-tls
+    allowedRoutes:
+      namespaces:
+        from: All
+

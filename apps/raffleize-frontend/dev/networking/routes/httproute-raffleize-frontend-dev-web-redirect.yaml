@@ -1,0 +1,20 @@
+# HTTPRoute for HTTP to HTTPS redirect for raffleize-frontend dev.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute-raffleize-frontend-dev-web-redirect
+  namespace: raffleize-frontend
+spec:
+  parentRefs:
+  - name: dev-gateway-raffleize-frontend-dev-web
+    namespace: raffleize-frontend
+    sectionName: http
+  hostnames:
+  - dev-raffleize.cardano.vip
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        statusCode: 301
+

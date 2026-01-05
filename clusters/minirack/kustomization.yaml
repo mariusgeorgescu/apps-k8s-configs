@@ -11,5 +11,6 @@ resources:
 - delegation-service
 - blazarpay
 - raffleize-backend
+- raffleize-frontend
 
 

@@ -1,0 +1,9 @@
+# Kustomization overlay "prod" for the raffleize-frontend application.
+# Currently empty - add resources when production deployment is needed.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: raffleize-frontend
+namePrefix: prod-
+resources:
+  - ../base
+

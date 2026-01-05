@@ -1,0 +1,11 @@
+# Service patch for raffleize-frontend dev environment to add environment selector.
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-raffleize-frontend-web
+  namespace: raffleize-frontend
+spec:
+  selector:
+    app: raffleize-frontend-web-pod-label
+    environment: dev
+

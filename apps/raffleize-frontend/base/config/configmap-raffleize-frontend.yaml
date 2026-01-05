@@ -1,0 +1,10 @@
+# ConfigMap with configuration variables for raffleize-frontend (consumed by Deployments).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-raffleize-frontend
+  namespace: raffleize-frontend
+data:
+  # Raffleize backend service URL for internal cluster communication
+  RAFFLEIZE_SERVICE: "placeholder"
+
