@@ -19,9 +19,9 @@ patchesStrategicMerge: # Patches pentru a adăuga atribute dev
   - patches/service-bjjbackend-query-api.yaml
 images: # Re-scrieri pentru imaginile containerelor
   - name: mariusgeorgescu/bjj-interaction-api # Numele imaginii principale
-    newTag: 0bef711 # Tag-ul folosit în dezvoltare
+    newTag: "0052342" # Tag-ul folosit în dezvoltare
   - name: mariusgeorgescu/bjj-query-api # Imaginea query-api
-    newTag: 0bef711 # Tag-ul folosit în dezvoltare
+    newTag: "0052342" # Tag-ul folosit în dezvoltare
   - name: mariusgeorgescu/bjj-chainsync # Imaginea chain-sync
-    newTag: 0bef711 # Tag-ul folosit în dezvoltare
+    newTag: "0052342" # Tag-ul folosit în dezvoltare
 
