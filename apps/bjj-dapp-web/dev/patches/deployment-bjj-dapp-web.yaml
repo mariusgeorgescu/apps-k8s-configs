@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name: deployment-bjj-dapp-web
   namespace: bjj-dapp-web
+  labels:
+    environment: dev
 spec:
   template:
     spec:
