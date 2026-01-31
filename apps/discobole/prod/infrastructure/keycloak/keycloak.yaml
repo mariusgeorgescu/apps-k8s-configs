@@ -30,7 +30,7 @@ spec:
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.0.0
-          args: ["start", "--http-enabled=true", "--hostname-strict=false"]
+          args: ["start", "--http-enabled=true", "--hostname-strict=false", "--health-enabled=true", "--metrics-enabled=true"]
           env:
             - name: KC_DB
               value: postgres
