@@ -41,7 +41,6 @@ helm.sh/chart: {{ include "order_follow_up.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app: {{ default .Chart.Name .Values.monitoring.application }}
 {{- end }}
 
 {{/*

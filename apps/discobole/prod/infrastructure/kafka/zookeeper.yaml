@@ -1,4 +1,8 @@
-# Zookeeper for Kafka coordination.
+# DEPRECATED: Zookeeper is no longer needed.
+# Kafka now uses KRaft mode for metadata management.
+# This file is kept for reference but is not deployed.
+#
+# Original purpose: Zookeeper for Kafka coordination.
 apiVersion: v1
 kind: Service
 metadata:

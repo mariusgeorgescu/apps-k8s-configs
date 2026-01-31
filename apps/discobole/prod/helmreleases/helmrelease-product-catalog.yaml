@@ -27,6 +27,10 @@ spec:
       imagePullSecrets:
         - name: gar-access
 
+    # Disable fluentd (not configured in this environment)
+    fluentd:
+      enabled: false
+
     # MongoDB settings
     mongodb:
       enabled: true

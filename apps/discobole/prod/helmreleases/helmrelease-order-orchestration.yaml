@@ -26,6 +26,10 @@ spec:
       imagePullSecrets:
         - name: gar-access
 
+    # Disable fluentd (not configured in this environment)
+    fluentd:
+      enabled: false
+
     order-orchestration:
       enabled: true
       replicaCount: 1

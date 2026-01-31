@@ -16,7 +16,7 @@ resources:
   # Infrastructure
   - infrastructure/keycloak/postgres.yaml
   - infrastructure/keycloak/keycloak.yaml
-  - infrastructure/kafka/zookeeper.yaml
+  # Note: Zookeeper removed - Kafka now uses KRaft mode (no Zookeeper required)
   - infrastructure/kafka/kafka.yaml
   - infrastructure/minio/minio.yaml
 

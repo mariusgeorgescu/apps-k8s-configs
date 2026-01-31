@@ -54,7 +54,6 @@ helm.sh/chart: {{ include "product-catalog-ui.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app: product-catalog-ui
 {{- end }}
 
 {{/*

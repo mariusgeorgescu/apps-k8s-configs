@@ -23,6 +23,10 @@ spec:
   values:
     replicaCount: 1
 
+    # Disable fluentd (not configured in this environment)
+    fluentd:
+      enabled: false
+
     image:
       repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/product-catalog-ui"
       pullPolicy: Always

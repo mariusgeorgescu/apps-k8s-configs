@@ -24,6 +24,10 @@ spec:
     replicaCount: 1
     dailyshutdown: disabled
 
+    # Disable fluentd (not configured in this environment)
+    fluentd:
+      enabled: false
+
     image:
       repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/spring-cloud-gateway"
       pullPolicy: Always
