@@ -12,4 +12,4 @@ resources:
 - blazarpay
 - raffleize-backend
 - raffleize-frontend
-- discobole
+# - discobole  # Removed: ARM64 images not available
