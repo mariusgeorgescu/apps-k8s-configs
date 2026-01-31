@@ -1,0 +1,15 @@
+# Certificate (cert-manager) for disco-keycloak.e7d.tech.
+# Uses HTTP-01 challenge for Let's Encrypt.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate-disco-keycloak-e7d-tech
+  namespace: disco
+spec:
+  secretName: secret-disco-keycloak-e7d-tech-tls
+  dnsNames:
+  - disco-keycloak.e7d.tech
+  issuerRef:
+    name: letsencrypt-http01-prod
+    kind: ClusterIssuer
+    group: cert-manager.io

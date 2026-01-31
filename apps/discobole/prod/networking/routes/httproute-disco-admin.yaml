@@ -1,0 +1,21 @@
+# HTTPRoute for HTTPS traffic to the Admin UI.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute-disco-admin
+  namespace: disco
+spec:
+  parentRefs:
+    - name: gateway-disco-admin
+      namespace: disco
+      sectionName: https
+  hostnames:
+    - disco-admin.e7d.tech
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: admin-ui
+          port: 80

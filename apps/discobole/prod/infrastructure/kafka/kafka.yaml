@@ -1,0 +1,49 @@
+# Kafka message broker for DISCOBOLE events.
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-broker
+  namespace: disco
+spec:
+  ports:
+    - port: 9092
+      targetPort: 9092
+  selector:
+    app: kafka-broker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-broker
+  namespace: disco
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-broker
+  template:
+    metadata:
+      labels:
+        app: kafka-broker
+    spec:
+      containers:
+        - name: kafka
+          image: bitnami/kafka:2.6.0
+          env:
+            - name: KAFKA_CFG_ZOOKEEPER_CONNECT
+              value: zookeeper:2181
+            - name: ALLOW_PLAINTEXT_LISTENER
+              value: "yes"
+            - name: KAFKA_CFG_LISTENERS
+              value: PLAINTEXT://:9092
+            - name: KAFKA_CFG_ADVERTISED_LISTENERS
+              value: PLAINTEXT://kafka-broker:9092
+          ports:
+            - containerPort: 9092
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi

@@ -1,0 +1,38 @@
+# HelmRelease for the Order Orchestration Component.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: order-orchestration
+  namespace: disco
+spec:
+  interval: 10m
+  timeout: 15m
+  chart:
+    spec:
+      chart: ./order-orchestration-component
+      sourceRef:
+        kind: GitRepository
+        name: discobole-stack
+        namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: order-management
+      namespace: disco
+  values:
+    global:
+      imagePullSecrets:
+        - name: gar-access
+
+    order-orchestration:
+      enabled: true
+      replicaCount: 1
+
+    fallout:
+      enabled: true
+      replicaCount: 1

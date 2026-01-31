@@ -1,0 +1,28 @@
+# Gateway (Gateway API) for Keycloak authentication service.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gateway-disco-keycloak
+  namespace: disco
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    hostname: disco-keycloak.e7d.tech
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https
+    hostname: disco-keycloak.e7d.tech
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: secret-disco-keycloak-e7d-tech-tls
+    allowedRoutes:
+      namespaces:
+        from: All

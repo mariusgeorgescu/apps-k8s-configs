@@ -1,0 +1,86 @@
+# HelmRelease for the Product Catalog Component (includes 8 microservices + MongoDB).
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: product-catalog
+  namespace: disco
+spec:
+  interval: 10m
+  timeout: 15m
+  chart:
+    spec:
+      chart: ./product-catalog-component
+      sourceRef:
+        kind: GitRepository
+        name: discobole-stack
+        namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: disco-gateway
+      namespace: disco
+  values:
+    # Global settings
+    global:
+      imagePullSecrets:
+        - name: gar-access
+
+    # MongoDB settings
+    mongodb:
+      enabled: true
+      auth:
+        enabled: false
+      persistence:
+        enabled: true
+        size: 5Gi
+
+    # Service-specific settings
+    catalog-product-catalog:
+      enabled: true
+      replicaCount: 1
+      image:
+        pullPolicy: Always
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+
+    catalog-product-specification:
+      enabled: true
+      replicaCount: 1
+
+    catalog-product-offering:
+      enabled: true
+      replicaCount: 1
+
+    catalog-product-offering-price:
+      enabled: true
+      replicaCount: 1
+
+    catalog-product-category:
+      enabled: true
+      replicaCount: 1
+
+    catalog-product-lifecycle-management:
+      enabled: true
+      replicaCount: 1
+
+    catalog-product-catalog-administration:
+      enabled: true
+      replicaCount: 1
+
+    catalog-policy-rule:
+      enabled: true
+      replicaCount: 1
+
+    catalog-event-service:
+      enabled: true
+      replicaCount: 1

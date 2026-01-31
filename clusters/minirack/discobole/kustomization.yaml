@@ -1,0 +1,5 @@
+# Kustomization for the DISCOBOLE cluster resources.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- discobole-prod.yaml

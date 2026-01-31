@@ -1,0 +1,78 @@
+# HelmRelease for the DISCOBOLE API Gateway.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: disco-gateway
+  namespace: disco
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: ./disco-gateway
+      sourceRef:
+        kind: GitRepository
+        name: discobole-stack
+        namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: keycloak
+      namespace: disco
+  values:
+    replicaCount: 1
+    dailyshutdown: disabled
+
+    image:
+      repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/spring-cloud-gateway"
+      pullPolicy: Always
+      tag: "1.6.0"
+
+    imagePullSecrets:
+      - name: gar-access
+
+    keycloakuri: "http://keycloak"
+
+    keycloak:
+      enabled: true
+      # IMPORTANT: Update this secret after Keycloak is configured
+      KEYCLOAK_CLIENT_SECRET: "REPLACE_WITH_GATEWAY_CLIENT_SECRET"
+      issuerURI: "https://disco-keycloak.e7d.tech/realms/SpringBootKeycloak"
+
+    services:
+      keycloak: "keycloak"
+      catalogui: "product-catalog-ui:80"
+      productcatalog: "catalog-product-catalog:8080"
+      specification: "catalog-product-specification:8080"
+      offering: "catalog-product-offering:8080"
+      offeringprice: "catalog-product-offering-price:8080"
+      category: "catalog-product-category:8080"
+      lifecycle: "catalog-product-lifecycle-management:8080"
+      userroleretrieve: "auth-userrole:8080"
+      catalogadmin: "catalog-product-catalog-administration:8080"
+      catalogpolicyrule: "catalog-policy-rule:8080"
+      orderCapture: "order-capture:8080"
+      orderFollowUp: "order-follow-up:8080"
+      orderInventory: "order-inventory:8080"
+      productinventory:
+        serviceName: "product-inventory:8080"
+        proxyPath: "/productInventory"
+      orchestrationdelivery: "order-orchestration:8080"
+      configurator: "product-configurator:8080"
+      eventservice: "catalog-event-service:8080"
+      issuerURI: "https://disco-keycloak.e7d.tech/realms/SpringBootKeycloak"
+
+    serviceAccount:
+      create: false
+      name: ""
+
+    ingress:
+      enabled: false
+
+    service:
+      type: ClusterIP
+      port: 8080

@@ -1,0 +1,22 @@
+# Flux Kustomization for the DISCOBOLE stack production deployment.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: discobole-prod
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./apps/discobole/prod
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  wait: true
+  timeout: 15m0s
+  dependsOn:
+  - name: infrastructure
+  - name: cert-manager

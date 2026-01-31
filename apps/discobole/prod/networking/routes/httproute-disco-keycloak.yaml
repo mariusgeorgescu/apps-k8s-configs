@@ -1,0 +1,21 @@
+# HTTPRoute for HTTPS traffic to Keycloak.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute-disco-keycloak
+  namespace: disco
+spec:
+  parentRefs:
+    - name: gateway-disco-keycloak
+      namespace: disco
+      sectionName: https
+  hostnames:
+    - disco-keycloak.e7d.tech
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: keycloak
+          port: 80

@@ -1,0 +1,77 @@
+# HelmRelease for the Product Catalog UI.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: product-catalog-ui
+  namespace: disco
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: ./product-catalog-ui
+      sourceRef:
+        kind: GitRepository
+        name: discobole-stack
+        namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: disco-gateway
+      namespace: disco
+  values:
+    replicaCount: 1
+
+    image:
+      repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/product-catalog-ui"
+      pullPolicy: Always
+      tag: "1.1.0"
+
+    imagePullSecrets:
+      - name: gar-access
+
+    # Production URLs for the frontend configuration
+    configValues: |
+      window.VITE_REACT_APP_GET='https://disco-api.e7d.tech/';
+      window.VITE_REACT_APP_CREATEPO='https://disco-api.e7d.tech/po/processManagement/v1/processFlow';
+      window.VITE_REACT_APP_CREATEPS='https://disco-api.e7d.tech/ps/processManagement/v1/processFlow';
+      window.VITE_REACT_APP_CREATEPS_ENTITY_TYPE='https://disco-api.e7d.tech/serviceCatalogManagement/v1/serviceSpecification';
+      window.VITE_REACT_APP_CREATEPOP='https://disco-api.e7d.tech/pop/processManagement/v1/processFlow';
+      window.VITE_REACT_APP_CREATECAT='https://disco-api.e7d.tech/category/';
+      window.VITE_REACT_APP_CREATELIFECYCLE='https://disco-api.e7d.tech/lifecycle/processManagement/v1/processFlow';
+      window.VITE_KEYCLOAK_URL='https://disco-keycloak.e7d.tech';
+      window.VITE_REACT_APP_ADMIN_URL='https://disco-api.e7d.tech/productCatalogAdministration/v5';
+      window.VITE_REACT_APP_MOCK_URL='https://disco-api.e7d.tech/channel';
+      window.VITE_KEYCLOAK_REALM='SpringBootKeycloak';
+      window.VITE_KEYCLOAK_CLIENT_ID='disco-frontend';
+      window.VITE_REACT_APP_AUTH_USERROLE_URL='https://disco-auth-api.e7d.tech/';
+      window.VITE_CREATEPS_STOCK_ITEM_ENTITY_TYPE='https://disco-api.e7d.tech/serviceCatalogManagement/v1/stockItemType';
+      window.VITE_CREATEPS_STOCK_ITEM_CHAR_VALUE='https://disco-api.e7d.tech/serviceCatalogManagement/v1/stockItem/stockItemType';
+
+    keycloak:
+      enabled: true
+      issuerURI: https://disco-keycloak.e7d.tech/realms/SpringBootKeycloak
+
+    ingress:
+      enabled: false
+
+    service:
+      type: ClusterIP
+      port: 80
+      targetPort: 8080
+
+    serviceAccount:
+      create: false
+      name: ""
+
+    resources:
+      requests:
+        cpu: 60m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 500Mi

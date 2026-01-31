@@ -1,0 +1,64 @@
+# Kustomization overlay "prod" for the DISCOBOLE stack.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: disco
+
+resources:
+  # Base resources
+  - ../base
+
+  # Sources
+  - sources/gitrepository-discobole-stack.yaml
+
+  # Secrets (encrypt with SOPS before committing)
+  - secrets/secret-postgres.yaml
+  - secrets/secret-keycloak-admin.yaml
+  - secrets/secret-minio.yaml
+  - secrets/secret-gar-access.yaml
+
+  # Infrastructure
+  - infrastructure/keycloak/postgres.yaml
+  - infrastructure/keycloak/keycloak.yaml
+  - infrastructure/kafka/zookeeper.yaml
+  - infrastructure/kafka/kafka.yaml
+  - infrastructure/minio/minio.yaml
+
+  # HelmReleases - Application Components
+  - helmreleases/helmrelease-disco-gateway.yaml
+  - helmreleases/helmrelease-product-catalog.yaml
+  - helmreleases/helmrelease-auth-userrole.yaml
+  - helmreleases/helmrelease-admin-ui.yaml
+  - helmreleases/helmrelease-product-catalog-ui.yaml
+  - helmreleases/helmrelease-product-configurator.yaml
+  - helmreleases/helmrelease-product-inventory.yaml
+  - helmreleases/helmrelease-order-management.yaml
+  - helmreleases/helmrelease-order-orchestration.yaml
+  - helmreleases/helmrelease-mock-server.yaml
+
+  # Networking - Certificates
+  - networking/certificates/certificate-disco-keycloak.yaml
+  - networking/certificates/certificate-disco-api.yaml
+  - networking/certificates/certificate-disco-auth-api.yaml
+  - networking/certificates/certificate-disco-admin.yaml
+  - networking/certificates/certificate-disco-pc.yaml
+
+  # Networking - Gateways
+  - networking/gateways/gateway-disco-keycloak.yaml
+  - networking/gateways/gateway-disco-api.yaml
+  - networking/gateways/gateway-disco-auth-api.yaml
+  - networking/gateways/gateway-disco-admin.yaml
+  - networking/gateways/gateway-disco-pc.yaml
+
+  # Networking - Routes (HTTPS)
+  - networking/routes/httproute-disco-keycloak.yaml
+  - networking/routes/httproute-disco-api.yaml
+  - networking/routes/httproute-disco-auth-api.yaml
+  - networking/routes/httproute-disco-admin.yaml
+  - networking/routes/httproute-disco-pc.yaml
+
+  # Networking - Routes (HTTP to HTTPS redirects)
+  - networking/routes/httproute-disco-keycloak-redirect.yaml
+  - networking/routes/httproute-disco-api-redirect.yaml
+  - networking/routes/httproute-disco-auth-api-redirect.yaml
+  - networking/routes/httproute-disco-admin-redirect.yaml
+  - networking/routes/httproute-disco-pc-redirect.yaml

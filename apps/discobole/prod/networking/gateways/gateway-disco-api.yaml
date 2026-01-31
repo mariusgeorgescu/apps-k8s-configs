@@ -1,0 +1,28 @@
+# Gateway (Gateway API) for the main DISCOBOLE API Gateway.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gateway-disco-api
+  namespace: disco
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    hostname: disco-api.e7d.tech
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https
+    hostname: disco-api.e7d.tech
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: secret-disco-api-e7d-tech-tls
+    allowedRoutes:
+      namespaces:
+        from: All

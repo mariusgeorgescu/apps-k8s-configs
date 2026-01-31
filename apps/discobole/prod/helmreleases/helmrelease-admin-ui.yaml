@@ -1,0 +1,57 @@
+# HelmRelease for the Admin UI Portal.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: admin-ui
+  namespace: disco
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: ./admin-ui
+      sourceRef:
+        kind: GitRepository
+        name: discobole-stack
+        namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: disco-gateway
+      namespace: disco
+  values:
+    replicaCount: 1
+
+    image:
+      repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/admin-ui"
+      pullPolicy: Always
+      tag: "1.12.1"
+
+    imagePullSecrets:
+      - name: gar-access
+
+    ingress:
+      enabled: false
+
+    registryCredentials:
+      create: false
+
+    environmentType: "production"
+
+    adminui:
+      service:
+        orchestrationDelivery: https://disco-api.e7d.tech/orchestrationManagement/v1
+        gateway: https://disco-api.e7d.tech
+        keycloak: https://disco-keycloak.e7d.tech/
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi

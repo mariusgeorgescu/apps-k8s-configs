@@ -1,0 +1,7 @@
+# Namespace for the DISCOBOLE stack applications.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: disco
+  labels:
+    app.kubernetes.io/part-of: discobole

@@ -1,0 +1,8 @@
+# Kustomization base for the DISCOBOLE stack.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: disco
+commonLabels:
+  app.kubernetes.io/part-of: discobole
+resources:
+- namespace.yaml

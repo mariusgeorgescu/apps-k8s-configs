@@ -1,0 +1,53 @@
+# HelmRelease for the Product Inventory service.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: product-inventory
+  namespace: disco
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: ./product-inventory
+      sourceRef:
+        kind: GitRepository
+        name: discobole-stack
+        namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: disco-gateway
+      namespace: disco
+  values:
+    replicaCount: 1
+
+    imagePullSecrets:
+      - name: gar-access
+
+    ingress:
+      enabled: false
+
+    service:
+      type: ClusterIP
+      port: 8080
+
+    mongo:
+      enabled: true
+      auth:
+        enabled: false
+      persistence:
+        enabled: true
+        size: 2Gi
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi

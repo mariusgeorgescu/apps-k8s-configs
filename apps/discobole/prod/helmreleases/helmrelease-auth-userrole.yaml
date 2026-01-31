@@ -1,0 +1,96 @@
+# HelmRelease for the Auth-Userrole service (user role management API).
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: auth-userrole
+  namespace: disco
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: ./auth-userrole
+      sourceRef:
+        kind: GitRepository
+        name: discobole-stack
+        namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: disco-gateway
+      namespace: disco
+  values:
+    replicaCount: 1
+    dailyshutdown: disabled
+
+    image:
+      repository: europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/auth-userrole
+      pullPolicy: Always
+      tag: "1.2.1"
+
+    imagePullSecrets:
+      - name: gar-access
+
+    services:
+      mongodb: auth-userrole-mongo
+      dbname: userRoleManagement
+      kafka: kafka-broker:9092
+      keycloak: keycloak:80
+      keycloakrealm: SpringBootKeycloak
+      catalogui: product-catalog-ui:80
+      productcatalog: catalog-product-catalog:8080
+      specification: catalog-product-specification:8080
+      offering: catalog-product-offering:8080
+      offeringprice: catalog-product-offering-price:8080
+      category: catalog-product-category:8080
+      lifecycle: catalog-product-lifecycle-management:8080
+      mockservice: mock-server:80
+      gateway: disco-gateway:8080
+      keycloakroute: disco-keycloak.e7d.tech
+      keycloakserviceroute: https://disco-keycloak.e7d.tech
+      authuserroleroute: https://disco-auth-api.e7d.tech
+
+    serviceAccount:
+      create: false
+      name: ""
+
+    ingress:
+      enabled: false
+
+    service:
+      type: ClusterIP
+      port: 8080
+
+    database:
+      enabled: true
+      rootPassword: "discodevpassword"
+      rootUser: mongo_user
+
+    mongo:
+      architecture: standalone
+      useStatefulSet: true
+      enabled: true
+      fullnameOverride: auth-userrole-mongo
+      auth:
+        enabled: false
+      persistence:
+        enabled: true
+        size: 2Gi
+
+    otel:
+      enabled: false
+
+    fluentd:
+      enabled: false
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
