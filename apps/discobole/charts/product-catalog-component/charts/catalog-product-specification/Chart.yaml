@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: 1.7.0
+description: A Helm chart for [discobole-catalog]/[catalog product specification]
+  service
+keywords:
+- orange
+- discobole
+- catalog-product-specification
+- product-specification
+name: catalog-product-specification
+type: application
+version: 1.7.0

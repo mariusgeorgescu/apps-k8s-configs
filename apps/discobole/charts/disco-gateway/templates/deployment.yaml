@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "catalog.fullname" . }}
+  labels:
+    {{- include "catalog.labels" . | nindent 4 }}
+    {{- include "catalog.shutdownLabels" . | nindent 4 }}
+spec:
+  replicas: {{ default "1" .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "catalog.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "catalog.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
+          volumeMounts:
+           - name: config-volume
+             mountPath: /app/application.yaml
+             subPath: application.yaml
+             readOnly: true
+           - name: volume-keystore
+             mountPath: /mnt/keystore
+             readOnly: true
+
+          env:
+            - name: ENV_TYPE
+              value: {{ .Values.envType }}
+            - name: JDK_JAVA_OPTIONS
+              value: -Djavax.net.ssl.trustStore=/mnt/keystore/keystore-p12 -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.debug=ssl,handshake
+            - name: SPRING_CLOUD_KUBERNETES_ENABLED
+              value: "true"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLED
+              value: "true"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_SOURCES_0_NAME
+              value: gateway-configmap
+            - name: SPRING_PROFILES_ACTIVE
+              value: openshift
+            - name: KEYCLOAK_ISSUER_URI
+              value: {{ .Values.keycloak.issuerURI }}
+            - name: KEYCLOAK_CLIENT_ID
+              value: gateway
+            - name: KEYCLOAK_SERVICE
+              value: {{ .Values.services.keycloak | default "keycloak:80" }}
+            - name: CATALOG_UI_SERVICE_NAME
+              value: {{ .Values.services.catalogui | default "catalog-ui:80" }}
+            - name: CATALOG_PRODUCT_SERVICE_NAME
+              value: {{ .Values.services.productcatalog | default "catalog-product-catalog:8080" }}
+            - name: SPECIFICATION_SERVICE_NAME
+              value: {{ .Values.services.specification | default "catalog-product-specification:8080" }}
+            - name: OFFERING_SERVICE_NAME
+              value: {{ .Values.services.offering | default "catalog-product-offering:8080" }}
+            - name: OFFERING_PRICE_SERVICE_NAME
+              value: {{ .Values.services.offeringprice | default "catalog-product-offering-price:8080" }}
+            - name: CATEGORY_SERVICE_NAME
+              value: {{ .Values.services.category | default "catalog-product-category:8080" }}
+            - name: LIFECYCLE_SERVICE_NAME
+              value: {{ .Values.services.lifecycle | default "catalog-product-lifecycle-management:8080" }}
+            - name: USERROLE_RETRIEVE_SERVICE_NAME
+              value: {{ .Values.services.userroleretrieve | default "auth-userrole:8080" }}
+            - name: CATALOG_ADMIN_SERVICE_NAME
+              value: {{ .Values.services.catalogadmin | default "catalog-product-catalog-administration:8080" }}
+            - name: CATALOG_POLICY_RULE_SERVICE_NAME
+              value: {{ .Values.services.catalogpolicyrule | default "catalog-policy-rule:8080" }}
+            - name: ORDER_CAPTURE_SERVICE_NAME
+              value: {{ .Values.services.orderCapture | default "order-capture:8080" }}
+            - name: ORDER_FOLLOW_UP_SERVICE_NAME
+              value: {{ .Values.services.orderFollowUp | default "order-follow-up:8080" }}
+            - name: ORDER_INVENTORY_SERVICE_NAME
+              value: {{ .Values.services.orderInventory | default "order-inventory:8080" }}
+            - name: PRODUCT_INVENTORY_SERVICE_NAME
+              value: {{ .Values.services.productinventory.serviceName | default "product-inventory:8080" }}
+            - name: PRODUCT_INVENTORY_PROXY_PATH
+              value: {{ .Values.services.productinventory.proxyPath | default "productInventory" }}
+            - name: PRODUCT_INVENTORY_CONTEXT_PATH
+              value: {{ .Values.services.productinventory.contextPath | default "productInventoryManagement/v1" }}
+            - name: ORCHESTRATION_DELIVERY_SERVICE_NAME
+              value: {{ .Values.services.orchestrationdelivery | default "orchestration-delivery:8080" }}
+            - name: FALLOUT_SERVICE_NAME
+              value: {{ .Values.services.fallout | default "orchestration-delivery-fallout-review:8080" }}
+            - name: CONFIGURATOR_SERVICE_NAME
+              value: {{ .Values.services.configurator | default "product-offering-qualification:8080" }}
+
+            - name: EVENT_SERVICE_NAME
+              value: {{ .Values.services.eventservice | default "event-service:8080" }}
+
+
+            - name: "KEYCLOAK_CLIENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  name: gateway-keycloak-client-secret
+                  key: KEYCLOAK_CLIENT_SECRET         
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config-volume
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want to add to your container
+            name: gateway-configmap
+
+        - name: volume-keystore  ## Name of secret to mount as volume
+          secret:
+            secretName: {{ include "catalog.fullname" . }}-keystore-p12 # modified
+            items:
+              - key: keystore-p12
+                path: keystore-p12
+            defaultMode: 420

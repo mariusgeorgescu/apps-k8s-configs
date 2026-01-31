@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: 1.12.1
+description: A Helm chart for disco admin ui portal.
+keywords:
+- orange
+- discobole
+- admin-ui
+maintainers:
+- email: melshazly.ext@orange.com
+  name: Orange, Inc. (FAMS Team)
+name: admin-ui
+sources:
+- https://gitlab.ow2.org/discobole/disco-oda-components/disco-ui-portals/admin-ui
+type: application
+version: 1.12.1

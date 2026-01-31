@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: 1.5.0
+description: A Helm chart for [order orchestration]/[delivery management] service
+home: https://discobole.ow2.io/doc
+keywords:
+- orange
+- discobole
+- order-orchestration
+- orchestration-delivery-management
+maintainers:
+- email: aelhoseiny.ext@orange.com
+  name: Orange, Inc. (FAMS Team)
+name: orchestration-delivery-management
+sources:
+- https://gitlab.ow2.org/discobole/disco-order-orchestration/orchestration-delivery-management
+type: application
+version: 1.5.0

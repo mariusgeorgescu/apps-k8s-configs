@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "catalog.fullname" . }}
+  labels:
+    {{- include "catalog.labels" . | nindent 4 }}
+    {{- include "catalog.shutdownLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "catalog.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "catalog.selectorLabels" . | nindent 8 }}
+        {{- include "catalog.monitoringLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: openshift
+          - name: KAFKA
+            value: {{ .Values.services.kafka | default "kafka:9092" }}
+          - name: KEYCLOAK_SERVICE
+            value: {{ .Values.services.keycloak | default "keycloak:80" }}
+          - name: KEYCLOAK_REALM
+            value: {{ .Values.services.keycloakrealm | default "SpringBootKeycloak" }}
+          - name: KEYCLOAK_ROUTE
+            value: {{ .Values.services.keycloakroute | default "keycloak" }}
+          - name: USERROLE-RETRIEVE-SERVICE-NAME
+            value: {{ .Values.services.userroleretrieve | default "auth-userrole-retrieve:8080" }}
+          - name: KEYCLOAK_ISSUER_URI
+            value: {{ .Values.keycloak.issuerURI | default "https://keycloak-disco.apps.prd1.c1.paas.tech.orange/realms/SpringBootKeycloak" }}
+
+          ports:
+            - name: http
+              containerPort: 8080 
+              protocol: TCP
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/application.yaml
+              subPath: application.yaml
+              readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      - name: config-volume  ## name of the ConfigMap to mount as volume
+        configMap:
+          name: {{ include "catalog.fullname" . }}-appconfig
+          defaultMode: 420

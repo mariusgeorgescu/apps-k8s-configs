@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: 1.8.0
+description: A Helm chart for [order management]/[order capture mock server] service
+home: https://om-mock-server.pages.gitlab.tech.orange
+keywords:
+- orange
+- disco
+- disco-order-management
+- om-mock-server
+maintainers:
+- email: aelhoseiny.ext@orange.com
+  name: Orange, Inc. (FAMS Team)
+name: om-mock-server
+sources:
+- https://gitlab.tech.orange/disco/disco-order-management/mock-server
+type: application
+version: 1.8.0

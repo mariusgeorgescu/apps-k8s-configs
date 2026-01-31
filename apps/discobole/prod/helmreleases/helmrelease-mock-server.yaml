@@ -8,10 +8,10 @@ spec:
   interval: 10m
   chart:
     spec:
-      chart: ./om-mock-server
+      chart: ./apps/discobole/charts/om-mock-server
       sourceRef:
         kind: GitRepository
-        name: discobole-stack
+        name: flux-system
         namespace: flux-system
   install:
     createNamespace: false

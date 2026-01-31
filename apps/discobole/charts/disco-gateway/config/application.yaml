@@ -1,0 +1,206 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+---
+spring:
+  config:
+    activate:
+      on-profile: openshift
+  application:
+    name: api-gateway
+  keycloakUrlCerts: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/certs
+  cloud:
+    gateway:
+      routes:
+        - id: product-catalog-ui
+#          uri: https://catalog-ui-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${CATALOG_UI_SERVICE_NAME}
+          predicates:
+            - Path=/product-catalog-ui/**
+          filters:
+            - RewritePath=/product-catalog-ui/(?<segment>.*), /$\{segment}
+        - id: product-catalog-ui-static
+#          uri: https://catalog-ui-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${CATALOG_UI_SERVICE_NAME}
+          predicates:
+            - Path=/static/**, /css/**, /boosted-5.2.3-dist/**
+        - id: product-catalog
+#          uri: https://catalog-product-catalog-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${CATALOG_PRODUCT_SERVICE_NAME}
+          predicates:
+            - Path=/productCatalogManagement/v1/**
+            - Method=GET,POST,OPTIONS,PATCH
+        - id: product-catalog
+#          uri: https://catalog-product-catalog-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${CATALOG_PRODUCT_SERVICE_NAME}
+          predicates:
+            - Path=/serviceCatalogManagement/v1/**
+            - Method=GET,POST,OPTIONS,PATCH
+
+
+
+
+
+        - id: product-configurator
+#          uri: https://product-offering-qualification-review-disco.apps.fr01.paas.tech.orange
+          uri: http://${CONFIGURATOR_SERVICE_NAME}
+          predicates:
+            - Path=/productOfferingQualification/v1/**
+            - Method=GET,POST,OPTIONS,PUT,DELETE
+        - id: product-configurator
+#          uri: https://product-offering-qualification-review-disco.apps.fr01.paas.tech.orange
+          uri: http://${CONFIGURATOR_SERVICE_NAME}
+          predicates:
+            - Path=/v1/queryProductConfiguration/**
+            - Method=GET,POST,OPTIONS,PUT,DELETE   
+
+
+
+        - id: event-service
+#          uri: https://product-offering-qualification-review-disco.apps.fr01.paas.tech.orange
+          uri: http://${EVENT_SERVICE_NAME}
+          predicates:
+            - Path=/topic/**
+            - Method=GET,POST,OPTIONS,PUT,DELETE   
+
+
+
+        - id: product-specification
+#          uri: https://catalog-product-specification-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${SPECIFICATION_SERVICE_NAME}
+          predicates:
+            - Path=/ps/processManagement/v1/processFlow/**
+            - Method=GET,POST,OPTIONS,PATCH
+          filters:
+            - RewritePath=/ps/(?<segment>.*), /$\{segment}
+        - id: product-offering
+#          uri: https://catalog-product-offering-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${OFFERING_SERVICE_NAME}
+          predicates:
+            - Path=/po/processManagement/v1/processFlow/**
+            - Method=GET,POST,OPTIONS,PATCH
+          filters:
+            - RewritePath=/po/(?<segment>.*), /$\{segment}
+        - id: product-offering-price
+#          uri: https://catalog-product-offering-price-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${OFFERING_PRICE_SERVICE_NAME}
+          predicates:
+            - Path=/pop/processManagement/v1/processFlow/**
+            - Method=GET,POST,OPTIONS,PATCH
+          filters:
+            - RewritePath=/pop/(?<segment>.*), /$\{segment}
+        - id: category
+#          uri: https://catalog-product-category-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${CATEGORY_SERVICE_NAME}
+          predicates:
+            - Path=/category/processManagement/v1/processFlow/**
+            - Method=GET,POST,OPTIONS,PATCH
+          filters:
+            - RewritePath=/category/(?<segment>.*), /$\{segment}
+        - id: lifecycle-management
+#          uri: https://catalog-product-lifecycle-management-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${LIFECYCLE_SERVICE_NAME}
+          predicates:
+            - Path=/lifecycle/processManagement/v1/processFlow/**
+            - Method=GET,POST,OPTIONS,PATCH
+          filters:
+            - RewritePath=/lifecycle/(?<segment>.*), /$\{segment}
+        - id: order-capture
+          uri: http://${ORDER_CAPTURE_SERVICE_NAME}
+          predicates:
+            - Path=/orderCapture/**
+            - Method=GET,POST,OPTIONS,PATCH
+          filters:
+            - RewritePath=/orderCapture/(?<segment>.*), /$\{segment}
+        - id: order-followup
+          uri: http://${ORDER_FOLLOW_UP_SERVICE_NAME}
+          predicates:
+            - Path=/orderFollowUp/processManagement/v1/processFlow/**
+            - Method=GET,POST,OPTIONS,PATCH
+          filters:
+            - RewritePath=/orderFollowUp/(?<segment>.*), /$\{segment}
+        - id: order-inventory
+          uri: http://${ORDER_INVENTORY_SERVICE_NAME}
+          predicates:
+            - Path=/productOrderingManagement/v1/**
+            - Method=GET,POST,OPTIONS,PATCH
+
+        #---------------- Product Inventory Management ----------------#
+        - id: product-inventory
+          uri: http://${PRODUCT_INVENTORY_SERVICE_NAME}
+          predicates:
+            - Path=/productInventory/productInventoryManagement/v1/**
+            - Method=GET,OPTIONS,POST,PATCH,DELETE
+          filters:
+            - RewritePath=/productInventory/(?<segment>.*), /$\{segment}
+        - id: product-inventory-configuration
+          uri: http://${PRODUCT_INVENTORY_SERVICE_NAME}
+          predicates:
+            - Path=/productInventory/configuration
+            - Method=GET,OPTIONS
+          filters:
+            - RewritePath=/productInventory/configuration, /configuration
+        #--------------------------------------------------------------#
+
+        - id: orchestration-delivery
+#          uri: https://orchestration-delivery-integration.apps.fr01.paas.tech.orange
+          uri: http://${ORCHESTRATION_DELIVERY_SERVICE_NAME}
+          predicates:
+            - Path=/cood/**
+            - Method=GET,OPTIONS
+          filters:
+            - RewritePath=/cood/(?<segment>.*), /$\{segment}
+        - id: orchestration-delivery-fallout
+          uri: http://${FALLOUT_SERVICE_NAME}
+          predicates:
+            - Path=/fallout/**
+            - Method=GET,POST,PATCH,OPTIONS
+          filters:
+            - RewritePath=/fallout/(?<segment>.*), /$\{segment}
+        - id: user-role-retrieval
+#          uri: https://auth-userrole-retrieve-integration-disco.apps.fr01.paas.tech.orange
+          uri: http://${USERROLE_RETRIEVE_SERVICE_NAME}
+          predicates:
+            - Path=/userRolePermission/v1/**
+            - Method=GET,OPTIONS
+          filters:
+            - RewritePath=/userrole-retrieval/(?<segment>.*), /$\{segment}
+        - id: rulenew
+          uri: http://${CATALOG_POLICY_RULE_SERVICE_NAME}
+          predicates:
+            - Path=/policyRule/v1/**
+            - Method=GET,POST,OPTIONS,PUT,DELETE,PATCH
+#          filters:
+#            - RewritePath=/policyRule/(?<segment>.*), /$\{segment}
+        - id: admin-ui
+#          uri: https://catalog-product-catalog-administration-review-disco.apps.fr01.paas.tech.orange
+          uri: http://${CATALOG_ADMIN_SERVICE_NAME}
+          predicates:
+            - Path=/productCatalogAdministration/v5/**
+            - Method=GET,POST,OPTIONS,PUT,DELETE
+          filters:
+            - AddRequestHeader=Content-Type, application/json
+            - AddRequestHeader=Accept, application/json
+      default-filters :
+        - TokenRelay
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_ISSUER_URI}
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: ${KEYCLOAK_CLIENT_ID}
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"

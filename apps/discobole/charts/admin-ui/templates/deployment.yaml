@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "adminui.fullname" . }}
+  labels:
+    {{- include "adminui.labels" . | nindent 4 }}
+    {{- include "adminui.shutdownLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "adminui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "adminui.selectorLabels" . | nindent 8 }}
+        {{- include "adminui.monitoringLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "adminui.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: admin-ui
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: ENV_TYPE
+              value: {{ .Values.environmentType }}
+            - name: ORCHESTRATION_DELIVERY_SERVICE
+              value: {{ .Values.adminui.service.orchestrationDelivery }}
+            - name: GATEWAY
+              value: {{ .Values.adminui.service.gateway }}
+          ports:
+            - name: http
+              containerPort: 8080 
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: environment-config
+              mountPath: /usr/share/nginx/html/config
+      volumes:
+        - name: environment-config
+          configMap:
+            name: environment-config
+            defaultMode: 420        

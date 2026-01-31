@@ -1,0 +1,12 @@
+dependencies:
+- name: orchestration-delivery
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-orchestration/orchestration-delivery/charts
+  version: 1.7.0
+- name: orchestration-delivery-fallout
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-orchestration/orchestration-delivery-fallout/charts
+  version: 2.0.0
+- name: orchestration-delivery-management
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-orchestration/orchestration-delivery-management/charts
+  version: 1.5.0
+digest: sha256:4a191283933ff7258754746b99c79433a8674ab61baca51d33624d04c890ef1a
+generated: "2025-12-09T07:25:25.404830003Z"

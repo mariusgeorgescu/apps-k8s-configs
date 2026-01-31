@@ -1,0 +1,30 @@
+dependencies:
+- name: event-service
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-event-service/charts
+  version: 1.1.2
+- name: catalog-product-catalog
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-catalog/charts
+  version: 1.5.0
+- name: catalog-product-offering
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-offering/charts
+  version: 1.8.0
+- name: catalog-product-catalog-administration
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-catalog-administration/charts
+  version: 1.6.0
+- name: catalog-product-offering-price
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-offering-price/charts
+  version: 1.10.0
+- name: catalog-product-category
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-category/charts
+  version: 1.7.0
+- name: catalog-product-specification
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-specification/charts
+  version: 1.7.0
+- name: catalog-policy-rule
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-policy-rule/charts
+  version: 1.7.0
+- name: catalog-product-lifecycle-management
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-lifecycle-management/charts
+  version: 1.4.0
+digest: sha256:72d0e9c6618d13feb0db40e892be78bdff934cd817abb9f033865425f9853b27
+generated: "2025-12-09T08:27:36.442143293Z"

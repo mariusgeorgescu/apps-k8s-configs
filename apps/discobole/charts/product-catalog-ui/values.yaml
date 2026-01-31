@@ -1,0 +1,146 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# Default values for lifecycle-management.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+ repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/product-catalog-ui"
+ pullPolicy: Always
+ tag: "1.1.0"
+
+nameOverride: ""
+fullnameOverride: ""
+
+configValues: |
+  window.VITE_REACT_APP_GET='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/';
+  window.VITE_REACT_APP_CREATEPO='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/po/processManagement/v1/processFlow';
+  window.VITE_REACT_APP_CREATEPS='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/ps/processManagement/v1/processFlow';
+  window.VITE_REACT_APP_CREATEPS_ENTITY_TYPE='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/serviceCatalogManagement/v1/serviceSpecification';
+  window.VITE_REACT_APP_CREATEPOP='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/pop/processManagement/v1/processFlow';
+  window.VITE_REACT_APP_CREATECAT='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/category/';
+  window.VITE_REACT_APP_CREATELIFECYCLE='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/lifecycle/processManagement/v1/processFlow';
+  window.VITE_KEYCLOAK_URL='https://keycloak-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}';
+  window.VITE_REACT_APP_ADMIN_URL='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/productCatalogAdministration/v5';
+  window.VITE_REACT_APP_MOCK_URL='https://mock-server-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/channel';
+  window.VITE_KEYCLOAK_REALM='${KEYCLOAK_REALM}';
+  window.VITE_KEYCLOAK_CLIENT_ID='${FE_CLIENT}';
+  window.VITE_REACT_APP_AUTH_USERROLE_URL='https://auth-userrole-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/';
+  window.VITE_CREATEPS_STOCK_ITEM_ENTITY_TYPE='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/serviceCatalogManagement/v1/stockItemType';
+  window.VITE_CREATEPS_STOCK_ITEM_CHAR_VALUE='https://disco-gateway-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/serviceCatalogManagement/v1/stockItem/stockItemType';
+
+keycloak:
+  enabled: true
+  issuerURI: https://keycloak-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+
+ingress:
+  enabled: false
+  className: ""
+  labels:
+    network: gin
+  annotations:
+    route.openshift.io/termination: edge
+    route.openshift.io/insecureEdgeTerminationPolicy: Redirect
+  hosts:
+    - host: ${hostname}
+      paths: [/] # align with contextPath
+
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  requests:
+    cpu: 60m
+    memory: 128Mi
+  limits:
+    cpu: 120m
+    memory: 500Mi
+
+# if you need a secret to pull image from protected registry
+imagePullSecrets: []
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# remove curly braces and specify if necessary
+podAnnotations: {}
+
+# remove curly braces and specify if necessary
+podSecurityContext: {}
+
+# remove curly braces and specify if necessary
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+# config for ingress 
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"    
+  hosts:
+   - host: chart-example.local
+     paths:
+       - path: /
+
+         pathType: ImplementationSpecific   
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+  
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  requests: #added
+    cpu: 10m
+    memory: 128Mi
+  limits: #added
+    cpu: 100m
+    memory: 128Mi  
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Monitoring values
+monitoring:
+  application: ""
+  domain: "appli"
+  productName: ""
+  topology: "none"
+  role: "none"
+  environment: ""

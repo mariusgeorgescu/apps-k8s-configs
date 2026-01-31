@@ -1,0 +1,60 @@
+apiVersion: v2
+appVersion: "9.0"
+dependencies:
+- alias: catalog-event-service
+  condition: catalog-event-service.enabled
+  name: event-service
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-event-service/charts
+  version: 1.1.2
+- alias: catalog-product-catalog
+  condition: catalog-product-catalog.enabled
+  name: catalog-product-catalog
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-catalog/charts
+  version: 1.5.0
+- alias: catalog-product-offering
+  condition: catalog-product-offering.enabled
+  name: catalog-product-offering
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-offering/charts
+  version: 1.8.0
+- alias: catalog-product-catalog-administration
+  condition: catalog-product-catalog-administration.enabled
+  name: catalog-product-catalog-administration
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-catalog-administration/charts
+  version: 1.6.0
+- alias: catalog-product-offering-price
+  condition: catalog-product-offering-price.enabled
+  name: catalog-product-offering-price
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-offering-price/charts
+  version: 1.10.0
+- alias: catalog-product-category
+  condition: catalog-product-category.enabled
+  name: catalog-product-category
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-category/charts
+  version: 1.7.0
+- alias: catalog-product-specification
+  condition: catalog-product-specification.enabled
+  name: catalog-product-specification
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-specification/charts
+  version: 1.7.0
+- alias: catalog-policy-rule
+  condition: catalog-policy-rule.enabled
+  name: catalog-policy-rule
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-policy-rule/charts
+  version: 1.7.0
+- alias: catalog-product-lifecycle-management
+  condition: catalog-product-lifecycle-management.enabled
+  name: catalog-product-lifecycle-management
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-catalog/catalog-product-lifecycle-management/charts
+  version: 1.4.0
+description: A Helm chart for installing Product Catalog Component.
+home: https://gitlab.ow2.org/discobole
+icon: https://gitlab.ow2.org/uploads/-/system/group/avatar/5972/discobole_50_black.png?width=48
+keywords:
+- orange
+- discobole
+- product catalog
+name: catalog-component
+sources:
+- https://gitlab.ow2.org/disco/disco-guide/disco-suite/catalog-component
+type: application
+version: 2.0.0

@@ -1,0 +1,12 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    {{- include "adminui.labels" . | nindent 4 }}
+  name: environment-config
+data:
+  env-config.json: |-
+    {
+      "REACT_APP_KEYCLOAK_URL": "{{ .Values.adminui.service.keycloak }}",
+      "REACT_APP_PROXY_URL": "{{ .Values.adminui.service.gateway }}"
+    }

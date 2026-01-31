@@ -1,0 +1,219 @@
+image: #modified during the packaging, overridden with values-*.yaml during the deployment
+  repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/mock-server"
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart version.
+  tag: "master"
+  
+registryCredentials:
+  create: false
+  #  example for GitLab internal registry
+  url: ${DIOD_CENTRAL_URL}
+  token:
+    userName: ${DIOD_CENTRAL_USER}
+    password: ${DIOD_CENTRAL_PASSWORD}
+otel:
+  # activate Open Telemetry instrumentation
+  enabled: false
+  sidecar:
+    # use collector agent sidecar
+    enabled: false
+    # main collector address
+    jaeger:
+      host: jaeger
+      port: 14250
+    # main receiver address
+    otlp:
+      host: disco-tracing-otel
+      port: 4317    
+fluentd:
+  enabled: false
+  host: apps-fluentd
+  port: 24224
+  tag: "disco-om-mock-server"
+
+monitoring:
+  # environment: "${environment_type}"
+  productName: om-mock-server
+  # app: ${CI_PROJECT_NAME}
+  # application: ${CI_PROJECT_NAME}
+
+# enable monitoring and supervision of pods
+podAnnotations:
+  prometheus.io/port: '8080'
+  prometheus.io/scrape: 'false'
+  metrics: '/actuator/prometheus' #align with contextPath
+
+service:
+  type: ClusterIP
+  port: 8080
+  # enable monitoring and supervision of service
+  annotations:
+    prometheus.io/port: '8080'
+    prometheus.io/scrape: 'true'
+  
+# config for ingress on DIOD OpenShift
+ingress:
+  enabled: false
+  annotations:
+    route.openshift.io/termination: edge
+    route.openshift.io/insecureEdgeTerminationPolicy: Allow
+  hosts:
+    - host: ${hostname}
+      paths: [/] # align with contextPath
+imagePullSecrets:
+  # example, using a secret created by the chart for a release with fullnameOverride: "om-mock-server-sandbox"
+  - name: gar-access
+
+scheduledshutdown: enabled
+
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# use to activate Promtail sidecar for logs scraping
+promtail:
+  enabled: false
+  # Extra args for the Promtail container.
+  extraArgs: []
+  # -- Example:
+  # -- extraArgs:
+  #  - -client.external-labels=env=sandbox,app=disco,setname=order_capture_mock_server
+  
+  # -- Section for crafting Promtails config file. The only directly relevant value is `config.file`
+  # which is a templated string that references the other values and snippets below this key.
+  # @default -- See `values.yaml`
+  config:
+    # -- The log level of the Promtail server
+    # Must be reference in `config.file` to configure `server.log_level`
+    # See default config in `values.yaml`
+    logLevel: ""
+    # -- The Loki address to post logs to.
+    # Must be reference in `config.file` to configure `client.url`.
+    # See default config in `values.yaml`
+    lokiAddress: ""
+    # -- A section of reusable snippets that can be reference in `config.file`.
+    # Custom snippets may be added in order to reduce redundancy.
+    # This is especially helpful when multiple `kubernetes_sd_configs` are use which usually have large parts in common.
+    # @default -- See `values.yaml`
+    snippets:
+      # -- You can put here any keys that will be directly added to the config file's 'client' block.
+      # @default -- empty
+      extraClientConfigs: ""
+      # -- You can put here any additional scrape configs you want to add to the config file.
+      # @default -- empty
+      extraScrapeConfigs: ""
+      # -- You can put here any additional relabel_configs to "kubernetes-pods" job
+      extraRelabelConfigs: []
+      scrapeConfigs: |
+        # See also https://github.com/grafana/loki/blob/master/production/ksonnet/promtail/scrape_config.libsonnet for reference
+        - job_name: app-logs
+          pipeline_stages:
+          - multiline:
+              firstline: '.*with root cause.*$'
+              max_wait_time: 1ms
+          static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: app-logs
+              __path__: /tmp/*log
+    # -- Config file contents for Promtail.
+    # Must be configured as string.
+    # It is templated so it can be assembled from reusable snippets in order to avoid redundancy.
+    # @default -- See `values.yaml`
+    file: |
+      server:
+        log_level: {{ .Values.promtail.config.logLevel }}
+        http_listen_port: 9080
+      client:
+        url: {{ tpl .Values.promtail.config.lokiAddress . }}
+        {{- tpl .Values.promtail.config.snippets.extraClientConfigs . | nindent 2 }}
+      positions:
+        filename: /tmp/positions.yaml
+      scrape_configs:
+        {{- tpl .Values.promtail.config.snippets.scrapeConfigs . | nindent 2 }}
+        {{- tpl .Values.promtail.config.snippets.extraScrapeConfigs . | nindent 2 }}
+
+# remove curly braces and specify if necessary
+podAnnotations: {}
+  # example to enable monitoring and supervision of pods
+  # prometheus.io/port: '8080'
+  # prometheus.io/scrape: 'true'
+  # metrics: '/actuator/prometheus' # align with contextPath, if specified
+
+# remove curly braces and specify if necessary
+podSecurityContext: {}
+  #runAsUser: 1003170001
+  #runAsGroup: 1003170001
+  # runAsUser: 1000
+  # fsGroup: 2000
+
+# remove curly braces and specify if necessary
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+# set to true if you want to have CertManager issue a Certificate for your service
+# further config is needed, check odaca custom file for example
+certManager:
+  create: false
+
+service:
+  type: ClusterIP
+  port: 8080
+  # example to enable monitoring and supervision of service
+  # annotations:
+  #   prometheus.io/port: '8080'
+  #   prometheus.io/scrape: 'true'  
+  
+# set to true if using istio gateway to expose your service
+# further config is needed, check odaca custom file for example
+istio:
+  enabled: false
+
+# use if you want to change the api version in URL path. Defaults to the API version implemented by this version of the component
+api:
+  contextPath: "/api/v2/"
+  
+# use if you want to expose your service with a context path, for instance /mock-server. Default is blank
+contextPath: ""
+  
+# set to true if using ingress to expose your service
+# further config is needed, check odaca custom file for example
+ingress:
+  enabled: false
+
+  
+resources: 
+  # It is usually recommended not to specify default resources and to leave this as a conscious
+  # choice for the user. As providers of disco, we chose to set these default values
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 500Mi
+
+# set to true and configure if you wish to activate autoscaling of pods    
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: 1.6.0
+description: A Helm chart for catalog-administration  service
+keywords:
+- orange
+- discobole
+- catalog-product-catalog-administration
+- catalog-administration
+name: catalog-product-catalog-administration
+sources:
+- https://gitlab.ow2.org/discobole/disco-oda-components/disco-catalog/catalog-product-catalog-administration
+type: application
+version: 1.6.0

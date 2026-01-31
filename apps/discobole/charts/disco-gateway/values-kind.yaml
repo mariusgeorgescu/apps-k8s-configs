@@ -1,0 +1,59 @@
+# disco-gateway values override for Kind cluster
+# Usage: helm install disco-gateway disco-gateway/ -f disco-gateway/values-kind.yaml
+
+replicaCount: 1
+dailyshutdown: disabled
+
+# Self-signed keystore for local development (password: changeit)
+keyStoreP12: "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"
+
+keycloakuri: "http://keycloak"
+
+keycloak:
+  enabled: true
+  KEYCLOAK_CLIENT_SECRET: "qQKoN4os9MWNNXgXhy3RMcWByHg1eelu"
+  # Note: Don't include port 80 - Keycloak returns issuer without the port
+  issuerURI: "http://keycloak/realms/SpringBootKeycloak"
+
+# Trying tag 1.6.0
+image:
+  repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/spring-cloud-gateway"
+  pullPolicy: Always
+  tag: "1.6.0"
+
+imagePullSecrets:
+  - name: gar-access
+
+services:
+  keycloak: "keycloak"
+  catalogui: "product-catalog-ui:80"
+  productcatalog: "catalog-product-catalog:8080"
+  specification: "catalog-product-specification:8080"
+  offering: "catalog-product-offering:8080"
+  offeringprice: "catalog-product-offering-price:8080"
+  category: "catalog-product-category:8080"
+  lifecycle: "catalog-product-lifecycle-management:8080"
+  userroleretrieve: "auth-userrole:8080"
+  catalogadmin: "catalog-product-catalog-administration:8080"
+  catalogpolicyrule: "catalog-policy-rule:8080"
+  orderCapture: "order-capture:8080"
+  orderFollowUp: "order-follow-up:8080"
+  orderInventory: "order-inventory:8080"
+  productinventory:
+    serviceName: "product-inventory:8080"
+    proxyPath: "/productInventory"
+  orchestrationdelivery: "order-orchestration:8080"
+  configurator: "product-configurator:8080"
+  eventservice: "catalog-event-service:8080"
+  issuerURI: "http://keycloak/realms/SpringBootKeycloak"
+
+serviceAccount:
+  create: false
+  name: ""
+
+ingress:
+  enabled: false
+
+service:
+  type: ClusterIP
+  port: 8080

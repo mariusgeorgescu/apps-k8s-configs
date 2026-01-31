@@ -1,0 +1,15 @@
+dependencies:
+- name: order-capture
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-management/order-capture/charts
+  version: 1.15.0
+- name: order-follow-up
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-management/order-followup/charts
+  version: 1.11.1
+- name: order-inventory
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-management/order-inventory/charts
+  version: 1.13.1
+- name: mock-server
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-management/mock-server/charts
+  version: 1.13.0
+digest: sha256:5963ce7197ac6a70fceebf1027d4c7d59de7673e7689d3ff3dd95f1590040116
+generated: "2025-12-09T07:19:29.301854896Z"

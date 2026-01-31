@@ -1,0 +1,170 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+  # SPDX-FileCopyrightText: 2025 Orange SA
+  # SPDX-License-Identifier: MIT
+  #
+  # This software is distributed under the MIT License,
+  # the text of which is available at https://opensource.org/license/mit
+  # or see the "LICENSE.txt" file for more details.
+  #
+  # Authors: See CONTRIBUTORS.txt
+
+  # This is a YAML-formatted file.
+  # Declare variables to be passed into your templates.
+
+  #
+  # Override dependency (i.e. subchart) values
+  #
+
+## common values to microservices
+
+common: &common-values
+  keyStoreP12: "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"
+  jdkJavaOptions: "-Djavax.net.ssl.trustStore=/mnt/keystore/keystore-p12 -Djavax.net.ssl.trustStorePassword=changeit"
+  scheduledshutdown: enabled
+  imagePullSecrets: []
+  registryCredentials:
+    create: false
+    #  example for GitLab internal registry
+    url: ${CI_REGISTRY}
+    token:
+      userName: ${GITLAB_TOKEN_USERNAME}
+      password: ${GITLAB_TOKEN_PASSWORD}
+  serviceAccount:
+    name: ${SERVICE_ACCOUNT_NAME}
+  service:
+    type: ClusterIP
+    port: 8080
+    # enable monitoring and supervision of service
+    annotations:
+      prometheus.io/port: '9000'
+      prometheus.io/scrape: 'true'
+  # config for ingress on DIOD OpenShift
+  ingress:
+    enabled: false
+    labels:
+      network: gin
+    annotations:
+      route.openshift.io/termination: edge
+      route.openshift.io/insecureEdgeTerminationPolicy: Allow
+    hosts:
+      - host: "" # TO OVERRIDE
+        paths: [/] # align with contextPath
+  podAnnotations:
+    prometheus.io/port: '9000'
+    prometheus.io/scrape: 'true'
+    metrics: '/actuator/prometheus' #align with contextPath
+  otel:
+    # activate Open Telemetry instrumentation
+    enabled: false
+    sidecar:
+      # use collector agent sidecar
+      enabled: true
+      # main collector address
+      jaeger:
+        host: jaeger
+        port: 14250
+      # main receiver address
+      otlp:
+        host: ${CI_PROJECT_ROOT_NAMESPACE}-tracing-otel
+        port: 4317
+  monitoring:
+    environment: "${environment_type}"
+    productName: ${CI_PROJECT_ROOT_NAMESPACE}
+  fluentd:
+    enabled: false
+    host: apps-fluentd
+    port: 24224
+  keycloak:
+    enabled: true
+    clientId: ${ORCHESTRATION_DELIVERY_KEYCLOAK_CLIENT_ID}
+    clientSecret: "${ORCHESTRATION_DELIVERY_KEYCLOAK_CLIENT_SECRET}"
+    uri: https://keycloak-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  od:
+    service:
+      kafka: kafka-${environment_type}
+      productCatalog: catalog-product-catalog-${environment_type}:8080
+      cpib: product-inventory-${environment_type}:8080
+      poi: order-inventory-${environment_type}:8080
+      mock: mock-server-${environment_type}:8080
+      userRoleRetrieval: auth-userrole-${environment_type}:8080
+
+## microservices
+
+orchestration-delivery:
+  <<: *common-values
+  imagePullSecrets:
+    - name: gitlab-orchestration-delivery-tech-pull-token-${environment_type}
+    - name: default-dockercfg-b7fws
+    - name: discoregistry-imagepuller
+  ingress:
+    hosts:
+      - host: "orchestration-delivery-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  od:
+    service:
+      fallout: orchestration-delivery-fallout-${environment_type}:8080
+  mongo:
+    enabled: true
+    global:
+      imageRegistry: dockerproxy.repos.tech.orange
+      storageClass: ${PVC_STORAGE_CLASS_NAME}
+    extraEnvVarsSecret: orchestration-delivery-mongo-secret-${environment_type}
+    fullnameOverride: orchestration-delivery-mongo-${environment_type}
+    auth:
+      enabled: false
+      rootPassword: ${ORCHESTRATION_DELIVERY_MONGO_PASSWORD}
+      rootUser: mongo_user
+    service:
+      nameOverride: orchestration-delivery-mongo-${environment_type}
+  plan:
+    deletePlanThresholdDuration: P0DT0H10M
+  node:
+    aggregateSpecIdAverageLeadTimeSchedulerDuration: PT1H
+    aggregateSpecIdAverageLeadTimeWindow: P2D
+
+orchestration-delivery-fallout:
+  <<: *common-values
+  imagePullSecrets:
+    # example, using a secret created by the chart for a release with fullnameOverride: "orchestration-delivery-sandbox"
+    - name: gitlab-orchestration-delivery-fallout-tech-pull-token
+    - name: default-dockercfg-b7fws
+  ingress:
+    hosts:
+      - host: "orchestration-delivery-fallout-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  som_mock_job_cron_expression: 0/30 * * * * *
+  od:
+    service:
+      mxHeap: "805306368"
+  mongo:
+    enabled: true
+    global:
+      imageRegistry: dockerproxy.repos.tech.orange
+      storageClass: ${PVC_STORAGE_CLASS_NAME}
+    extraEnvVarsSecret: orchestration-delivery-fallout-mongo-secret-${environment_type}
+    fullnameOverride: delivery-fallout-mongo-${environment_type}
+    auth:
+      enabled: false
+      rootPassword: ${ORCHESTRATION_DELIVERY_FALLOUT_MONGO_PASSWORD}
+      rootUser: mongo_user
+    service:
+      nameOverride: orchestration-delivery-fallout-mongo-${environment_type}
+
+orchestration-delivery-management:
+  <<: *common-values
+  imagePullSecrets:
+    - name: gitlab-delivery-management-tech-pull-token-${environment_type}
+    - name: default-dockercfg-b7fws
+  ingress:
+    hosts:
+      - host: "orchestration-delivery-management-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  od:
+    spring_json_secret_name: orchestration-delivery-${environment_type}-spring
+    service:
+      spring_json_secret_name: orchestration-delivery-${environment_type}-spring

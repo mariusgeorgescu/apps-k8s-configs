@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# Override dependency (i.e. subchart) values
+#
+
+order-capture:
+  ingress:
+    hosts:
+      - host: "order-capture-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  otel:
+    attributes:
+      hostname: "https://order-capture-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+
+order-followup:
+  ingress:
+    hosts:
+      - host: "order-followup-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  otel:
+    attributes:
+      hostname: "https://order-followup-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+
+order-inventory:
+  ingress:
+    hosts:
+      - host: "order-inventory-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  otel:
+    attributes:
+      hostname: "https://order-inventory-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"

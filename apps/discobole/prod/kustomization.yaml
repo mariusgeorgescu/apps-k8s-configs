@@ -7,9 +7,6 @@ resources:
   # Base resources
   - ../base
 
-  # Sources
-  - sources/gitrepository-discobole-stack.yaml
-
   # Secrets (encrypt with SOPS before committing)
   - secrets/secret-postgres.yaml
   - secrets/secret-keycloak-admin.yaml

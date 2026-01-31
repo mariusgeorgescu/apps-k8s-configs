@@ -1,0 +1,196 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# Override dependency (i.e. subchart) values
+#
+
+
+## common values for microservices
+
+common: &common-values
+  keyStoreP12: "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"
+  jdkJavaOptions: "-Djavax.net.ssl.trustStore=/mnt/keystore/keystore-p12 -Djavax.net.ssl.trustStorePassword=changeit"
+  imagePullSecrets: 
+   - name: discoregistry-imagepuller
+  registryCredentials:
+    create: false
+    url: ${CI_REGISTRY}
+    token:
+      userName: ${GITLAB_TOKEN_USERNAME}
+      password: ${GITLAB_TOKEN_PASSWORD}
+  serviceAccount:
+    name: ${SERVICE_ACCOUNT_NAME}
+  podAnnotations:
+    prometheus.io/port: '9000'
+    prometheus.io/scrape: 'true'
+    metrics: '/actuator/prometheus'
+  service:
+    type: ClusterIP
+    port: 8080
+    annotations:
+      prometheus.io/port: '9000'
+      prometheus.io/scrape: 'true'
+  ingress:
+    enabled: false
+    labels:
+      network: gin
+    annotations:
+      route.openshift.io/termination: edge
+      route.openshift.io/insecureEdgeTerminationPolicy: Redirect
+    hosts:
+      - host: "" # TO OVERRIDE
+        paths: [/] # align with contextPath
+  otel:
+    # activate Open Telemetry instrumentation
+    enabled: false
+    sidecar:
+      # use collector agent sidecar
+      enabled: false
+      # main collector address
+      jaeger:
+        host: jaeger
+        port: 14250
+        # main receiver address
+      otlp:
+        host: ${CI_PROJECT_ROOT_NAMESPACE}-tracing-otel
+        port: 4317
+    attributes:
+      platform: "OpenShift"
+      region: ""
+      cluster: ${CI_PROJECT_ROOT_NAMESPACE}-openshift
+      namespace: "${kube_namespace}"
+      hostname: "" # TO OVERRIDE
+  # fluentd sidecar for logs forwarding
+  fluentd:
+    enabled: false
+    host: apps-fluentd
+  monitoring:
+    domain: "appli"
+    productName: "${CI_PROJECT_ROOT_NAMESPACE}"
+    topology: "none"
+    role: "none"
+    environment: "${environment_type}"
+  mongo:
+    enabled: true
+    global:
+      imageRegistry: dockerproxy.repos.tech.orange
+      storageClass: ${PVC_STORAGE_CLASS_NAME}
+  keycloak:
+    enabled: true
+    clientId: ${ORDER_KEYCLOAK_CLIENT_ID}
+    clientSecret: "${ORDER_KEYCLOAK_CLIENT_SECRET}"
+    url: https://keycloak-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+
+## microservices values
+
+order-capture:
+  <<: *common-values
+  imagePullSecrets: [{ name: default-dockercfg-b7fws }, { name: gitlab.order-capture-tech-pull-token }]
+  ingress:
+    hosts:
+      - host: "order-capture-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  mongo:
+    extraEnvVarsSecret: order-capture-mongo-secret-${environment_type}
+    fullnameOverride: order-capture-mongo-${environment_type}
+    service:
+      nameOverride: order-capture-mongo-${environment_type}
+  oc:
+    service:
+      kafka: kafka-${environment_type}
+      productCatalog: catalog-product-catalog-${environment_type}:8080 # to override
+      productInventory: product-inventory-${environment_type}:8080 # to override
+      productConfigurator: product-configurator-${environment_type}:8080 # to override
+      orderInventory: order-inventory-${environment_type}:8080 # to override
+      mockServer: mock-server-${environment_type}:8080 # to override
+      authUserRole: auth-userrole-${environment_type}:8080 # to override
+      poi: order-inventory-${environment_type}:8080 # to override
+  otel:
+    attributes:
+      hostname: "https://order-capture-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  fluentd:
+    tag: "order-capture"
+  monitoring:
+    application: "order-capture"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 500Mi
+    limits:
+      cpu: 600m
+      memory: 1Gi
+
+order-followup:
+  <<: *common-values
+  imagePullSecrets:
+    - name: default-dockercfg-b7fws
+    - name: gitlab-order-follow-up-tech-pull-token
+    - name: default-dockercfg-8bcj2
+  ingress:
+    hosts:
+      - host: "order-followup-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  mongo:
+    extraEnvVarsSecret: order-follow-up-mongo-secret-${environment_type}
+    fullnameOverride: order-follow-up-mongo-${environment_type}e
+    service:
+      nameOverride: order-follow-up-mongo-${environment_type} # to override
+  of:
+    service:
+      kafka: kafka-${environment_type} # to override
+      productInventory: product-inventory-${environment_type} # to override
+  otel:
+    attributes:
+      hostname: "https://order-followup-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  fluentd:
+    tag: "order-followup"
+  monitoring:
+    application: "order-followup"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1000Mi
+
+order-inventory:
+  <<: *common-values
+  imagePullSecrets:
+    - name: default-dockercfg-b7fws
+    - name: gitlab.order-inventory-tech-pull-token
+    - name: discoregistry-imagepuller
+  ingress:
+    hosts:
+      - host: "order-inventory-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  mongo:
+    extraEnvVarsSecret: order-inventory-mongo-secret-${environment_type} # to override
+    fullnameOverride: order-inventory-mongo-${environment_type} # to override
+    service:
+      nameOverride: order-inventory-mongo-${environment_type} # to override
+  orderInventory:
+    service:
+      kafka: kafka-${environment_type} # to override
+      authUserRole: auth-userrole-${environment_type}:8080 # to override
+  otel:
+    attributes:
+      hostname: "https://order-inventory-${environment_type}-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  fluentd:
+    tag: "order-inventory"
+  monitoring:
+    application: "order-inventory"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi

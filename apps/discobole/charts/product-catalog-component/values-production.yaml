@@ -1,0 +1,351 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# Override dependency (i.e. subchart) values
+#
+
+## singular service
+
+catalog-event-service:
+  ingress:
+    hosts:
+      - host: catalog-event-service-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-event-service-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    kafka: kafka:9092
+    userroleretrieve: auth-userrole:8080
+    keycloak: keycloak.disco:80
+    keycloakrealm: SpringBootKeycloak
+    keycloakroute: keycloak
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
+
+## microservices
+
+catalog-policy-rule:
+  <<: *common-values
+  ingress:
+    hosts:
+      - host: catalog-policy-rule-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-policy-rule-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    mongodb: catalog-mongo-production
+    dbname: catalog
+    kafka: kafka:9092
+    keycloak: keycloak:80
+    keycloakrealm: SpringBootKeycloak
+    catalogui: catalog-ui:80
+    productcatalog: catalog-product-catalog:8080
+    specification: catalog-product-specification:8080
+    offering: catalog-product-offering:8080
+    offeringprice: catalog-product-offering-price:8080
+    category: catalog-product-category:8080
+    lifecycle: catalog-product-lifecycle-management:8080
+    userroleretrieve: auth-userrole:8080
+    mockservice: mock-service:80
+    gateway: disco-gateway:8080
+    keycloakroute: keycloak
+    policyrule: catalog-policy-rule:8080
+    catprodcaturl: https://catalog-product-catalog-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
+
+catalog-product-catalog:
+  <<: *common-values
+  ingress:
+    hosts:
+      - host: catalog-policy-catalog-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-policy-catalog-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    mongodb: catalog-mongo-production
+    dbname: catalog
+  #  dbport: "27017"
+    kafka: kafka:9092
+    keycloak: keycloak:80
+    keycloakrealm: SpringBootKeycloak
+    catalogui: catalog-ui:80
+    productcatalog: catalog-product-catalog:8080
+    specification: catalog-product-specification:8080
+    offering: catalog-product-offering:8080
+    offeringprice: catalog-product-offering-price:8080
+    category: catalog-product-category:8080
+    lifecycle: catalog-product-lifecycle-management:8080
+    userroleretrieve: auth-userrole:8080
+    mockservice: mock-service:80
+    gateway: disco-gateway:8080
+    keycloakroute: keycloak
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 800m
+      memory: 2048Mi
+
+catalog-product-catalog-administration:
+  <<: *common-values
+  ingress:
+    hosts:
+      - host: catalog-catalog-administration-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-product-catalog-administration-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    mongodb: catalog-mongo-production
+    dbname: catalog
+  #  dbport: "27017"
+    kafka: kafka:9092
+    keycloak: keycloak:80
+    keycloakrealm: SpringBootKeycloak
+    catalogui: catalog-ui:80
+    productcatalog: catalog-product-catalog:8080
+    specification: catalog-product-specification:8080
+    offering: catalog-product-offering:8080
+    offeringprice: catalog-product-offering-price:8080
+    category: catalog-product-category:8080
+    lifecycle: catalog-product-lifecycle-management:8080
+    userroleretrieve: auth-userrole:8080
+    mockservice: mock-server:80
+    gateway: disco-gateway:8080
+    keycloakroute: keycloak
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
+
+catalog-product-category:
+  <<: *common-values
+  ingress:
+    hosts:
+      - host: catalog-policy-category-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-policy-category-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    mongodb: catalog-mongo-production
+    dbname: catalog
+    # dbport: "27017"
+    kafka: kafka:9092
+    keycloak: keycloak:80
+    keycloakrealm: SpringBootKeycloak
+    catalogui: catalog-ui:80
+    productcatalog: catalog-product-catalog:8080
+    specification: catalog-product-specification:8080
+    offering: catalog-product-offering:8080
+    offeringprice: catalog-product-offering-price:8080
+    category: catalog-product-category:8080
+    lifecycle: catalog-product-lifecycle-management:8080
+    userroleretrieve: auth-userrole:8080
+    mockservice: mock-service:80
+    gateway: disco-gateway:8080
+    keycloakroute: keycloak
+    catprodcaturl: https://catalog-product-catalog-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
+
+catalog-product-lifecycle-management:
+  <<: *common-values
+  ingress:
+    hosts:
+      - host: catalog-policy-lifecycle-management-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-product-lifecycle-management-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    mongodb: catalog-mongo-production
+    dbname: catalog
+  #  dbport: "27017"
+    kafka: kafka:9092
+    keycloak: keycloak:80
+    keycloakrealm: SpringBootKeycloak
+    catalogui: catalog-ui:80
+    productcatalog: catalog-product-catalog:8080
+    specification: catalog-product-specification:8080
+    offering: catalog-product-offering:8080
+    offeringprice: catalog-product-offering-price:8080
+    category: catalog-product-category:8080
+    lifecycle: catalog-product-lifecycle-management:8080
+    userroleretrieve: auth-userrole:8080
+    mockservice: mock-service:80
+    gateway: disco-gateway:8080
+    administration: catalog-product-catalog-administration:8080
+    cpib: product-inventory:8080:8080
+    keycloakroute: keycloak
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 1024Mi
+
+catalog-product-offering:
+  <<: *common-values
+  ingress:
+    hosts:
+      - host: catalog-policy-offering-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-product-offering-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    mongodb: catalog-mongo-production
+    dbname: catalog
+  #  dbport: "27017"
+    kafka: kafka:9092
+    keycloak: keycloak:80
+    keycloakrealm: SpringBootKeycloak
+    catalogui: catalog-ui:80
+    productcatalog: catalog-product-catalog:8080
+    specification: catalog-product-specification:8080
+    offering: catalog-product-offering:8080
+    offeringprice: catalog-product-offering-price:8080
+    category: catalog-product-category:8080
+    lifecycle: catalog-product-lifecycle-management:8080
+    userroleretrieve: auth-userrole:8080
+    mockservice: mock-service:80
+    gateway: disco-gateway:8080
+    keycloakroute: keycloak
+    catalogadminstration: catalog-product-catalog-administration:8080
+    cpib: product-inventory:8080
+    catprodcaturl: https://catalog-product-catalog-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 2048Mi
+
+catalog-product-offering-price:
+  <<: *common-values
+  ingress:
+    hosts:
+      - host: catalog-poduct-offering-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-product-offering-pric-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    mongodb: catalog-mongo-production
+    dbname: catalog
+  #  dbport: "27017"
+    kafka: kafka:9092
+    keycloak: keycloak:80
+    keycloakrealm: SpringBootKeycloak
+    catalogui: catalog-ui:80
+    productcatalog: catalog-product-catalog:8080
+    specification: catalog-product-specification:8080
+    offering: catalog-product-offering:8080
+    offeringprice: catalog-product-offering-price:8080
+    category: catalog-product-category:8080
+    lifecycle: catalog-product-lifecycle-management:8080
+    userroleretrieve: auth-userrole:8080
+    mockservice: mock-service:80
+    gateway: disco-gateway:8080
+    keycloakroute: keycloak
+    catprodcaturl: https://catalog-product-catalog-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+    administrationurl: catalog-product-catalog-administration:8080
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 2048Mi
+
+catalog-product-specification:
+  <<: *common-values
+  ingress:
+    hosts:
+      - host: catalog-policy-specification-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  otel:
+    attributes:
+      hostname: "https://catalog-product-specification-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  services:
+    mongodb: catalog-mongo-production
+    dbname: catalog
+  #  dbport: "27017"
+    kafka: kafka:9092
+    keycloak: keycloak:80
+    keycloakrealm: SpringBootKeycloak
+    catalogui: catalog-ui:80
+    productcatalog: catalog-product-catalog:8080
+    specification: catalog-product-specification:8080
+    offering: catalog-product-offering:8080
+    offeringprice: catalog-product-offering-price:8080
+    category: catalog-product-category:8080
+    lifecycle: catalog-product-lifecycle-management:8080
+    userroleretrieve: auth-userrole:8080
+    mockservice: mock-server:80
+    gateway: disco-gateway:8080
+    keycloakroute: keycloak
+    catalogadminstration: catalog-product-catalog-administration:8080
+    cpib: cpib:8080
+    catprodcaturl: https://catalog-product-catalog-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  keycloak:
+    enabled: true
+    issuerURI: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}/realms/SpringBootKeycloak
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 2048Mi

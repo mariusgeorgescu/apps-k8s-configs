@@ -1,0 +1,174 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# Default values for lifecycle-management.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+DISCO_DEV_CATALOG_MONGO_PASSWORD: ""
+
+replicaCount: 1
+
+keyStoreP12: ""
+
+dailyshutdown: enabled
+
+image:
+  repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/catalog-policy-rule"
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.7.0"
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# enable monitoring and supervision of pods
+podAnnotations:
+  prometheus.io/port: '9000'
+  prometheus.io/scrape: 'true'
+  metrics: '/actuator/prometheus'
+
+podSecurityContext: {}
+  # fsGroup: 1000
+  # runAsNonRoot: true
+
+securityContext: {}
+  # allowPrivilegeEscalation: false
+  # readOnlyRootFilesystem: true
+  # runAsGroup: 1000
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  # enable monitoring and supervision of service
+  annotations:
+    prometheus.io/port: '9000'
+    prometheus.io/scrape: 'true'
+
+keycloak:
+  enabled: false
+  clientSecret: ""
+  issuerURI: ""
+
+# config for ingress on DIOD OpenShift
+ingress:
+  enabled: true
+  annotations:
+    route.openshift.io/termination: edge
+    route.openshift.io/insecureEdgeTerminationPolicy: Redirect
+  hosts:
+    - host: ""
+      paths: [/] # align with contextPath
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: ""
+  maxReplicas: ""
+  targetCPUUtilizationPercentage: ""
+  targetMemoryUtilizationPercentage: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+services:
+  mongodb: ""
+  dbname: ""
+  kafka: ""
+  keycloak: ""
+  keycloakrealm: ""
+  catalogui: ""
+  productcatalog: ""
+  specification: ""
+  offering: ""
+  offeringprice: ""
+  category: ""
+  lifecycle: ""
+  userroleretrieve: ""
+  mockservice: ""
+  gateway: ""
+  keycloakroute: ""
+  policyrule: ""
+  catprodcaturl: ""
+  
+database:
+  enabled: false
+  rootPassword: ""
+  rootUser: ""
+
+otel:
+  # activate Open Telemetry instrumentation
+  enabled: false
+  sidecar:
+    # use collector agent sidecar
+    enabled: false
+    # main collector address
+    jaeger:
+      host: jaeger
+      port: 14250
+      # main receiver address
+    otlp:
+      host: ""
+      port: 4317
+  attributes:
+    platform: "openshift"
+    region: ""
+    cluster: ""
+    namespace: ""
+    hostname: ""
+
+# fluentd sidecar for logs forwarding
+fluentd:
+  enabled: false
+  host: ""
+  tag: ""
+
+promtail:
+  enabled: false
+
+# monitoring values
+monitoring:
+  application: ""
+  domain: "appli"
+  productName: ""
+  topology: "none"
+  role: "none"
+  environment: ""
+
+contextPath: ""

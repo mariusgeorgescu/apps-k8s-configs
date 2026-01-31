@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: 1.7.0
+description: A Helm chart for [disco-catalog]/[catalog policy rule] service
+keywords:
+- orange
+- discobole
+- catalog-policy-rule
+- policy-rule
+name: catalog-policy-rule
+sources:
+- https://gitlab.ow2.org/discobole/disco-oda-components/disco-catalog/catalog-policy-rule
+type: application
+version: 1.7.0

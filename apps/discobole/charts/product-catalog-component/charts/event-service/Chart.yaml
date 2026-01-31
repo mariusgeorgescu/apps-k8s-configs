@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: 1.1.2
+description: A Helm chart for event service
+keywords:
+- orange
+- discobole
+- event-service
+maintainers:
+- email: rakesh4.kumar@orange.com
+  name: Orange, Inc.
+name: event-service
+sources:
+- https://gitlab.ow2.org/discobole/disco-oda-components/disco-catalog/event-service.git
+type: application
+version: 1.1.2

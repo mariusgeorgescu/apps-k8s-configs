@@ -1,0 +1,460 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# Default values for the component.
+#
+
+replicaCount: 1
+
+image: {}
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress: {}
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+readinessProbe: {}
+
+autoscaling: {}
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+
+#
+# Override dependency (i.e. subchart) values
+#
+
+## common values of microservices
+
+common: &common-values
+  # -- application replica count
+  replicaCount: 1
+  # -- base64 encoded p12 keystore file content
+  keyStoreP12: ""
+  # -- extra java options to pass to the jvm
+  jdkJavaOptions: "" 
+  # -- image pull secrets if you use a private registry
+  imagePullSecrets: []
+  # set create to true if you want this chart to create a secret for you. Default is false
+  registryCredentials:
+    # --specifies whether a registry credentials secret should be created
+    create: false
+    # -- example for GitLab internal registry
+    url: ""
+    token:
+      userName: ""
+      password: ""
+  serviceAccount:
+    # -- specifies whether a service account should be created
+    create: false
+    # -- annotations to add to the service account
+    annotations: {}
+    # -- the name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: "${SERVICE_ACCOUNT_NAME}"
+  # use to configure Open Telemetry
+  otel:
+    # -- activate Open Telemetry instrumentation
+    enabled: false
+    sidecar:
+      # -- set to true to enable collector agent sidecar
+      enabled: false
+      # -- otlp protocol to use in sidecar exporter (only otlp is available in default config)
+      exporter: ""
+      # otlp main collector endpoint
+      collector:
+        # -- otlp main collector host (defaults to "otel-collector")
+        host: ""
+        # -- otlp main collector port (defaults to otlp 4317 port on main otel collector)
+        port: 14250
+  # used to specify labels on pods and services (useful for monitoring)
+  monitoring:
+    # -- label for exporter autodetection
+    domain: ""
+    # -- label to specify product name 
+    productName: "discobole"
+    # -- label to specify application name
+    application: "" # TO OVERRIDE to git projet name
+    # -- label to specify topology
+    topology: ""
+    # -- label to specify role
+    role: ""
+    # -- label for environment being deployed
+    environment: ""
+  # use to activate logs sending to fluentd
+  fluentd:
+    # -- set to true to enable fluentd logging
+    enabled: false
+    # -- tag value being set on log events and used by fluentd to route logs
+    tag: "" # TO OVERRIDE to git project name
+    # -- hostname of the fluentd instance this application should send logs to. Defaults to localhost
+    host: ""
+    # -- port of the fluentd instance this application should send logs to. Defaults to localhost
+    port: ""
+    # use to enable fluentd sidecar container running logging agent
+    sidecar:
+      # -- set to true to enable the fluentd sidecar container
+      enabled: false
+      # -- loki output configuration for the fluentd sidecar
+      loki:
+        # URL of the Loki instance that the sidecar will output logs to
+        url: ""
+        # extra labels that the fluentd sidecar will set on log events for loki
+        extra_labels: "\"env\":\"sandbox\", \"app\": \"disco\""
+  # remove curly braces and specify if necessary
+  podAnnotations: {}
+    # -- enable monitoring and supervision of pods
+    # prometheus.io/port: '8080'
+    # prometheus.io/scrape: 'true'
+    # metrics: '/actuator/prometheus' # align with contextPath, if specified
+  # remove curly braces and specify if necessary
+  podSecurityContext: {}
+    #runAsUser: 1003170001
+    #runAsGroup: 1003170001
+    # runAsUser: 1000
+    # fsGroup: 2000
+  # remove curly braces and specify if necessary
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  # set to true if you want to have CertManager issue a Certificate for your service
+  # further config is needed
+  certManager:
+    # specifies whether a cert-manager certificate should be created
+    create: false
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- service port
+    port: 8080
+    # -- enable monitoring and supervision of service
+    annotations: {}
+    #   prometheus.io/port: '8080'
+    #   prometheus.io/scrape: 'true'  
+  # set to true if using ingress to expose your service
+  ingress:
+    # specifies whether an ingress should be created
+    enabled: false
+    # -- ingress class name
+    className: ""
+    # -- ingress class annotations
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"    
+    hosts:
+      # -- ingress hostnames
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific   
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+  # Horizontal Pod Autoscaler configuration
+  autoscaling:
+    # -- Enable Horizontal Pod Autoscaler
+    enabled: false
+    # -- Minimum number of pod replicas
+    minReplicas: ""
+    # -- Maximum number of pod replicas
+    maxReplicas: ""
+    # -- Target CPU utilization percentages for pod scaling
+    targetCPUUtilizationPercentage: ""
+    # -- Target Memory utilization percentages for pod scaling
+    targetMemoryUtilizationPercentage: ""
+  # -- node selectorfor pod assignment
+  nodeSelector: {}
+  # -- node tolerations for pod assignment
+  tolerations: []
+  # -- node affinity for pod assignment
+  affinity: {}
+  # Resource requests and limits for pods
+  resources:
+    # It is usually recommended not to specify default resources and to leave this as a conscious
+    # choice for the user. We chose to set these default values
+    # -- resource requests
+    requests:
+      cpu: "" # to override
+      memory: "" # to override
+    # -- resource limits
+    limits: 
+      cpu: "" # to override
+      memory: "" # to override  
+  # Mongo database configuration
+  mongo:
+    # -- enable or disable mongoDB deployment
+    enabled: true
+    # -- labels to add to mongoDB pods and services
+    commonLabels:
+      domain: dbms
+      productname: mongodb    
+    image:
+      # -- mongoDB image repository
+      repository: bitnamilegacy/mongodb
+    metrics:
+      image:
+        # -- mongoDB exporter image repository
+        repository: bitnamilegacy/mongodb-exporter
+      enabled: true
+    arbiter:
+      # -- enable mongoDB arbiter for replica sets
+      enabled: false
+    global:
+      # -- image registry to pull mongoDB images from
+      imageRegistry: registry.hub.docker.com
+      # -- storage class to use for mongoDB persistent volume claims
+      storageClass: block-default-storage-class
+    resources:
+      # -- resource requests and limits for mongoDB pods
+      limits:
+        memory: 1500Mi
+    # -- enable monitoring and supervision of mongoDB pods
+    podAnnotations:
+      prometheus.io/port: '9216'
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: "/metrics"
+    # -- mongoDB deployment architecture
+    architecture: standalone
+    # -- use statefulset for mongoDB deployment
+    useStatefulSet: true
+    # -- create a separate directory for each database
+    directoryPerDB: true
+    # -- extra environment variables to set on mongoDB pods from a secret
+    extraEnvVarsSecret: "" # to override
+    # -- scripts to run on mongoDB initialization
+    fullnameOverride: "" # to override
+    auth:
+      # -- enable mongoDB authentication
+      enabled: false
+      # -- mongoDB root user password
+      rootPassword: "" # to define
+      # -- mongoDB root user name
+      rootUser: mongo_user
+    # -- service configuration for mongoDB
+    service:
+      nameOverride: "" # to override
+      ports:
+        mongodb: 27017
+    # -- database initialization scripts
+    initdbScripts: {}        
+  # Keycloak dependent service configuration
+  keycloak:
+    # -- enable or disable Keycloak integration
+    enabled: false
+    # -- Keycloak client ID
+    clientId: "${ORDER_KEYCLOAK_CLIENT_ID}" # to override    
+    # -- Keycloak client secret
+    clientSecret: "${ORDER_KEYCLOAK_CLIENT_SECRET}" # to override
+    # -- Keycloak service URL
+    url: https://keycloak # to override
+  # use if you want to change the api version in URL path. Defaults to the API version implemented by this version of the component
+  api:
+    contextPath: "/api/v2/"
+  # use if you want to expose your service with a context path. Default is blank.
+  contextPath: ""
+
+## microservices values
+
+order-capture:
+  <<: *common-values
+  mongo:
+    # -- enable or disable mongoDB deployment
+    enabled: true
+    # -- extra environment variables to set on mongoDB pods from a secret
+    extraEnvVarsSecret: order-capture-mongo-secret # to override
+    # -- mongoDB fullname override
+    fullnameOverride: order-capture-mongo # to override
+    ## -- database initialization scripts
+    initdbScripts:
+      init.js: |
+          // app user
+          db.getSiblingDB("order_capture")
+          use order_capture;
+          db.createCollection("dummy_table")
+          db.dummy_table.insertOne({"desc" : "create dummy row to create database"})
+          var username='mongo_user';
+          var password=process.env["MONGO_DB_PWD"];
+          var user=db.getUser(username);
+          if (user == null) {
+            print('create user: ' + username);
+            db.createUser({user: 'mongo_user',pwd: password,roles: [ { role: 'readWrite', db: 'order_capture' } ]});
+          } else {
+            print('update user: ' + username);
+            db.updateUser(username, {pwd: password});
+          }
+          print('---- done for ' + username);
+          quit(0);
+    auth:
+      # -- enable mongoDB authentication
+      enabled: false
+      # -- mongoDB root user password
+      rootPassword: "${ORDER_CAPTURE_MONGO_PASSWORD}" # to define
+      # -- mongoDB root user name
+      rootUser: mongo_user
+    # -- service configuration for mongoDB
+    service:
+      nameOverride: order-capture-mongo # to override
+  oc:
+    service:
+      # -- dependent service
+      kafka: kafka # to override
+      # -- dependent service
+      productCatalog: catalog-product-catalog:8080 # to override
+      # -- dependent service
+      productInventory: product-inventory:8080 # to override
+      # -- dependent service
+      productConfigurator: product-configurator:8080 # to override
+      # -- dependent service
+      orderInventory: order-inventory:8080 # to override
+      # -- dependent service
+      mockServer: mock-server:8080 # to override
+      # -- dependent service
+      authUserRole: auth-userrole:8080 # to override
+      # -- dependent service
+      poi: order-inventory:8080 # to override
+  fluentd:
+    tag: "order-capture"
+  monitoring:
+    application: "order-capture"
+
+order-followup:
+  <<: *common-values
+  mongo:
+    # -- enable or disable mongoDB deployment
+    enabled: true
+    # -- extra environment variables to set on mongoDB pods from a secret
+    extraEnvVarsSecret: order-followup-mongo-secret # to override
+    # -- mongoDB fullname override
+    fullnameOverride: order-followup-mongo # to override
+    # -- database initialization scripts
+    initdbScripts:
+      init.js: |
+          // app user
+          db.getSiblingDB("order_follow_up")
+          use order_follow_up;
+          db.createCollection("dummy_table")
+          db.dummy_table.insertOne({"desc" : "create dummy row to create database"})
+          var username='mongo_user';
+          var password=process.env["MONGO_DB_PWD"];
+          var user=db.getUser(username);
+          if (user == null) {
+            print('create user: ' + username);
+            db.createUser({user: 'mongo_user',pwd: password,roles: [ { role: 'readWrite', db: 'order_follow_up' } ]});
+          } else {
+            print('update user: ' + username);
+            db.updateUser(username, {pwd: password});
+          }
+          print('---- done for ' + username);
+          quit(0);
+    auth:
+      # -- enable mongoDB authentication
+      enabled: false
+      # -- mongoDB root user password
+      rootPassword: "${ORDER_FOLLOW_UP_MONGO_PASSWORD}" # to define
+      # -- mongoDB root user name
+      rootUser: mongo_user
+    service:
+      nameOverride: order-followup-mongo # to override
+  of:
+    service:
+      # -- dependent service
+      kafka: kafka # to override
+      # -- dependent service
+      productInventory: product-inventory # to override
+      mxHeap: "805306368" # 768 Mi in bytes. NOTE: keep it as string to prevent converting it to scientific notation  
+  fluentd:
+    tag: "order-followup"
+  monitoring:
+    application: "order-followup"
+
+order-inventory:
+  <<: *common-values
+  mongo:
+    # -- enable or disable mongoDB deployment
+    enabled: true
+    # -- extra environment variables to set on mongoDB pods from a secret
+    extraEnvVarsSecret: order-inventory-mongo-secret # to override
+    # -- mongoDB fullname override
+    fullnameOverride: order-inventory-mongo # to override
+    # -- database initialization scripts
+    initdbScripts:
+      init.js: |
+        // app user
+        db.getSiblingDB("order_inventory")
+        use order_inventory;
+        db.createCollection("dummy_table")
+        db.dummy_table.insertOne({"desc" : "create dummy row to create database"})
+        var username='mongo_user';
+        var password=process.env["MONGO_DB_PWD"];
+        var user=db.getUser(username);
+        if (user == null) {
+          print('create user: ' + username);
+          db.createUser({user: 'mongo_user',pwd: password,roles: [{ role: 'readWrite', db: 'order_inventory' } ]});
+        } else {
+          print('update user: ' + username);
+          db.updateUser(username, {pwd: password});
+        }
+        print('---- done for ' + username);
+        quit(0);
+    auth:
+      # -- enable mongoDB authentication
+      enabled: false
+      # -- mongoDB root user password
+      rootPassword: "${ORDER_INVENTORY_MONGO_PASSWORD}" # to define
+      # -- mongoDB root user name
+      rootUser: mongo_user
+    # -- service configuration for mongoDB
+    service:
+      nameOverride: order-inventory-mongo # to override
+  orderInventory:
+    service:
+      # -- dependent service
+      kafka: kafka # to override
+      # -- dependent service
+      authUserRole: auth-userrole:8080 # to override
+      # -- heap memory setting
+      mxHeap: "805306368" # 768 Mi in bytes. NOTE: keep it as string to prevent converting it to scientific notation
+  fluentd:
+    tag: "order-inventory"
+  monitoring:
+    application: "order-inventory"

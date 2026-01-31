@@ -1,0 +1,16 @@
+apiVersion: v2
+appVersion: 1.0.0
+description: A Helm chart for Kubernetes
+icon: https://gitlab.ow2.org/uploads/-/system/project/avatar/3007/avatar.png?width=48
+keywords:
+- orange
+- discobole
+- product-catalog-ui
+maintainers:
+- email: dhruv.verma@orange.com
+  name: Dhruv Verma
+name: product-catalog-ui
+sources:
+- https://gitlab.ow2.org/discobole/disco-oda-components/disco-ui-portals/product-catalog-ui
+type: application
+version: 1.1.0

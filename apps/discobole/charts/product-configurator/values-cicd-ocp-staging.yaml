@@ -1,0 +1,260 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# Default values for lifecycle-management.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+DISCO_DEV_CATALOG_MONGO_PASSWORD: ${DISCO_DEV_CATALOG_MONGO_PASSWORD}
+replicaCount: 1
+
+dailyshutdown: enabled
+keyStoreP12: "${KEYSTORE_P12}"
+
+image:
+  repository: ${CI_REGISTRY}/${CI_PROJECT_PATH}/snapshot
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ${CI_COMMIT_REF_SLUG}
+
+imagePullSecrets: [{ name: discoregistry-imagepuller },{ name: default-dockercfg-b7fws }]
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "ci-cd"
+
+# enable monitoring and supervision of pods
+podAnnotations:
+  prometheus.io/port: '9000'
+  prometheus.io/scrape: 'true'
+  metrics: '/actuator/prometheus'
+
+
+podSecurityContext: {}
+  # fsGroup: 1000
+  # runAsNonRoot: true
+
+securityContext: {}
+  # allowPrivilegeEscalation: false
+  # readOnlyRootFilesystem: true
+  # runAsGroup: 1000
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  # enable monitoring and supervision of service
+  annotations:
+    prometheus.io/port: '9000'
+    prometheus.io/scrape: 'true'
+
+
+services:
+  mongodb: catalog-mongo.disco-staging.svc.cluster.local
+  dbname: catalog
+#  dbport: "27017"
+  kafka: kafka-staging.disco-staging.svc.cluster.local:9092
+  keycloak: keycloak.disco-staging.svc.cluster.local:80
+  keycloakrealm: SpringBootKeycloak
+  catalogui: catalog-ui-staging:80
+  productcatalog: catalog-product-catalog-staging.disco-staging.svc.cluster.local:8080
+  specification: catalog-product-specification-staging.disco-staging.svc.cluster.local:8080
+  offering: catalog-product-offering-staging.disco-staging.svc.cluster.local:8080
+  offeringprice: catalog-product-offering-price-staging.disco-staging.svc.cluster.local:8080
+  category: catalog-product-category-staging.disco-staging.svc.cluster.local:8080
+  lifecycle: catalog-product-lifecycle-management-staging.disco-staging.svc.cluster.local:8080
+  userroleretrieve: auth-userrole-staging.disco-staging.svc.cluster.local:8080
+  mockservice: mock-service-staging.disco-staging.svc.cluster.local:80
+  gateway: disco-gateway-staging.disco-staging.svc.cluster.local:8080
+  keycloakroute: keycloak-staging
+  # poq: product-offering-qualification-staging:8080
+  # cpib: cpib-staging.disco-staging.svc.cluster.local:8080
+  cpib: product-inventory-staging.disco-staging.svc.cluster.local:8080
+  policyrule: catalog-policy-rule-staging.disco-staging.svc.cluster.local:8080
+  configurator: product-configurator-staging.disco-staging.svc.cluster.local:8080
+
+database:
+  enabled: true
+  rootPassword: ${DISCO_DEV_CATALOG_MONGO_PASSWORD}
+  rootUser: mongo_user
+
+
+# config for ingress on DIOD OpenShift
+ingress:
+  enabled: true
+  annotations:
+    route.openshift.io/termination: edge
+    route.openshift.io/insecureEdgeTerminationPolicy: Redirect
+  hosts:
+    - host: ${environment_name}-disco.apps.fr01.paas.tech.orange
+      paths: [/] # align with contextPath
+
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 2000m
+    memory: 2048Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+otel:
+  # activate Open Telemetry instrumentation
+  enabled: false
+  sidecar:
+    # use collector agent sidecar
+    enabled: false
+    # main collector address
+    jaeger:
+      host: jaeger
+      port: 14250
+      # main receiver address
+    otlp:
+      host: disco-tracing-otel
+      port: 4317
+  attributes:
+    platform: "openshift"
+    region: ""
+    cluster: "diod-openshift"
+    namespace: "disco-staging"
+    hostname: "${hostname}"
+
+
+# fluentd sidecar for logs forwarding
+fluentd:
+  enabled: false
+  host: apps-fluentd    
+  tag: "product-configurator"
+
+# fluentd:
+#   enabled: true
+#   tag: "lizard-${env}.cpib"
+#   host: "localhost"
+#   port: "24224"
+#   sidecar:
+#     enabled: true
+#     loki:
+#       url: "http://lizard-loki-${env}.lizard-${env}-monitoring.svc.cluster.local:3100"
+#       extra_labels: "\"env\":\"${env}\", \"app\": \"lizard\""
+
+# Monitoring values
+
+# monitoring:
+#   application: qualification-${env}
+#   environment: ${env}
+#   productName: Disco
+#   domain: "appli"
+#   topology: "none"
+#   role: "none"
+
+monitoring:
+  environment: ${env}
+  productName: disco
+  application: product-configurator-staging
+
+
+# use to activate Promtail sidecar for logs scraping
+promtail:
+  enabled: false
+  # Extra args for the Promtail container.
+  extraArgs: []
+  # -- Example:
+  # -- extraArgs:
+  #  - -client.external-labels=env=sandbox,app=lizard,setname=cpib
+  
+  # -- Section for crafting Promtails config file. The only directly relevant value is `config.file`
+  # which is a templated string that references the other values and snippets below this key.
+  # @default -- See `values.yaml`
+  config:
+    # -- The log level of the Promtail server
+    # Must be reference in `config.file` to configure `server.log_level`
+    # See default config in `values.yaml`
+    logLevel: ""
+    # -- The Loki address to post logs to.
+    # Must be reference in `config.file` to configure `client.url`.
+    # See default config in `values.yaml`
+    lokiAddress: ""
+    # -- A section of reusable snippets that can be reference in `config.file`.
+    # Custom snippets may be added in order to reduce redundancy.
+    # This is especially helpful when multiple `kubernetes_sd_configs` are use which usually have large parts in common.
+    # @default -- See `values.yaml`
+    snippets:
+      # -- You can put here any keys that will be directly added to the config file's 'client' block.
+      # @default -- empty
+      extraClientConfigs: ""
+      # -- You can put here any additional scrape configs you want to add to the config file.
+      # @default -- empty
+      extraScrapeConfigs: ""
+      # -- You can put here any additional relabel_configs to "kubernetes-pods" job
+      extraRelabelConfigs: []
+      scrapeConfigs: |
+        # See also https://github.com/grafana/loki/blob/master/production/ksonnet/promtail/scrape_config.libsonnet for reference
+        - job_name: app-logs
+          pipeline_stages:
+          - multiline:
+              firstline: '.*with root cause.*$'
+              max_wait_time: 1ms
+          static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: app-logs
+              __path__: /tmp/*log
+    # -- Config file contents for Promtail.
+    # Must be configured as string.
+    # It is templated so it can be assembled from reusable snippets in order to avoid redundancy.
+    # @default -- See `values.yaml`
+    file: |
+      server:
+        log_level: {{ .Values.promtail.config.logLevel }}
+        http_listen_port: 9080
+      client:
+        url: {{ tpl .Values.promtail.config.lokiAddress . }}
+        {{- tpl .Values.promtail.config.snippets.extraClientConfigs . | nindent 2 }}
+      positions:
+        filename: /tmp/positions.yaml
+      scrape_configs:
+        {{- tpl .Values.promtail.config.snippets.scrapeConfigs . | nindent 2 }}
+        {{- tpl .Values.promtail.config.snippets.extraScrapeConfigs . | nindent 2 }}
+
+# use if you want to change the api version in URL path. Defaults to the API version implemented by this version of the component
+#api:
+#  contextPath: "/api/v2/"
+  
+# use if you want to expose your service with a context path, for instance /cpop. Default is blank
+contextPath: ""

@@ -8,10 +8,10 @@ spec:
   interval: 10m
   chart:
     spec:
-      chart: ./product-inventory
+      chart: ./apps/discobole/charts/product-inventory
       sourceRef:
         kind: GitRepository
-        name: discobole-stack
+        name: flux-system
         namespace: flux-system
   install:
     createNamespace: false
@@ -20,9 +20,6 @@ spec:
   upgrade:
     remediation:
       retries: 3
-  dependsOn:
-    - name: disco-gateway
-      namespace: disco
   values:
     replicaCount: 1
 

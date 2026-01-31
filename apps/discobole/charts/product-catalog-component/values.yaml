@@ -1,0 +1,441 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# Default values for the component.
+#
+
+replicaCount: 1
+
+image: {}
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress: {}
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+readinessProbe: {}
+
+autoscaling: {}
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+
+#
+# Override dependency (i.e. subchart) values
+#
+
+## singular service
+
+catalog-event-service:
+  # -- set to false if you don't wish this chart to install this service
+  enabled: true
+  # -- application replica count
+  replicaCount: 1
+  # -- enable or disable application daily shutdown
+  dailyshutdown: enabled
+  # -- specify pulling image secrets if your image repository requires it
+  imagePullSecrets: []
+  serviceAccount:
+    # -- specifies whether a service account should be created
+    create: false
+    # -- annotations to add to the service account
+    annotations: {}
+    # -- the name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: "${SERVICE_ACCOUNT_NAME}"
+  podAnnotations: {}
+    # -- enable monitoring and supervision of pods
+    #prometheus.io/port: '9000'
+    #prometheus.io/scrape: 'true'
+    #metrics: '/actuator/prometheus'
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- service port
+    port: 8080
+    # -- enable monitoring and supervision of service
+    annotations:
+    #  prometheus.io/port: '9000'
+    #  prometheus.io/scrape: 'true'
+  ingress:
+    # -- enable ingress controller
+    enabled: false
+    # -- ingress annotations
+    annotations:
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"  
+    hosts:
+      # -- host names for the ingress controller
+      - host: "" # TO OVERRIDE
+        paths: [/] # align with contextPath
+  services:
+    # -- dependent service
+    kafka: kafka:9092 # to override
+    # -- dependent service
+    userroleretrieve: auth-userrole:8080 # to override
+    # -- dependent service
+    keycloak: keycloak:80 # to override
+    # -- keycloak realm
+    keycloakrealm: SpringBootKeycloak # to override
+    # -- dependent service
+    keycloakroute: keycloak # to override   
+  # Monitoring values
+  monitoring:
+    # -- label to specify application monitoring
+    application: "catalog-event-service"
+    domain: ""
+    # -- label to specify product name (chart name by default)
+    productName: "discobole"
+    # -- label to specify topology
+    topology: ""
+    # -- label to specify role
+    role: ""
+    # -- label for environment being deployed
+    environment: ""
+  # Resource requests and limits for pods    
+  resources:
+    # It is usually recommended not to specify default resources and to leave this as a conscious
+    # -- resource requests    
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    # -- resource limits
+    limits:
+      cpu: 200m
+      memory: 512Mi 
+
+## common values of microservices
+
+common: &common-values
+  # -- application replica count
+  replicaCount: 1
+  # -- enable or disable application daily shutdown
+  dailyshutdown: enabled
+  # -- keystore in P12 format, base64 encoded
+  keyStoreP12: "" # to override
+  # -- specify pulling image secrets if your image repository requires it
+  imagePullSecrets: []
+  serviceAccount:
+    # -- specifies whether a service account should be created
+    create: false
+    # -- annotations to add to the service account
+    annotations: {}
+    # -- the name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: "${SERVICE_ACCOUNT_NAME}"
+  podAnnotations: {}
+    # -- enable monitoring and supervision of pods
+    #prometheus.io/port: '9000'
+    #prometheus.io/scrape: 'true'
+    #metrics: '/actuator/prometheus'
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- service port 
+    port: 8080
+    # --enable monitoring and supervision of service    
+    annotations: {}
+    #  prometheus.io/port: '9000'
+    #  prometheus.io/scrape: 'true'
+  ingress: 
+    # -- enable ingress controller
+    enabled: false
+    # -- ingress annotations
+    annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"  
+    hosts:
+      ## -- host names for the ingress controller
+      - host: ""
+        paths: [/] # align with contextPath
+  otel:
+    # activate Open Telemetry instrumentation
+    enabled: false
+    sidecar:
+      # -- use collector agent sidecar
+      enabled: false
+      # -- main collector address
+      jaeger:
+        host: jaeger
+        port: 14250
+      # -- main receiver address
+      otlp:
+        host: 
+        port: 4317
+    # resource attributes to be set on telemetry data
+    attributes:
+      # -- resource attribute to be set on telemetry data
+      platform: ""
+      # -- resource attribute to be set on telemetry data
+      region: ""
+      # -- resource attribute to be set on telemetry data
+      cluster: ""
+      # -- resource attribute to be set on telemetry data
+      namespace: ""
+      # -- resource attribute to be set on telemetry data
+      hostname: ""
+  # fluentd sidecar for logs forwarding
+  fluentd:
+    # -- enable fluentd sidecar container
+    enabled: false
+    # -- tag value being set on log events and used by fluentd to route logs
+    tag: "" # TO OVERRIDE to project name
+    # -- hostname of the fluentd instance this application should send logs to. Defaults to localhost
+    host: ""
+  # Monitoring values
+  monitoring:
+    # -- label to specify application monitoring
+    application: "" # TO OVERRIDE to project name
+    domain: ""
+    # -- label to specify product name (chart name by default)
+    productName: "discobole"
+    # -- label to specify topology
+    topology: ""
+    # -- label to specify role
+    role: ""
+    # -- label for environment being deployed
+    environment: ""
+  # Resource requests and limits for pods
+  resources:
+    # It is usually recommended not to specify default resources and to leave this as a conscious
+    # choice for the user. We chose to set these default values
+    # -- resource requests
+    requests:
+      cpu: "" # to override
+      memory: "" # to override
+    # -- resource limits
+    limits: 
+      cpu: "" # to override
+      memory: "" # to override  
+  # Database configuration    
+  database:
+    # -- enable database creation
+    enabled: true
+    # -- database root password
+    rootPassword: "${CATALOG_MONGO_PASSWORD}" # to define
+    # -- database root user
+    rootUser: mongo_user
+  # Dependent services configuration
+  services:
+    # -- hostnames and ports of dependent services
+    mongodb: catalog-mongo # to override
+    # -- mongo database name
+    dbname: catalog
+    # -- dependent service
+    kafka: kafka:9092
+    # -- dependent service
+    keycloak: keycloak:80
+    # -- keycloak realm
+    keycloakrealm: SpringBootKeycloak
+    # -- dependent service
+    catalogui: catalog-ui:80
+    # -- dependent service
+    productcatalog: catalog-product-catalog:8080
+    # -- dependent service
+    specification: catalog-product-specification:8080
+    # -- dependent service
+    offering: catalog-product-offering:8080
+    # -- dependent service
+    offeringprice: catalog-product-offering-price:8080
+    # -- dependent service
+    category: catalog-product-category:8080
+    # -- dependent service
+    lifecycle: catalog-product-lifecycle-management:8080
+    # -- dependent service
+    userroleretrieve: auth-userrole:8080
+    # -- dependent service
+    mockservice: mock-service:80
+    # -- dependent service
+    gateway: disco-gateway:8080
+    # -- dependent service
+    keycloakroute: keycloak
+  # keycloak issuer
+  keycloak:
+    # -- enable keycloak authentication
+    enabled: false
+    # -- keycloak issuer URI (to override)
+    issuerURI: https://keycloak/realms/SpringBootKeycloak  # TO OVERRIDE
+  # -- context path of the application
+  contextPath: ""
+
+## microservices values
+
+catalog-policy-rule:
+  <<: *common-values
+  services:
+    # -- catalog API URL
+    catprodcaturl: https://catalog-product-catalog # to override
+  fluentd:
+    tag: "catalog-policy-rule"
+  monitoring:
+    application: "catalog-policy-rule"
+
+catalog-product-catalog-administration:
+  <<: *common-values
+  fluentd:
+    tag: "catalog-product-catalog-administration"
+  monitoring:
+    application: "catalog-product-catalog-administration"
+
+catalog-product-catalog:
+  <<: *common-values
+  mongo:
+    # -- enable or disable mongoDB deployment
+    enabled: true
+    # -- mongoDB configuration
+    architecture: standalone
+    # -- use StatefulSet for mongoDB
+    useStatefulSet: true
+    # -- use extra env vars from secret
+    extraEnvVarsSecret: product-catalog-mongo-secret
+    # -- create performance directory per database
+    directoryPerDB: true
+    # -- mongoDB fullname override
+    fullnameOverride: catalog-mongo # to override
+    image:
+      # -- mongoDB image repository
+      repository: bitnamilegacy/mongodb
+    global:
+      # -- image registry to pull mongoDB images from
+      imageRegistry: registry.hub.docker.com
+      # -- storage class to use for mongoDB persistent volume claims
+      storageClass: block-default-storage-class    
+    # -- database initialization scripts
+    initdbScripts:
+      init.js: |
+        // app user
+        db.getSiblingDB("catalog")
+        use catalog;
+        var username='mongo_user';
+        var password=process.env["MONGO_DB_PWD"];
+        var user=db.getUser(username);
+        if (user == null) {
+          print('create user: ' + username);
+          db.createUser({user: 'mongo_user',pwd: password,roles: [ { role: 'readWrite', db: 'catalog' } ]});
+        } else {
+          print('update user: ' + username);
+          db.updateUser(username, {pwd: password});
+        }
+        print('---- done for ' + username);
+        quit(0);
+    auth:
+      # -- enable or disable mongoDB authentication
+      enabled: false
+      # -- mongoDB root password
+      rootPassword: "${CATALOG_MONGO_PASSWORD}" # to define
+      # -- mongoDB root user
+      rootUser: mongo_user
+    # -- mongoDB persistence configuration
+    persistence:
+      enabled: true
+      size: 4Gi
+    # -- hidden mongoDB persistence configuration      
+    hidden:
+      persistence:
+        size: 4Gi
+    # -- mongoDB  service configuration        
+    service:
+      nameOverride: catalog-mongo # to override
+      ports:
+        mongodb: 27017
+  fluentd:
+    tag: "catalog-product-catalog"
+  monitoring:
+    application: "catalog-product-catalog"
+
+catalog-product-category:
+  <<: *common-values
+  services:
+    # -- catalog API URL
+    catprodcaturl: https://catalog-product-catalog # to override 
+  fluentd:
+    tag: "catalog-product-category"
+  monitoring:
+    application: "catalog-product-category"
+
+catalog-product-lifecycle-management:
+  <<: *common-values
+  services:
+    # -- dependent service
+    administration: catalog-product-catalog-administration:8080 # to override
+    # -- dependent service
+    cpib: product-inventory8080 # to override
+  fluentd:
+    tag: "catalog-product-lifecycle-management"
+  monitoring:
+    application: "catalog-product-lifecycle-management"
+
+catalog-product-offering:
+  <<: *common-values
+  services:
+    # -- dependent service
+    catalogadminstration: catalog-product-catalog-administration:8080 # to override
+    # -- dependent service
+    cpib: product-inventory8080
+    # -- catalog API URL
+    catprodcaturl: https://catalog-product-catalog # to override 
+  fluentd:
+    tag: "catalog-product-offering"
+  monitoring:
+    application: "catalog-product-offering"
+
+catalog-product-offering-price:
+  <<: *common-values
+  services:
+    # -- catalog API URL
+    catprodcaturl: https://catalog-product-catalog # to override 
+    # -- dependent service
+    adminstration: catalog-product-catalog-administration:8080 # to override
+  fluentd:
+  tag: "catalog-product-offering-price"
+  monitoring:
+    application: "catalog-product-offering-price"
+
+catalog-product-specification:
+  <<: *common-values
+  services:
+    # -- dependent service
+    catadminstration: catalog-product-catalog-administration:8080 # to override
+    # -- dependent service
+    cpib: product-inventory8080 # to override
+    # -- catalog API URL
+    catprodcaturl: https://catalog-product-catalog # to override 
+  fluentd:
+    tag: "catalog-product-specification"
+  monitoring:
+    application: "catalog-product-specification"

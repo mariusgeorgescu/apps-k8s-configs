@@ -1,0 +1,151 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "order_capture_mock_server.fullname" . }}
+  labels:
+    {{- include "order_capture_mock_server.labels" . | nindent 4 }}
+    {{- include "order_capture_mock_server.shutdownLabels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "order_capture_mock_server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "order_capture_mock_server.selectorLabels" . | nindent 8 }}
+        {{- include "order_capture_mock_server.monitoringLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "order_capture_mock_server.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: om-mock-server
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env: #modified
+            - name: SPRING_CLOUD_KUBERNETES_ENABLED
+              value: "true"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLED
+              value: "true"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_SOURCES_0_NAME
+              value: "{{ template "order_capture_mock_server.fullname" . }}"
+            - name: SPRING_PROFILES_ACTIVE
+              value: kubernetes{{- if .Values.fluentd.enabled }},fluentd{{- end }},logstash{{- if .Values.promtail.enabled }},promtail{{- end }}
+            - name: SERVER_SERVLET_CONTEXT_PATH
+              value: "{{ .Values.contextPath }}"
+            {{- if .Values.fluentd.enabled }}
+            - name: FLUENTD_TAG
+              value: "{{ default "disco-order_capture_mock_server" .Values.fluentd.tag }}"
+            - name: FLUENTD_CONTAINER_NAME
+              value: "disco-order_capture_mock_server"
+            - name: FLUENTD_HOST
+              value: "{{ default "localhost" .Values.fluentd.host }}"
+            - name: FLUENTD_PORT
+              value: "{{ default "24224" .Values.fluentd.port }}"
+            {{- end }}
+            {{- if .Values.otel.enabled }}
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/app/opentelemetry-javaagent.jar"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://{{ .Values.otel.sidecar.otlp.host }}:{{ .Values.otel.sidecar.otlp.port }}"
+            - name: OTEL_METRICS_EXPORTER
+              value: "none"
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+            - name: OTEL_SERVICE_NAME
+              value: "{{ template "order_capture_mock_server.fullname" . }}"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name={{ include "order_capture_mock_server.fullname" . }},app=disco,env={{ default "default" .Values.monitoring.environment }},container_name=disco-order_capture_mock_server"
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080 #modified
+              protocol: TCP
+          volumeMounts:
+            - name: {{ template "order_capture_mock_server.fullname" . }}-applog
+              mountPath: /tmp
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.contextPath }}/actuator/health/readiness
+              port: http
+            initialDelaySeconds: 65
+            failureThreshold: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.contextPath }}/actuator/health/liveness
+              port: http
+            initialDelaySeconds: 200
+            failureThreshold: 1
+            periodSeconds: 20
+          startupProbe:
+            httpGet:
+              path: {{ .Values.contextPath }}/actuator/health
+              port: http
+            failureThreshold: 45
+            periodSeconds: 2
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 10"]
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.promtail.enabled }}
+        - name: promtail
+          image: dockerproxy.repos.tech.orange/grafana/promtail:2.6.1
+          imagePullPolicy: Always
+          args:
+          - -config.file=/etc/promtail/promtail.yaml
+          - -client.external-labels=app=disco,env={{ default "default" .Values.monitoring.environment }},productname={{ default .Chart.Name .Values.monitoring.productName }},setname={{ include "order_capture_mock_server.fullname" . }}
+          {{- with .Values.promtail.extraArgs }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          volumeMounts:
+            - name: {{ template "order_capture_mock_server.fullname" . }}-promtail-config
+              mountPath: /etc/promtail
+            - name: {{ template "order_capture_mock_server.fullname" . }}-applog
+              mountPath: /tmp
+          ports:
+          - containerPort: 9080
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+        {{- end }}
+      volumes:
+      - name: {{ template "order_capture_mock_server.fullname" . }}-applog
+        emptyDir: {}
+      {{- if .Values.promtail.enabled }}
+      - name: {{ template "order_capture_mock_server.fullname" . }}-promtail-config
+        secret:
+          secretName: {{ include "order_capture_mock_server.fullname" . }}-promtail-config
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

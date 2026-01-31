@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# Default values for catalog-product-catalog-administration.
+DISCO_DEV_CATALOG_MONGO_PASSWORD: ${DISCO_DEV_CATALOG_MONGO_PASSWORD}
+replicaCount: 1
+
+dailyshutdown: enabled
+
+keyStoreP12: "${KEYSTORE_P12}"

@@ -1,0 +1,298 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# Default values for the component.
+#
+
+replicaCount: 1
+
+image: {}
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress: {}
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+readinessProbe: {}
+
+autoscaling: {}
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+
+#
+# Override dependency (i.e. subchart) values
+#
+
+## common values to microservices
+
+common: &common-values
+  # -- application replica count
+  replicaCount: 1
+  # -- daily shutdown
+  dailyshutdown: enabled
+  # -- base64 encoded p12 keystore file content
+  keyStoreP12: "" # to override
+  # -- extra java options to pass to the jvm
+  jdkJavaOptions: "" # optional java options
+  # -- image pull secrets if you use a private registry
+  imagePullSecrets: []
+  # set create to true if you want this chart to create a secret for you. Default is false
+  registryCredentials:
+    # --specifies whether a registry credentials secret should be created
+    create: false
+    #  -- example for GitLab internal registry
+    url: ""
+    token:
+      userName: ""
+      password: ""
+  service:
+    # -- service type
+    type: ClusterIP
+   # -- service port
+    port: 8080
+    # -- enable monitoring and supervision of service
+    annotations: {}
+    #   prometheus.io/port: '8080'
+    #   prometheus.io/scrape: 'true'  
+  ingress:
+    # specifies whether an ingress should be created
+    enabled: false
+    # -- ingress label annotations
+    annotations:
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"  
+    hosts:
+      # -- ingress hostnames
+      - host: "" # TO OVERRIDE
+        paths: [/] # align with contextPath
+  podAnnotations: {}
+    #prometheus.io/port: '9000'
+    #prometheus.io/scrape: 'true'
+    #metrics: '/actuator/prometheus'  
+  keycloak:
+    # -- enable or disable Keycloak integration
+    enabled: true
+    # -- Keycloak client ID
+    clientId: "${ORCHESTRATION_DELIVERY_KEYCLOAK_CLIENT_ID}" # to override
+      # -- Keycloak client secret
+    clientSecret: "${ORCHESTRATION_DELIVERY_KEYCLOAK_CLIENT_SECRET}" # to override
+    # -- Keycloak service URL (to override)
+    uri: https://keycloak
+  od:
+    service:
+      # -- dependent service
+      kafka: "kafka" # to override
+      # -- dependent service
+      productCatalog: catalog-product-catalog:8080 # to override
+      # -- dependent service
+      cpib: product-inventory:8080 # to override
+      # -- dependent service
+      poi: order-inventory:8080 # to override
+      # -- dependent service
+      mock: mock-server:8080 # to override
+      # -- dependent service
+      userRoleRetrieval: auth-userrole:8080 # to override
+  otel:
+    # -- activate Open Telemetry instrumentation
+    enabled: false
+    sidecar:
+      # -- use collector agent sidecar
+      enabled: false
+      # -- main collector address
+      jaeger:
+        host: jaeger
+        port: 14250
+      # -- main receiver address
+      otlp:
+        host: ""
+        port: 4317
+  # used to specify labels on pods and services (useful for monitoring)
+  monitoring:
+    # -- label to specify application name
+    application: "" # TO OVERRIDE to git projet name
+    # -- label to specify application name
+    app: "" # TO OVERRIDE to git projet name
+    # -- label for environment being deployed
+    environment: "" # TO OVERRIDE to environment type
+    # -- label to specify product name     
+    productName: "discobole" 
+  fluentd:
+    # -- set to true to enable fluentd logging
+    enabled: false
+    # -- hostname of the fluentd instance this application should send logs to. Defaults to localhost
+    host: ""
+    # -- port of the fluentd instance this application should send logs to. Defaults to localhost
+    port: 24224
+    # -- tag value being set on log events and used by fluentd to route logs
+    tag: "" # TO OVERRIDE to git projet name
+  contextPath: ""
+
+## microservices
+
+orchestration-delivery:
+  <<: *common-values
+  od:
+    service:
+      fallout: orchestration-delivery-fallout:8080
+  mongo:
+    enabled: true
+    image:    
+      repository: bitnamilegacy/mongodb
+    metrics:
+      image:
+        repository: bitnamilegacy/mongodb-exporter
+      enabled: true
+    arbiter:
+      enabled: false
+    global:
+      imageRegistry: registry.hub.docker.com
+      storageClass: block-default-storage-class     
+    resources:
+      limits:
+        memory: 1500Mi
+    architecture: replicaset
+    replicaCount: 1
+    useStatefulSet: true
+    directoryPerDB: true
+    extraEnvVarsSecret: orchestration-delivery-mongo-secret
+    fullnameOverride: orchestration-delivery-mongo
+    initdbScripts:
+      init.js: |    
+          // app user
+          db.getSiblingDB("orchestration_delivery")
+          use orchestration_delivery;
+          db.createCollection("dummy_table")
+          db.dummy_table.insertOne({"desc" : "creare dummy row to create database"})
+          var username='mongo_user';
+          var password=process.env["MONGO_DB_PWD"];
+          var user=db.getUser(username);
+          if (user == null) {
+            print('create user: ' + username);
+            db.createUser({user: 'mongo_user',pwd: password,roles: [ { role: 'readWrite', db: 'orchestration_delivery' }, { role: 'readWrite', db: 'catalog' } ]});
+          } else {
+            print('update user: ' + username);
+            db.updateUser(username, {pwd: password});
+          }
+          print('---- done for ' + username);
+          quit(0);
+    auth:
+      enabled: false
+      rootPassword: "$ORCHESTRATION_DELIVERY_MONGO_PASSWORD" # to define
+      rootUser: mongo_user
+    service:
+      nameOverride: orchestration-delivery-mongo
+      ports:
+        mongodb: 27017
+  monitoring:
+    application: "orchestration-delivery" 
+    app: "orchestration-delivery" 
+  fluentd:
+    tag: "orchestration-delivery"
+  plan:
+    deletePlanThresholdDuration: P0DT0H10M
+
+orchestration-delivery-fallout:
+  <<: *common-values
+  som_mock_job_cron_expression: 0/30 * * * * *
+  mongo:
+    image:
+      repository: bitnamilegacy/mongodb
+    metrics:
+      image:
+        repository: bitnamilegacy/mongodb-exporter
+      enabled: true
+    global:
+      imageRegistry: registry.hub.docker.com
+      storageClass: block-default-storage-class
+    arbiter:
+      enabled: false
+    architecture: replicaset
+    replicaCount: 1
+    resources:
+      limits:
+        memory: 1500Mi
+    useStatefulSet: true
+    directoryPerDB: true
+    extraEnvVarsSecret: "orchestration-delivery-fallout-mongo-secret"
+    enabled: true
+    fullnameOverride: "delivery-fallout-mongo"
+    initdbScripts:
+      init.js: |
+        // app user
+        db.getSiblingDB("orchestration_delivery_fallout")
+        use orchestration_delivery_fallout;
+        db.createCollection("dummy_table")
+        db.dummy_table.insertOne({"desc" : "creare dummy row to create database"})        
+        var username='mongo_user';
+        var password=process.env["MONGO_DB_PWD"];
+        var user=db.getUser(username);
+        if (user == null) {
+          print('create user: ' + username);
+          db.createUser({user: 'mongo_user',pwd: password,roles: [ { role: 'readWrite', db: 'orchestration_delivery_fallout' }, { role: 'readWrite', db: 'catalog' } ]});
+        } else {
+          print('update user: ' + username);
+          db.updateUser(username, {pwd: password});
+        }
+        print('---- done for ' + username);
+        quit(0);
+    auth:
+      enabled: false
+      rootPassword: "$ORCHESTRATION_DELIVERY_FALLOUT_MONGO_PASSWORD" # to define
+      rootUser: mongo_user
+    service:
+      nameOverride: "orchestration-delivery-fallout-mongo"
+      ports:
+        mongodb: 27017
+  monitoring:
+    application: "orchestration-delivery-fallout" 
+    app: "orchestration-delivery-fallout" 
+  fluentd:
+    tag: "orchestration-delivery-fallout"
+
+orchestration-delivery-management:
+  <<: *common-values
+  od:
+    spring_json_secret_name: orchestration-delivery-spring
+    service:
+      spring_json_secret_name: orchestration-delivery-spring
+  monitoring:
+    application: "orchestration-delivery-management" 
+    app: "orchestration-delivery-management" 
+  fluentd:
+    tag: "orchestration-delivery-management"

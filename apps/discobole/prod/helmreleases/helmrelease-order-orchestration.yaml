@@ -9,10 +9,10 @@ spec:
   timeout: 15m
   chart:
     spec:
-      chart: ./order-orchestration-component
+      chart: ./apps/discobole/charts/order-orchestration-component
       sourceRef:
         kind: GitRepository
-        name: discobole-stack
+        name: flux-system
         namespace: flux-system
   install:
     createNamespace: false
@@ -21,9 +21,6 @@ spec:
   upgrade:
     remediation:
       retries: 3
-  dependsOn:
-    - name: order-management
-      namespace: disco
   values:
     global:
       imagePullSecrets:

@@ -1,0 +1,56 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+spring:
+  config:
+    activate:
+      on-profile: openshift
+  redis:
+    host: redis-master
+    port: 6379
+    password: ${REDIS_PWD}
+  data:
+    mongodb:
+      delete: true
+      host: ${DB_SERVICE}
+      port: 27017
+      database: ${DB_NAME}
+      username: ${DATABASE_USER}
+      password: ${DATABASE_PASSWORD}
+  keycloak: http://${KEYCLOAK_SERVICE}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs
+  keycloakRolesEntitlements: x102
+  userRoleRetrievalUrl: http://${USERROLE-RETRIEVE-SERVICE-NAME}/userRolePermission/v1/userRole
+  keycloakAuthUrl: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/auth
+config:
+  productOfferingUrl: http://${CATALOG-PRODUCT-SERVICE-NAME}/productCatalogManagement/v1/productOffering
+  cpibProductUrl: http://${CPIB-SERVICE-NAME}/productInventoryManagement/v1/product
+  productOfferingQualificationUrl: http://${CATALOG-PRODUCT-OFFERING-QUALIFICATION-SERVICE-NAME}
+  productOfferingPriceUrl: http://${CATALOG-PRODUCT-SERVICE-NAME}/productCatalogManagement/v1/productOfferingPrice
+  productSpecificationUrl: http://${CATALOG-PRODUCT-SERVICE-NAME}/productCatalogManagement/v1/productSpecification
+  policyRuleUrl: http://${POLICY-SERVICE-NAME}/policyRule/v1/rule
+  policyRuleIdsUrl: http://${POLICY-SERVICE-NAME}/policyRule/v1/rule/ids
+  policyEventIdsUrl: http://${POLICY-SERVICE-NAME}/policyRule/v1/event/ids
+  policyConditionIdsUrl: http://${POLICY-SERVICE-NAME}/policyRule/v1/condition/ids
+  policyActionIdsUrl: http://${POLICY-SERVICE-NAME}/policyRule/v1/action/ids
+  policyEventUrl: http://${POLICY-SERVICE-NAME}/policyRule/v1/event
+  policyConditionUrl: http://${POLICY-SERVICE-NAME}/policyRule/v1/condition
+  policyActionUrl: http://${POLICY-SERVICE-NAME}/policyRule/v1/action
+  poqURL: http://${CONFIGURATOR-SERVICE-NAME}/productOfferingQualificationQualification/v1/productOfferingQualification
+  configuratorURL: http://${CONFIGURATOR-SERVICE-NAME}/v1/queryProductConfiguration
+  
+  # for Scheduler cron job
+scheduler:
+  cron: "0 30 8 * * *"  
+  zone: "Asia/Kolkata"
+
+server:
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+    min-response-size: 512

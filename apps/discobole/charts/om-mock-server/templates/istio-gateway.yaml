@@ -1,0 +1,87 @@
+{{- if .Values.istio.enabled -}}
+{{- $fullName := include "order_capture_mock_server.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- if .Values.istio.tls -}}
+{{- if .Values.certManager.create -}}
+{{- range .Values.istio.tls }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .secretName }}
+  namespace: istio-system
+spec:
+  secretName: {{ .secretName }}
+  commonName: {{ .commonName | quote }}
+  dnsNames:
+  {{- range .hosts }}
+  - {{ . | quote }}
+  {{- end }}
+  issuerRef:
+    name: {{- .Values.certManager.clusterIssuer -}}
+    # We can reference ClusterIssuers by changing the kind here.
+    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+{{- end }}
+{{- end }}
+{{- end }}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ $fullName }}
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port: # insecure server
+      number: 80
+      name: http
+      protocol: HTTP    
+    hosts:
+    {{- range .Values.istio.hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    {{- if .Values.istio.tls }}
+    tls:
+      httpsRedirect: true # sends 301 redirect for http requests
+    {{- end }}
+{{- if .Values.istio.tls }}
+  {{- range .Values.istio.tls }}
+  - port: # secure servers
+      number: 443
+      name: {{ .securePortName }}
+      protocol: HTTPS
+    hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    tls:
+      mode: SIMPLE # enables HTTPS on this port
+      credentialName: {{ .secretName }}
+  {{- end }}
+{{- end }}  
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ $fullName }}
+spec:
+  hosts:
+  {{- range .Values.istio.hosts }}
+  - {{ . | quote }}
+  {{- end }}
+  gateways:
+  - {{ $fullName }}
+  http:
+  - match:
+    {{- range .Values.istio.paths }}
+    - uri:
+        prefix: {{ . }}
+    {{- end }}
+    route:
+    - destination:
+        host: {{ $fullName }}
+        port:
+          number: {{ $svcPort }}
+{{- end }}

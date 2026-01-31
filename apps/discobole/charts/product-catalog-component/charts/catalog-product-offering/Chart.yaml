@@ -1,0 +1,14 @@
+apiVersion: v2
+appVersion: 1.8.0
+description: A Helm chart for [disco-catalog]/[catalog product offering price] service
+home: https://discobole.ow2.io/doc
+keywords:
+- orange
+- discobole
+- catalog-product-offering
+- product-offering
+name: catalog-product-offering
+sources:
+- https://gitlab.ow2.org/discobole/disco-catalog/catalog-product-offering-price
+type: application
+version: 1.8.0

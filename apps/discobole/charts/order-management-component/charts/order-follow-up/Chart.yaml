@@ -1,0 +1,18 @@
+apiVersion: v2
+appVersion: 1.11.1
+dependencies:
+- alias: mongo
+  condition: mongo.enabled
+  name: mongodb
+  repository: https://charts.bitnami.com/bitnami/
+  tags:
+  - spring-java-app-nosql-store
+  version: 15.3.0
+description: A Helm chart for [order management]/[order follow up] service
+keywords:
+- discobole
+- order-management
+- order-follow-up
+name: order-follow-up
+type: application
+version: 1.11.1

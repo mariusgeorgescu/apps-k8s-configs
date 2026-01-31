@@ -1,0 +1,70 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# Override dependency (i.e. subchart) values
+#
+
+orchestration-delivery:
+  ingress:
+    hosts:
+      - host: "orchestration-delivery-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  od:
+    service:
+      kafka: kafka
+      productCatalog: catalog-product-catalog:8080
+      cpib: product-inventory:8080
+      poi: order-inventory:8080
+      mock: mock-server:8080
+      userRoleRetrieval: auth-userrole:8080
+      fallout: orchestration-delivery-fallout:8080
+      mxHeap: "805306368"
+  som_mock_job_cron_expression: 0/30 * * * * *
+  keycloak:
+    uri: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+  plan:
+    deletePlanThresholdDuration: P0DT12H0M
+  event:
+    deleteEventsThresholdDuration: P30D
+
+orchestration-delivery-fallout:
+  ingress:
+    hosts:
+      - host: "orchestration-delivery-fallout-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  od:
+    service:
+      kafka: kafka
+      productCatalog: catalog-product-catalog:8080
+      cpib: product-inventory:8080
+      poi: order-inventory:8080
+      mock: mock-server:8080
+      userRoleRetrieval: auth-userrole:8080
+      mxHeap: "805306368"
+  keycloak:
+    uri: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}
+
+orchestration-delivery-management:
+  ingress:
+    hosts:
+      - host: "orchestration-delivery-management-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}"
+  od:
+    spring_json_secret_name: orchestration-delivery-spring
+    service:
+      kafka: kafka
+      productCatalog: catalog-product-catalog
+      cpib: product-inventory:8080
+      poi: order-inventory:8080
+      mock: mock-server:8080
+      userRoleRetrieval: auth-userrole:8080
+      spring_json_secret_name: orchestration-delivery-spring
+  keycloak:
+    uri: https://keycloak-${CI_PROJECT_ROOT_NAMESPACE}${DIOD_DOMAIN}

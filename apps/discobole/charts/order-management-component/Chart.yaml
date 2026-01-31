@@ -1,0 +1,35 @@
+apiVersion: v2
+appVersion: "9.0"
+dependencies:
+- alias: order-capture
+  condition: order-capture.enabled
+  name: order-capture
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-management/order-capture/charts
+  version: 1.15.0
+- alias: order-followup
+  condition: order-followup.enabled
+  name: order-follow-up
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-management/order-followup/charts
+  version: 1.11.1
+- alias: order-inventory
+  condition: order-inventory.enabled
+  name: order-inventory
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-management/order-inventory/charts
+  version: 1.13.1
+- alias: mock-server
+  condition: mock-server.enabled
+  name: mock-server
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-management/mock-server/charts
+  version: 1.13.0
+description: A Helm chart for installing Order Management Component.
+home: https://gitlab.ow2.org/discobole
+icon: https://gitlab.ow2.org/uploads/-/system/group/avatar/5972/discobole_50_black.png?width=48
+keywords:
+- orange
+- discobole
+- product catalog
+name: orchestration-delivery-component
+sources:
+- https://gitlab.ow2.org/disco/disco-guide/disco-suite/orchestration-delivery-component
+type: application
+version: 2.0.0

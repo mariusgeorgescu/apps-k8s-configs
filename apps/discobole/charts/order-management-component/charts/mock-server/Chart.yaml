@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: 1.13.0
+description: A Helm chart for [order management]/[order capture mock server] service
+home: https://discobole.ow2.io/doc
+keywords:
+- orange
+- discobolebole
+- discobolebole-order-management
+- mock-server
+maintainers:
+- email: aelhoseiny.ext@orange.com
+  name: Orange, Inc. (FAMS Team)
+name: mock-server
+sources:
+- https://gitlab.ow2.org/discobole/disco-order-management/mock-server
+type: application
+version: 1.13.0

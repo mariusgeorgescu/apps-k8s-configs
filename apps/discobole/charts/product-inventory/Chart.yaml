@@ -1,0 +1,19 @@
+apiVersion: v2
+appVersion: 1.15.0
+dependencies:
+- alias: mongo
+  condition: mongo.enabled
+  name: mongodb
+  repository: https://charts.bitnami.com/bitnami/
+  tags:
+  - spring-java-app-nosql-store
+  version: 15.3.0
+description: A Helm chart for [product-inventory]/[customer product installed base]
+  service
+keywords:
+- discobole
+- customer-product-installed-base
+- product-inventory
+name: product-inventory
+type: application
+version: 1.15.0

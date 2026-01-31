@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: 1.7.0
+description: A Helm chart for Kubernetes
+keywords:
+- orange
+- discobole
+- product-configurator
+maintainers:
+- email: dhruv.verma@orange.com
+  name: Orange, Inc.
+name: product-configurator
+sources:
+- https://gitlab.ow2.org/discobole/product-configurator/qualification/
+type: application
+version: 1.7.0

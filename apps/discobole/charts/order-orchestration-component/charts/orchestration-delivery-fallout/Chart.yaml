@@ -1,0 +1,19 @@
+apiVersion: v2
+appVersion: 2.0.0
+dependencies:
+- alias: mongo
+  condition: mongo.enabled
+  name: mongodb
+  repository: https://charts.bitnami.com/bitnami/
+  tags:
+  - spring-java-app-nosql-store
+  version: 15.3.0
+description: A Helm chart for [order orchestration]/[orchestration delivery fallout]
+  service
+keywords:
+- discobole
+- order-orchestration
+- orchestration-delivery-fallout
+name: orchestration-delivery-fallout
+type: application
+version: 2.0.0

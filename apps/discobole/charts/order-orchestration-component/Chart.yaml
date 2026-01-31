@@ -1,0 +1,30 @@
+apiVersion: v2
+appVersion: "9.0"
+dependencies:
+- alias: orchestration-delivery
+  condition: orchestration-delivery.enabled
+  name: orchestration-delivery
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-orchestration/orchestration-delivery/charts
+  version: 1.7.0
+- alias: orchestration-delivery-fallout
+  condition: orchestration-delivery-fallout.enabled
+  name: orchestration-delivery-fallout
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-orchestration/orchestration-delivery-fallout/charts
+  version: 2.0.0
+- alias: orchestration-delivery-management
+  condition: orchestration-delivery-management.enabled
+  name: orchestration-delivery-management
+  repository: oci://registry.gitlab.tech.orange/disco/disco-oda-components/disco-order-orchestration/orchestration-delivery-management/charts
+  version: 1.5.0
+description: A Helm chart for installing Product Order Delivery Orchestration Component.
+home: https://gitlab.ow2.org/discobole
+icon: https://gitlab.ow2.org/uploads/-/system/group/avatar/5972/discobole_50_black.png?width=48
+keywords:
+- orange
+- discobole
+- orchestration delivery
+name: orchestration-delivery-component
+sources:
+- https://gitlab.ow2.org/disco/disco-guide/disco-suite/orchestration-delivery-component
+type: application
+version: 2.0.0

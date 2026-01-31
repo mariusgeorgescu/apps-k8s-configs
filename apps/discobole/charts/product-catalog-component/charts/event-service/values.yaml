@@ -1,0 +1,138 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Application replica count
+replicaCount: 1
+
+# -- Enable or disable application daily shutdown
+dailyshutdown: enabled
+
+# -- Docker image parameters
+image:
+  repository: "europe-central2-docker.pkg.dev/ino-it-s-disco-dev/disco-gcp/disco/catalog-event-service"
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.1.2"
+
+# -- Specify pulling image secrets if your image repository requires it
+imagePullSecrets: []
+
+# -- Override default fully qualified app name and chart name
+nameOverride: ""
+
+# -- Override fully qualified app name
+fullnameOverride: ""
+
+
+
+# -- Service names used to connect to other services
+services:
+  kafka: kafka:9092
+  userroleretrieve: auth-userrole:8080
+  keycloak: keycloak:80
+  keycloakrealm: SpringBootKeycloak
+  keycloakroute: keycloak
+
+keycloak:
+  enabled: false
+  issuerURI: ""
+
+
+# -- Service account configuration if needed
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Enable monitoring and supervision of pods
+podAnnotations: {}
+  #prometheus.io/port: '9000'
+  #prometheus.io/scrape: 'true'
+  #metrics: '/actuator/prometheus'
+
+# -- Security contexts
+podSecurityContext: {}
+  # fsGroup: 1000
+  # runAsNonRoot: true
+
+# -- Container security context
+securityContext: {}
+  # allowPrivilegeEscalation: false
+  # readOnlyRootFilesystem: true
+  # runAsGroup: 1000
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+# -- Service configuration
+service:
+  type: ClusterIP
+  port: 8080
+  # enable monitoring and supervision of service
+  #annotations:
+  #  prometheus.io/port: '9000'
+  #  prometheus.io/scrape: 'true'
+
+# -- Ingress configuration
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"   
+  hosts:
+    - host: "" # to be define
+      paths: [/] # align with contextPath
+
+# -- Application size and resource allocation
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 512Mi
+
+# -- Horizontal Pod Autoscaler configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# -- Node selector for pod assignment
+nodeSelector: {}
+
+# -- Tolerations for node taints
+tolerations: []
+
+# Affinity settings for pod assignment
+affinity: {}
+
+# -- Monitoring values
+monitoring:
+  application: ""
+  domain: ""
+  productName: ""
+  topology: ""
+  role: ""
+  environment: ""

@@ -1,0 +1,16 @@
+apiVersion: v2
+appVersion: 1.7.0
+description: A Helm chart for gateway
+home: https://gitlab.tech.orange/disco/disco-gateway/disco-gateway
+keywords:
+- orange
+- disco
+- disco-gateway
+maintainers:
+- email: rakesh4.kumar@orange.com
+  name: Orange, Inc.
+name: disco-gateway
+sources:
+- https://gitlab.tech.orange/disco/disco-gateway/disco-gateway
+type: application
+version: 1.7.0

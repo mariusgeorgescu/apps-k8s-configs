@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+apiVersion: v2
+name: product-catalog-ui
+description: A Helm chart for Kubernetes
+
+sources:
+  - https://gitlab.tech.orange/disco/disco-oda-components/disco-catalog/disco-cat-ui-new.git
+
+
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+keywords:
+  - orange
+  - disco
+  - product-catalog-ui
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 1.0.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion: "1.0.0"
+
+
+maintainers:
+  - name: Dhruv Verma
+    email: dhruv.verma@orange.com
+
+icon: https://gitlab.tech.orange/uploads/-/system/project/avatar/447861/odacat_new.png?width=48

@@ -1,0 +1,224 @@
+# SPDX-FileCopyrightText: 2025 Orange SA
+# SPDX-License-Identifier: MIT
+#
+# This software is distributed under the MIT License,
+# the text of which is available at https://opensource.org/license/mit
+# or see the "LICENSE.txt" file for more details.
+#
+# Authors: See CONTRIBUTORS.txt
+
+# Default values for lifecycle-management.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+envType: ${ENV_TYPE}
+DISCO_DEV_CATALOG_MONGO_PASSWORD: ${DISCO_DEV_CATALOG_MONGO_PASSWORD}
+replicaCount: 1
+
+
+dailyshutdown: enabled
+
+image:
+  repository: ${CI_REGISTRY}/${CI_PROJECT_PATH}/snapshot
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ${CI_COMMIT_REF_SLUG}
+
+imagePullSecrets: [{ name: discoregistry-imagepuller },{ name: default-dockercfg-b7fws }]
+nameOverride: ""
+fullnameOverride: ""
+
+keyStoreP12: "${KEYSTORE_P12}"
+
+
+services:
+  mongodb: auth-userrole-mongo-staging
+  dbname: userRoleManagement
+#  dbport: "27017"
+  kafka: kafka-staging:9092
+  keycloak: keycloak:80
+  keycloakrealm: SpringBootKeycloak
+  catalogui: catalog-ui-staging:80
+  productcatalog: catalog-product-catalog-staging:8080
+  specification: catalog-product-specification-staging:8080
+  offering: catalog-product-offering-staging:8080
+  offeringprice: catalog-product-offering-price-staging:8080
+  category: catalog-product-category-staging:8080
+  lifecycle: catalog-product-lifecycle-management-staging:8080
+  userroleretrieve: auth-userrole-retrieve-staging:8080
+  mockservice: mock-server-staging:80
+  gateway: disco-gateway-staging:8080
+  keycloakroute: keycloak-staging
+  keycloakserviceroute: https://keycloak-staging-disco.apps.fr01.paas.tech.orange
+  authuserroleroute: https://auth-userrole-staging-disco.apps.fr01.paas.tech.orange
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "ci-cd"
+
+# enable monitoring and supervision of pods
+podAnnotations:
+  prometheus.io/port: '9000'
+  prometheus.io/scrape: 'true'
+  metrics: '/actuator/prometheus'
+
+
+podSecurityContext: {}
+  # fsGroup: 1000
+  # runAsNonRoot: true
+
+securityContext: {}
+  # allowPrivilegeEscalation: false
+  # readOnlyRootFilesystem: true
+  # runAsGroup: 1000
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  # enable monitoring and supervision of service
+  annotations:
+    prometheus.io/port: '9000'
+    prometheus.io/scrape: 'true'
+
+database:
+  enabled: true
+  rootPassword: ${DISCO_DEV_CATALOG_MONGO_PASSWORD}
+  rootUser: mongo_user
+
+gateway:
+  id: ${KEYCLOAKCLIENTID}
+
+# config for ingress on DIOD OpenShift
+ingress:
+  enabled: true
+  annotations:
+    route.openshift.io/termination: edge
+    route.openshift.io/insecureEdgeTerminationPolicy: Redirect
+  hosts:
+    - host: ${environment_name}-disco.apps.fr01.paas.tech.orange
+      paths: [/] # align with contextPath
+
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+
+  requests:
+    cpu: 200m
+    memory: 128Mi
+  limits:
+    cpu: 1000m
+    memory: 2048Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+#############################################################
+    #Database  Dependency 
+##########################################    
+mongo:
+  architecture: standalone
+  useStatefulSet: true
+  extraEnvVarsSecret: auth-userrole-mongo-secret
+  enabled: true
+  directoryPerDB: true
+  fullnameOverride: auth-userrole-mongo-${ENV_TYPE}
+  initdbScripts:
+     init.js: |    
+         // app user
+         db.getSiblingDB("userRoleManagement")
+         use userRoleManagement;
+         var username='mongo_user';
+         var password=process.env["MONGO_DB_PWD"];
+         var user=db.getUser(username);
+         if (user == null) {
+           print('create user: ' + username);
+           db.createUser({user: 'mongo_user',pwd: password,roles: [ { role: 'readWrite', db: 'userRoleManagement' } ]});
+         } else {
+           print('update user: ' + username);
+           db.updateUser(username, {pwd: password});
+         }
+         print('---- done for ' + username);
+         quit(0);
+  auth:
+    enabled: false 
+    rootPassword: ${DISCO_DEV_CATALOG_MONGO_PASSWORD}
+    rootUser: mongo_user
+
+  persistence:
+    enabled: true
+    size: 4Gi
+  hidden:
+    persistence:
+      size: 4Gi
+  service:
+    nameOverride: auth-userrole-mongo-${ENV_TYPE}
+    ports:
+      mongodb: 27017
+
+
+
+###################################################################################
+#Logging Tracing Observability
+##########################################
+
+otel:
+  # activate Open Telemetry instrumentation
+  enabled: true
+  sidecar:
+    # use collector agent sidecar
+    enabled: false
+    # main collector address
+    jaeger:
+      host: jaeger
+      port: 14250
+      # main receiver address
+    otlp:
+      host: disco-tracing-otel
+      port: 4317
+  attributes:
+    platform: "openshift"
+    region: ""
+    cluster: "diod-openshift"
+    namespace: "${kube_namespace}"
+    hostname: "${hostname}"
+
+
+# fluentd sidecar for logs forwarding
+fluentd:
+  enabled: true
+  host: apps-fluentd   
+  tag: "auth-userrole-creation"
+
+# Monitoring values
+monitoring:
+  application: "auth-userrole-creation"
+  domain: "appli"
+  productName: "disco"
+  topology: "none"
+  role: "none"
+  environment: "${environment_type}"
+
+contextPath: ""

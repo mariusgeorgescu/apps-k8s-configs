@@ -9,10 +9,10 @@ spec:
   timeout: 15m
   chart:
     spec:
-      chart: ./product-catalog-component
+      chart: ./apps/discobole/charts/product-catalog-component
       sourceRef:
         kind: GitRepository
-        name: discobole-stack
+        name: flux-system
         namespace: flux-system
   install:
     createNamespace: false
@@ -21,9 +21,6 @@ spec:
   upgrade:
     remediation:
       retries: 3
-  dependsOn:
-    - name: disco-gateway
-      namespace: disco
   values:
     # Global settings
     global:
